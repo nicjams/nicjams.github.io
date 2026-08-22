@@ -1,0 +1,62 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>nicjams</title>
+<style>
+  :root {
+    --bg: #f2efe8;
+    --surface: #ffffff;
+    --line: rgba(28, 32, 40, 0.14);
+    --text: #1e242e;
+    --text-dim: #6c7480;
+    --accent: #0e7c96;
+  }
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+  body {
+    background: var(--bg);
+    color: var(--text);
+    font: 16px/1.6 -apple-system, BlinkMacSystemFont, 'Segoe UI', system-ui, sans-serif;
+    min-height: 100vh;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    padding: 32px;
+  }
+  main { width: 100%; max-width: 640px; }
+  h1 { font-size: 26px; letter-spacing: -0.01em; }
+  .sub { color: var(--text-dim); margin: 6px 0 28px; }
+  .card {
+    display: block;
+    background: var(--surface);
+    border: 1px solid var(--line);
+    border-radius: 12px;
+    padding: 18px 20px;
+    margin-bottom: 12px;
+    text-decoration: none;
+    color: inherit;
+    transition: border-color 0.15s, transform 0.15s;
+  }
+  .card:hover { border-color: var(--accent); transform: translateY(-1px); }
+  .card h2 { font-size: 17px; color: var(--accent); margin-bottom: 4px; }
+  .card p { color: var(--text-dim); font-size: 14px; }
+  footer { color: var(--text-dim); font-size: 13px; margin-top: 24px; }
+</style>
+</head>
+<body>
+<main>
+  <h1>nicjams</h1>
+  <p class="sub">Small music tools that run in the browser.</p>
+
+  <a class="card" href="musicalCanvas/">
+    <h2>musicalCanvas 🎨</h2>
+    <p>Paint on a canvas and a cycling playhead turns the strokes into MIDI.
+       Pick a brush per instrument, a key and a quantize grid, then press Demo
+       to watch it paint itself.</p>
+  </a>
+
+  <footer>Built with Claude Code.</footer>
+</main>
+</body>
+</html>

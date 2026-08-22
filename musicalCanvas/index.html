@@ -1,0 +1,114 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no">
+<title>musicalCanvas</title>
+<link rel="stylesheet" href="style.css">
+</head>
+<body>
+
+<header id="topbar">
+  <div class="brand"><span class="logo">🎨</span><h1>musicalCanvas</h1></div>
+
+  <div class="group transport">
+    <button id="playBtn" class="pill primary" title="Play / stop (space)">▶</button>
+    <div class="field">
+      <label for="bpm">Tempo</label>
+      <div class="tempo">
+        <input id="bpm" type="range" min="40" max="220" step="1" value="100">
+        <output id="bpmOut">100</output>
+      </div>
+    </div>
+    <div class="field">
+      <label for="bars">Bars</label>
+      <select id="bars">
+        <option>1</option><option>2</option><option selected>4</option>
+        <option>8</option><option>12</option><option>16</option>
+      </select>
+    </div>
+  </div>
+
+  <div class="group">
+    <div class="field">
+      <label for="mode">Pitch</label>
+      <select id="mode">
+        <option value="modal" selected>Modal</option>
+        <option value="chromatic">Chromatic</option>
+      </select>
+    </div>
+    <div class="field">
+      <label for="root">Key</label>
+      <select id="root"></select>
+    </div>
+    <div class="field" id="scaleField">
+      <label for="scale">Scale</label>
+      <select id="scale"></select>
+    </div>
+    <div class="field">
+      <label for="quantize">Quantize</label>
+      <select id="quantize"></select>
+    </div>
+  </div>
+
+  <div class="group actions">
+    <label class="pill check" title="Show the pitch grid and the MIDI notes your strokes make">
+      <input id="gridChk" type="checkbox"> Grid + MIDI
+    </label>
+    <button id="speedBtn" class="pill" title="Colour strokes by painting speed">Speed</button>
+    <button id="undoBtn" class="pill icon" title="Undo (⌘Z)">↺</button>
+    <button id="redoBtn" class="pill icon" title="Redo (⇧⌘Z)">↻</button>
+    <button id="clearBtn" class="pill icon" title="Clear canvas">✕</button>
+    <button id="demoBtn" class="pill" title="Watch the canvas paint itself, one instrument per loop">Demo</button>
+    <button id="midiBtn" class="pill" title="Download as a .mid file">MIDI</button>
+    <button id="setsBtn" class="pill">Sets <span id="netDot" class="dot"></span></button>
+  </div>
+</header>
+
+<main id="stage">
+  <aside id="brushes">
+    <div class="rail-title">Brushes</div>
+    <div id="brushList"></div>
+    <div class="rail-title">Brush level</div>
+    <input id="brushLevel" type="range" min="0" max="1.5" step="0.01" value="1">
+    <button id="eraseBtn" class="tool">Eraser <kbd>E</kbd></button>
+    <button id="soloBtn" class="tool">Solo brush</button>
+    <div class="rail-title">Master</div>
+    <input id="master" type="range" min="0" max="1" step="0.01" value="0.8">
+  </aside>
+
+  <div id="canvasWrap">
+    <canvas id="canvas"></canvas>
+  </div>
+</main>
+
+<footer id="statusbar">
+  <span id="cursorInfo">—</span>
+  <span id="sceneInfo">0 strokes · 0 notes</span>
+  <span id="speedInfo">100 BPM · 4 bars · 9.6 s loop</span>
+</footer>
+
+<section id="setsPanel" class="hidden">
+  <div class="panel-head">
+    <h2>Sets</h2>
+    <button id="closeSets" class="pill icon">✕</button>
+  </div>
+  <div class="panel-body">
+    <label class="stack">Set name
+      <input id="setName" type="text" value="Untitled set" spellcheck="false">
+    </label>
+    <div class="row">
+      <button id="saveBtn" class="pill primary">Save</button>
+      <button id="saveAsBtn" class="pill">Save as new</button>
+    </div>
+    <div class="rail-title">Saved</div>
+    <div id="setList" class="set-list"></div>
+    <p id="storageNote" class="note"></p>
+  </div>
+</section>
+
+<div id="toast" class="hidden"></div>
+
+<script type="module" src="js/main.js"></script>
+</body>
+</html>

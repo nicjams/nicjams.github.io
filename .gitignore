@@ -1,0 +1,6 @@
+# local state, rebuilt on demand
+musicalCanvas/data/
+*.db
+
+.DS_Store
+**/.DS_Store
