@@ -2,5 +2,8 @@
 musicalCanvas/data/
 *.db
 
+# stays local: 113MB of scanned tabs, not ours to publish
+theBag/
+
 .DS_Store
 **/.DS_Store
