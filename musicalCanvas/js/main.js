@@ -124,6 +124,7 @@ async function togglePlay() {
   }
   $('playBtn').textContent = '■';
   $('playBtn').classList.add('on');
+  if (engine.blocked) toast('Tap the screen to let this device play audio');
 }
 
 let frameCount = 0;
@@ -337,6 +338,15 @@ function init() {
       e.preventDefault();
       e.shiftKey ? scene.redo() : scene.undo();
     }
+  });
+
+  // Mobile browsers suspend audio when the page goes away and need a gesture
+  // to give it back, so take any tap as permission and re-check on return.
+  const reclaim = () => { if (engine.ctx && engine.blocked) engine.ensureCtx(); };
+  ['pointerdown', 'touchend', 'keydown'].forEach(ev =>
+    document.addEventListener(ev, reclaim, { passive: true }));
+  document.addEventListener('visibilitychange', () => {
+    if (!document.hidden) reclaim();
   });
 
   store.ping().then(online => {

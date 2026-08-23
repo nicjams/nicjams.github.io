@@ -17,6 +17,7 @@ body {
   color: var(--text);
   font: 13px/1.4 -apple-system, BlinkMacSystemFont, 'Segoe UI', system-ui, sans-serif;
   height: 100vh;
+  height: 100dvh;          /* phone browsers: exclude the address bar */
   display: flex;
   flex-direction: column;
   overflow: hidden;
@@ -29,6 +30,7 @@ body {
   align-items: center;
   gap: 18px;
   flex-wrap: wrap;
+  flex-shrink: 0;          /* a wrapped row must grow the bar, not spill over */
   padding: 8px 14px;
   background: linear-gradient(180deg, #ffffff, #f4f1ea);
   border-bottom: 1px solid var(--line);
@@ -38,7 +40,7 @@ body {
 .brand .logo { font-size: 18px; }
 .brand h1 { font-size: 15px; font-weight: 600; letter-spacing: 0.2px; }
 
-.group { display: flex; align-items: center; gap: 12px; }
+.group { display: flex; align-items: center; gap: 12px; flex-wrap: wrap; }
 .group.actions { margin-left: auto; }
 
 .field { display: flex; flex-direction: column; gap: 2px; }
@@ -182,7 +184,9 @@ kbd {
   padding: 0 3px;
 }
 
-#canvasWrap { flex: 1; min-width: 0; position: relative; }
+/* min-height:0 as well as min-width: in the phone layout #stage is a column,
+   and without it the canvas refuses to shrink and rides up under the toolbar */
+#canvasWrap { flex: 1; min-width: 0; min-height: 0; position: relative; }
 #canvas { width: 100%; height: 100%; display: block; touch-action: none; cursor: crosshair; }
 #canvas.erasing { cursor: cell; }
 
@@ -191,6 +195,7 @@ kbd {
 #statusbar {
   display: flex;
   gap: 20px;
+  flex-shrink: 0;
   padding: 5px 14px;
   background: var(--surface);
   border-top: 1px solid var(--line);
@@ -274,4 +279,41 @@ kbd {
   #topbar { gap: 10px; padding: 6px 10px; }
   .brand h1 { display: none; }
   #brushes { width: 118px; }
+}
+
+/*
+ * Phones: the brush rail becomes a scrolling strip under the canvas, so the
+ * painting surface gets the full width instead of two thirds of it.
+ */
+@media (max-width: 640px) {
+  #topbar { gap: 8px; padding: 6px 8px; }
+  .group { gap: 8px; }
+  .group.actions { margin-left: 0; }
+  input[type="range"] { width: 78px; }
+  .pill { padding: 7px 11px; }
+
+  #stage { flex-direction: column-reverse; }
+
+  #brushes {
+    width: 100%;
+    flex-shrink: 0;
+    flex-direction: row;
+    align-items: center;
+    gap: 6px;
+    padding: 7px 8px;
+    border-right: none;
+    border-top: 1px solid var(--line);
+    overflow-x: auto;
+    overflow-y: hidden;
+  }
+  #brushes .rail-title { display: none; }
+  #brushList { flex-direction: row; gap: 6px; }
+  .brush, .tool { flex-shrink: 0; white-space: nowrap; }
+  .brush kbd, .tool kbd { display: none; }
+  #brushLevel, #master { flex-shrink: 0; }
+
+  #cursorInfo { display: none; }          /* there is no hover on a finger */
+  #statusbar { gap: 12px; overflow-x: auto; white-space: nowrap; }
+
+  #setsPanel { width: 100%; }
 }

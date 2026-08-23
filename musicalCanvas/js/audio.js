@@ -40,6 +40,12 @@ export class AudioEngine {
 
   async ensureCtx() {
     if (!this.ctx) {
+      // iOS puts Web Audio on the ringer channel unless the page asks for a
+      // playback session -- without this the app is silent whenever the phone's
+      // mute switch is on, with no other sign that anything is wrong
+      try {
+        if (navigator.audioSession) navigator.audioSession.type = 'playback';
+      } catch (e) { /* not supported, carry on */ }
       this.ctx = new (window.AudioContext || window.webkitAudioContext)();
       this.master = this.ctx.createGain();
       this.master.gain.value = 0.8;
@@ -51,6 +57,7 @@ export class AudioEngine {
       this.reverb.connect(this.reverbGain).connect(this.master);
 
       this.master.connect(this.ctx.destination);
+      this._unlock();
       BRUSHES.forEach(b => {
         const g = this.ctx.createGain();
         g.gain.value = b.gain;
@@ -61,8 +68,36 @@ export class AudioEngine {
         this.buses[b.id] = g;
       });
     }
-    if (this.ctx.state === 'suspended') await this.ctx.resume();
+    // 'interrupted' is an iOS-only state (a call, Siri, the page going away);
+    // anything that is not 'running' should be resumed
+    if (this.ctx.state !== 'running') {
+      try { await this.ctx.resume(); } catch (e) { /* needs another gesture */ }
+    }
     return this.ctx;
+  }
+
+  /* True while the browser is holding audio back and needs a user gesture. */
+  get blocked() {
+    return !this.ctx || this.ctx.state !== 'running';
+  }
+
+  /* Older iOS only opens the output once a source has run inside a gesture. */
+  _unlock() {
+    try {
+      const src = this.ctx.createBufferSource();
+      src.buffer = this.ctx.createBuffer(1, 1, this.ctx.sampleRate);
+      src.connect(this.ctx.destination);
+      src.start(0);
+    } catch (e) { /* nothing to unlock */ }
+  }
+
+  /*
+   * Mobile browsers throttle timers in the background, so the scheduler can
+   * come back to find its cursor far behind. Anything already in the past is
+   * dropped rather than fired as one clump.
+   */
+  _stale(time) {
+    return time < this.ctx.currentTime - 0.05;
   }
 
   /* Exponentially decaying noise: a cheap, decent plate. */
@@ -139,7 +174,8 @@ export class AudioEngine {
       const until = Math.min(horizon, this.totalBeats);
       for (const n of notes) {
         if (n.start >= this.cursor && n.start < until) {
-          this.play(n, this.loopStart + n.start / bps, n.dur / bps);
+          const at = this.loopStart + n.start / bps;
+          if (!this._stale(at)) this.play(n, at, n.dur / bps);
         }
       }
       this.cursor = until;
