@@ -53,19 +53,22 @@ const SCORE = [
 const smoothstep = t => t * t * (3 - 2 * t);
 
 /* Row (int) -> the 0..1 pitch coordinate at the middle of that row. */
-const rowToY = (row, rows) => (row + 0.5) / rows;
+export const rowToY = (row, rows) => (row + 0.5) / rows;
 
 /*
  * Sample one stroke into points. Row changes ease over GLIDE beats centred on
  * the step boundary, which is short enough that every quantize slot still
  * belongs to one row -- the drawing is smooth, the MIDI stays exact.
  */
-function smoothPath(stroke, rows, phase) {
+export function smoothPath(stroke, rows, phase, opts = {}) {
   const steps = stroke.steps;
   const gaps = steps.slice(1).map((s, i) => s[0] - steps[i][0]);
-  const glide = Math.min(GLIDE, 0.35 * Math.min(...gaps, stroke.end - steps[steps.length - 1][0]));
+  const fitted = Math.min(GLIDE, 0.35 * Math.min(...gaps, stroke.end - steps[steps.length - 1][0]));
+  const glide = Math.max(1e-4, opts.glide != null ? opts.glide : fitted);
+  const breath = opts.breath != null ? opts.breath : BREATH;
+  const step = opts.step || STEP;
   const pts = [];
-  for (let b = steps[0][0]; b <= stroke.end + 1e-9; b += STEP) {
+  for (let b = steps[0][0]; b <= stroke.end + 1e-9; b += step) {
     const beat = Math.min(b, stroke.end);
     let i = 0;
     while (i + 1 < steps.length && steps[i + 1][0] <= beat) i++;
@@ -77,9 +80,9 @@ function smoothPath(stroke, rows, phase) {
         row = steps[i][1] + (steps[i + 1][1] - steps[i][1]) * t;
       }
     }
-    const breath = BREATH * Math.sin(beat * 1.3 * Math.PI * 2 + phase)
+    const wobble = breath * Math.sin(beat * 1.3 * Math.PI * 2 + phase)
       * (0.6 + 0.4 * Math.sin(beat * 0.37 + phase));
-    pts.push({ b: beat, y: rowToY(row + breath, rows) });
+    pts.push({ b: beat, y: rowToY(row + wobble, rows) });
     if (beat >= stroke.end) break;
   }
   return pts;

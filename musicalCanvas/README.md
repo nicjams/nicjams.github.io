@@ -43,10 +43,38 @@ Also registered in `Code/.claude/launch.json` as `musicalcanvas`.
   stays monophonic. A smear too fast to dwell anywhere plays where it leaned
   plus both ends of the sweep. Stacking separate strokes of the same colour
   chords too. The rules are three constants at the top of `js/scene.js`.
+* **New** (`N`) paints a fresh piece — a new image and a new tune. Press it
+  again for another. Like Demo it clears first, so ⌘Z brings back what was
+  there.
 * **Demo** paints the built-in score; press it again to stop and keep what is
   on the canvas. It clears first, so ⌘Z brings your painting back.
 * **Solo brush** is on by default: the brush you are holding paints at full
   strength and the other parts sit back. Turn it off to see everything level.
+
+## What New generates
+
+The picture and the piece are the same object, so `js/generate.js` composes
+music and lets the image fall out of it. It picks one of three temperaments —
+`drift` (slow, major-ish, sparse), `groove` (mid tempo, dorian and mixolydian,
+backbeat) or `pulse` (fast, minor, sixteenths) — then a key, a mode and a
+four-chord progression, and gives each instrument its own band of the canvas:
+
+* **bass** holds the root of each chord low on the canvas, sometimes stepping
+  to the fifth halfway through the bar
+* **strings** paint the chord as a smear woven up and down through the chord
+  tones inside every beat, which is what the scene reads back as a triad — the
+  generator uses the same chord rule your hand does
+* **keys** arpeggiate the same chords, so the harmony keeps moving when the pad
+  drops out
+* **lead** enters in the back half along a contour (arc, rise, fall, wave or
+  step) with rests for phrasing
+* **drums** lay down a kick pattern, a backbeat and hats to suit the style
+* **bells** or **pluck** add a few high scale tones, some of the time
+
+Everything is diatonic by construction, since modal rows only ever land on
+scale degrees. Triads with a diminished fifth drop the fifth rather than hold a
+tritone under a whole bar. Each piece is named for the seed that made it, and
+`mc.generate(seed)` in the console paints that exact one again.
 
 ## The dropdowns
 
@@ -101,6 +129,7 @@ js/audio.js       brush definitions, synth voices, transport scheduler
 js/scene.js       settings, strokes, stroke -> note derivation, undo, save format
 js/canvas.js      canvas texture, grid, notes, playhead, pointer input
 js/demo.js        the built-in score and the self-painting player
+js/generate.js    composes a new piece and paints it
 js/replay.js      repaints a saved set at its recorded pace
 js/store.js       backend client with localStorage fallback
 js/midi.js        standard MIDI file writer

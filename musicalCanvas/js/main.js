@@ -8,6 +8,7 @@ import { Store } from './store.js';
 import { downloadMidi } from './midi.js';
 import { Demo } from './demo.js';
 import { Replay } from './replay.js';
+import { generate } from './generate.js';
 
 const $ = id => document.getElementById(id);
 
@@ -135,6 +136,29 @@ function frame() {
   view.draw();
   if (frameCount++ % 6 === 0) updateSpeed();
   requestAnimationFrame(frame);
+}
+
+/* ---- generate ---------------------------------------------------------- */
+
+async function newPainting() {
+  if (demo.running) demo.stop();
+  if (replay.running) replay.cancel();
+  replay.disarm();
+  const made = generate(scene);
+  scene.name = `Generated ${made.seed}`;
+  scene.id = null;                       // a new piece, not an edit of the loaded set
+  fillSelects();
+  $('bpmOut').value = scene.settings.bpm;
+  engine.setTempo(scene.settings.bpm);
+  engine.setLength(scene.totalBeats);
+  if (!engine.playing) {
+    await engine.start(0);
+    $('playBtn').textContent = '■';
+    $('playBtn').classList.add('on');
+  }
+  refresh();
+  toast(`${made.style} · ${SHARP[made.root]} ${SCALES[made.scale].name} · ${made.bpm} BPM`);
+  return made;
 }
 
 /* ---- demo -------------------------------------------------------------- */
@@ -309,6 +333,7 @@ function init() {
     downloadMidi(scene);
     toast('Exported .mid');
   });
+  $('newBtn').addEventListener('click', newPainting);
   $('demoBtn').addEventListener('click', toggleDemo);
   $('eraseBtn').addEventListener('click', toggleErase);
   $('soloBtn').addEventListener('click', () => {
@@ -332,6 +357,7 @@ function init() {
     if (n >= 1 && n <= BRUSHES.length) return selectBrush(BRUSHES[n - 1].id);
     if (e.key === ' ') { e.preventDefault(); togglePlay(); }
     else if (e.key === 'e') toggleErase();
+    else if (e.key === 'n') newPainting();
     else if (e.key === 'g') { $('gridChk').checked = !$('gridChk').checked; view.showGrid = $('gridChk').checked; }
     else if (e.key === 'b') selectBrush(view.brush);
     else if ((e.metaKey || e.ctrlKey) && e.key.toLowerCase() === 'z') {
@@ -356,7 +382,8 @@ function init() {
   });
 
   // console hook: mc.scene.notes, mc.engine.play({brush:'keys',midi:60}), ...
-  window.mc = { scene, engine, store, view, demo, replay };
+  // mc.generate(seed) repaints a particular piece
+  window.mc = { scene, engine, store, view, demo, replay, generate: seed => generate(scene, seed) };
 
   refresh();
   requestAnimationFrame(frame);
