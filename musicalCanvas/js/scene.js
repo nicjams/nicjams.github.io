@@ -23,6 +23,19 @@ export const DEFAULTS = {
   lowest: 48,           // C3
 };
 
+/*
+ * Chord rules. A grid slot sounds every row the brush lingered on, so a
+ * vertical smear becomes a chord while an ordinary line stays one note:
+ *   - a row has to hold MIN_SHARE of the slot before it sounds at all, which
+ *     keeps a shaky hand and the notes passed through mid-glide out of it
+ *   - the rows that qualify have to be MIN_SPREAD apart before any of this
+ *     counts as deliberate, so wobble across a row boundary stays monophonic
+ *   - and a slot never sounds more than MAX_VOICES at once
+ */
+const MAX_VOICES = 3;
+const MIN_SHARE = 0.2;
+const MIN_SPREAD = 2;
+
 const round4 = v => Math.round(v * 1e4) / 1e4;
 let nextId = 1;
 
@@ -176,42 +189,96 @@ export class Scene {
       }
     }
 
+    // a run holds its row until the next run begins -- without this a stroke
+    // sampled point by point looks like a series of zero-length visits, and
+    // nothing ever holds a slot for long enough to sound
+    for (let i = 0; i < runs.length - 1; i++) {
+      runs[i].end = Math.max(runs[i].end, runs[i + 1].start);
+    }
+
     const kit = brushById(stroke.brush).kit;
     const spans = grid ? this._quantizeRuns(runs, grid, kit) : this._freeRuns(runs);
     return this._emit(spans, stroke, map, grid);
   }
 
   /*
-   * On a grid, every slot the stroke passes through gets one note: the row it
-   * spent the most time on. That keeps a wobbly line from spraying grace notes
-   * while still letting a fast diagonal read as a scale run.
+   * On a grid, every slot the stroke passes through sounds the row (or rows)
+   * it spent its time on. One row is the ordinary case; a smear across several
+   * rows inside one slot plays them together, up to MAX_VOICES.
    */
   _quantizeRuns(runs, grid, kit = false) {
-    const slots = new Map();
+    const slots = new Map();          // slot index -> row -> time spent there
     for (const r of runs) {
       const first = Math.floor(r.start / grid + 1e-9);
       const last = Math.max(first, Math.floor((r.end - 1e-9) / grid));
       for (let i = first; i <= last; i++) {
         const lo = i * grid, hi = lo + grid;
         const overlap = Math.max(Math.min(r.end, hi) - Math.max(r.start, lo), 1e-6);
-        const cur = slots.get(i);
-        if (!cur || overlap > cur.weight) {
-          slots.set(i, { row: r.row, weight: overlap, speed: r.speed / r.n });
+        let rows = slots.get(i);
+        if (!rows) slots.set(i, rows = new Map());
+        const cur = rows.get(r.row);
+        if (cur) {
+          cur.weight += overlap;
+          cur.speed = (cur.speed * cur.n + r.speed / r.n) / (cur.n + 1);
+          cur.n++;
+        } else {
+          rows.set(r.row, { weight: overlap, speed: r.speed / r.n, n: 1 });
         }
       }
     }
-    // consecutive slots on the same row are one held note -- except for the
-    // drum kit, where a line along a row means a hit on every grid step
+
+    const voiced = new Map();
+    for (const [i, rows] of slots) voiced.set(i, this._voices(rows, grid));
+    return this._merge(voiced, grid, kit);
+  }
+
+  /* Which rows of one slot actually sound. */
+  _voices(rows, grid) {
+    const ranked = [...rows.entries()]
+      .map(([row, v]) => ({ row, weight: v.weight, speed: v.speed }))
+      .sort((a, b) => b.weight - a.weight || a.row - b.row);
+    const spread = list =>
+      Math.max(...list.map(v => v.row)) - Math.min(...list.map(v => v.row));
+
+    const strong = ranked.filter(v => v.weight >= grid * MIN_SHARE);
+    if (strong.length >= 2 && spread(strong) >= MIN_SPREAD) {
+      return strong.slice(0, MAX_VOICES);
+    }
+    // A smear fast enough that no row holds the slot on its own: if it covered
+    // real ground, sound where it leaned and the two ends of the sweep.
+    if (!strong.length && ranked.length > 1 && spread(ranked) >= MIN_SPREAD) {
+      const byRow = [...ranked].sort((a, b) => a.row - b.row);
+      const picks = [ranked[0], byRow[0], byRow[byRow.length - 1]];
+      return picks.filter((v, i) => picks.indexOf(v) === i).slice(0, MAX_VOICES);
+    }
+    return [ranked[0]];
+  }
+
+  /*
+   * Consecutive slots holding the same row are one held note -- per row, so a
+   * chord can hold while a voice above it moves. The drum kit never merges: a
+   * line along a row means a hit on every grid step.
+   */
+  _merge(voiced, grid, kit) {
     const spans = [];
-    for (const i of [...slots.keys()].sort((a, b) => a - b)) {
-      const slot = slots.get(i);
-      const last = spans[spans.length - 1];
-      if (!kit && last && last.row === slot.row && Math.abs(last.endSlot + 1 - i) < 1e-9) {
-        last.endSlot = i;
-        last.speed = (last.speed * last.n + slot.speed) / (last.n + 1);
-        last.n++;
-      } else {
-        spans.push({ row: slot.row, startSlot: i, endSlot: i, speed: slot.speed, n: 1 });
+    const open = new Map();           // row -> the span still being held
+    for (const i of [...voiced.keys()].sort((a, b) => a - b)) {
+      const sounding = new Set();
+      for (const v of voiced.get(i)) {
+        sounding.add(v.row);
+        const held = open.get(v.row);
+        if (!kit && held && held.endSlot + 1 === i) {
+          held.endSlot = i;
+          held.speed = (held.speed * held.n + v.speed) / (held.n + 1);
+          held.n++;
+        } else {
+          const span = { row: v.row, startSlot: i, endSlot: i, speed: v.speed, n: 1 };
+          spans.push(span);
+          open.set(v.row, span);
+        }
+      }
+      for (const row of [...open.keys()]) {
+        if (!sounding.has(row)) open.delete(row);
       }
     }
     return spans.map(s => ({

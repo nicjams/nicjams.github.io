@@ -36,6 +36,13 @@ Also registered in `Code/.claude/launch.json` as `musicalcanvas`.
 * **Speed** colours strokes by how fast you painted them. Paint speed also sets
   note velocity, and a slow hand lays down a fatter line.
 * Click the key strip (grid mode) to audition a row.
+* **Chords** — a grid slot sounds every row the brush lingered on, up to three
+  at once. Smear a stroke up and down within a beat and it plays a chord; an
+  ordinary line stays one note. A row has to hold about a fifth of the slot
+  before it sounds, and the rows have to be at least two apart, so a shaky hand
+  stays monophonic. A smear too fast to dwell anywhere plays where it leaned
+  plus both ends of the sweep. Stacking separate strokes of the same colour
+  chords too. The rules are three constants at the top of `js/scene.js`.
 * **Demo** paints the built-in score; press it again to stop and keep what is
   on the canvas. It clears first, so ⌘Z brings your painting back.
 * **Solo brush** is on by default: the brush you are holding paints at full
@@ -50,9 +57,9 @@ painting is re-read.
 * **Pitch** — `Modal` gives one row per scale degree, so nothing is out of key;
   `Chromatic` gives one row per semitone, with scale tones shaded.
 * **Key / Scale** — transposes and remaps the whole canvas.
-* **Quantize** — `Off` through `1/32`, triplets included. On a grid, each slot
-  takes the row the stroke spent the most time on, so a wobbly line does not
-  spray grace notes.
+* **Quantize** — `Off` through `1/32`, triplets included. The grid is also what
+  makes chords possible: with quantize off, a vertical smear reads as a fast
+  arpeggio rather than notes struck together.
 * **Tempo / Bars** set the loop; the status bar shows the loop length and how
   fast the playhead sweeps, in px/s.
 
