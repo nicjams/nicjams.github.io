@@ -46,6 +46,8 @@ Also registered in `Code/.claude/launch.json` as `musicalcanvas`.
 * **New** (`N`) paints a fresh piece — a new image and a new tune. Press it
   again for another. Like Demo it clears first, so ⌘Z brings back what was
   there.
+* **Scene** (`P`) draws a little picture that plays — a sailboat with an island
+  and the sun, a mountain range, a city skyline.
 * **Demo** paints the built-in score; press it again to stop and keep what is
   on the canvas. It clears first, so ⌘Z brings your painting back.
 * **Solo brush** is on by default: the brush you are holding paints at full
@@ -75,6 +77,30 @@ Everything is diatonic by construction, since modal rows only ever land on
 scale degrees. Triads with a diminished fifth drop the fifth rather than hold a
 tritone under a whole bar. Each piece is named for the seed that made it, and
 `mc.generate(seed)` in the console paints that exact one again.
+
+## What Scene draws
+
+`js/picture.js` is the other way round from New: it draws a picture and lets
+the music fall out of it. Two choices keep an arbitrary drawing listenable — a
+**pentatonic** grid, so no two rows in the picture can land a semitone apart
+however the pencil moves, and a slow tempo, so the scene unfolds as the
+playhead reads it left to right.
+
+Shapes carry their own musical weight, which is what makes this more than a
+gimmick:
+
+* a **mast** or a **tree trunk** is a vertical smear across many rows, which
+  the chord rule reads as a spread chord — the boat strikes a chord as the
+  playhead passes it
+* the **sun** is a circle, so the interval between its upper and lower arc
+  opens from a unison to its widest and closes again
+* the **sea** is a slow sine, which becomes an undulating bass line, and the
+  **sail** is a triangle, which becomes a descending run
+* **birds** are quick high flicks, **rays** and **stars** single bright notes
+
+Everything is placed in beats and rows, so the picture is the score. Scenes are
+seeded and named for it, and `mc.picture(seed)` in the console draws that exact
+one again.
 
 ## The dropdowns
 
@@ -130,6 +156,8 @@ js/scene.js       settings, strokes, stroke -> note derivation, undo, save forma
 js/canvas.js      canvas texture, grid, notes, playhead, pointer input
 js/demo.js        the built-in score and the self-painting player
 js/generate.js    composes a new piece and paints it
+js/picture.js     draws a scene that plays (sailboat, mountains, skyline)
+js/painter.js     lays generated strokes down with staged timing
 js/replay.js      repaints a saved set at its recorded pace
 js/store.js       backend client with localStorage fallback
 js/midi.js        standard MIDI file writer

@@ -8,8 +8,9 @@
  * reads back as up to three notes at once.
  */
 
-import { SCALES, clamp } from './music.js';
-import { smoothPath, rowToY } from './demo.js';
+import { SCALES } from './music.js';
+import { smoothPath } from './demo.js';
+import { paintStrokes } from './painter.js';
 
 /* Small deterministic RNG, so a seed can be shown and painted again. */
 function mulberry32(seed) {
@@ -222,39 +223,14 @@ export function generate(scene, seed = Math.floor(Math.random() * 1e6)) {
   }
   add('drums', drums);
 
-  paint(scene, settings, parts);
-  return { seed, style: style.name, scale, root: settings.root, bpm: settings.bpm, bars };
-}
-
-/* Lay the parts down as strokes, staged so a replay redraws them in order. */
-function paint(scene, settings, parts) {
-  scene.clear();                       // snapshots first, so undo still works
-  Object.assign(scene.settings, settings);
-  scene.createdAt = Date.now();
-  scene.invalidate();
-
-  const rows = settings.rows;
-  const msPerBeat = 60000 / settings.bpm;
-  let stagedAt = 0;
+  const strokes = [];
   let phase = 0;
-
-  parts.forEach(part => {
-    part.strokes.forEach(spec => {
-      const pts = smoothPath(spec, rows, (phase += 1.7), part.opts || {});
-      if (pts.length < 1) return;
-      const stroke = scene.beginStroke(part.brush, { snapshot: false });
-      // stage the recorded timing as though it had been painted in tempo
-      stroke.at = stagedAt;
-      stroke.t0 = scene.createdAt + stagedAt;
-      const b0 = pts[0].b;
-      pts.forEach((p, i) => {
-        const prev = pts[i - 1] || p;
-        const rowRate = Math.abs(p.y - prev.y) * rows / Math.max(p.b - prev.b, 1e-6);
-        scene.addPoint(stroke, p.b, p.y, (p.b - b0) * msPerBeat,
-          clamp(0.2 + rowRate / 12, 0, 1));
-      });
-      scene.endStroke(stroke, { snapshot: false });
-      stagedAt += (pts[pts.length - 1].b - b0) * msPerBeat + 120;
+  parts.forEach(part => part.strokes.forEach(spec => {
+    strokes.push({
+      brush: part.brush,
+      pts: smoothPath(spec, settings.rows, (phase += 1.7), part.opts || {}),
     });
-  });
+  }));
+  paintStrokes(scene, settings, strokes);
+  return { seed, style: style.name, scale, root: settings.root, bpm: settings.bpm, bars };
 }
