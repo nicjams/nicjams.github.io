@@ -131,3 +131,7 @@ Select **Trancefusion guitarist** in the lead slot of the [listening room](https
 Read the [musician profile](musicians/trancefusion/PROFILE.md) and [training report](musicians/trancefusion/TRAINING_REPORT.md). Reproduce the experiments in [Colab](https://colab.research.google.com/github/nicjams/nicjams.github.io/blob/main/superGroups/trancefusion_colab.ipynb). Checkpoints are in the downloaded `trancefusion-guitarist-results.zip`, not in Git.
 
 This specialist has a different event representation from the original ensemble model. Load it with `supergroups.trancefusion.load(checkpoint)` and call `generate(model, backing_roll, seed=1709)` with a 256-step, four-track backing roll. It generates the lead slot and preserves the supplied backing. `scripts/export_guitar_web.py` shows the complete integration.
+
+## Staged next version: custom instruments
+
+[v0.2 design and backlog](docs/v0.2-instruments.md) separates musician behavior from instrument sound: MIDI plus expression → selected sample or neural instrument → aligned audio stems → mixer and WAV/MP3 export. Start with a sampled baseline, then a compact PyTorch neural guitar pilot using isolated recordings. This is staged future work; no neural audio renderer is shipped yet.
