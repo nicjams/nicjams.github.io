@@ -113,3 +113,13 @@ Tests cover causal masking, target exclusion, identity/context sensitivity, MIDI
 The immediate milestone is a credible experiment in learned symbolic interaction. Next: larger paired MIDI data, stronger held-out evaluations, musician-specific fine-tuning, flexible instrumentation, longer-context generation, and real-time scheduling. Learning audio timbre or adapting audio foundation models is a separate stage. GitHub Pages can distribute the notebook and examples; PyTorch training runs in Colab or locally.
 
 Implementation references: [PyTorch AMP](https://docs.pytorch.org/docs/stable/amp.html), [Colab resource limits](https://research.google.com/colaboratory/faq.html).
+
+## Listening room
+
+[Open superGroups](https://nicjams.github.io/superGroups/). The frontend contains five training stages, a keyboard-led response test, profiles for 12 synthetic musicians, and 81 jointly generated lineups. Every mixer channel has independent volume, mute, and solo; playback supports seeking, looping, and MIDI download.
+
+These are saved note performances synthesized with Web Audio, not live browser model inference. Band rehearsals use run 4, 64 steps, two listening rounds, temperature 0.85. Sampling is batched in groups of nine with seeds 1709 + batch offset; lineups vary both identity and random draw. The comparison stages use the same lineup and seed 17. The response test holds keys fixed. Sound design is illustrative, not learned timbre.
+
+Frontend commands (Node 20+ and Python 3): `npm run dev`, `npm run build`, `npm test`. The dependency-free build validates note bounds and copies static assets into `dist/`. To regenerate performances, install the Python package and run `python scripts/build_web_catalog.py --results PATH_TO_T4_RESULTS --baseline PATH_TO_ORIGINAL_MIDI`.
+
+Validation: note bounds and catalog completeness checked; audio clock, seek, mute/solo and take replacement have unit tests. Visual browser testing was not performed. Optional WebMCP registration is feature-detected; no supported WebMCP test context was available.

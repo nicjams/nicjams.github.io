@@ -5,3 +5,6 @@ data/
 runs/
 *.pt
 *.npz
+
+# Rebuilt static deployment
+/dist/

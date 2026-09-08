@@ -1,0 +1,9 @@
+import {test} from 'node:test';import assert from 'node:assert/strict';import {Player} from '../audio.js';
+class Param {value=0;setTargetAtTime(v){this.value=v}setValueAtTime(v){this.value=v}linearRampToValueAtTime(){}exponentialRampToValueAtTime(){}}
+class Node {gain=new Param();frequency=new Param();connect(){}disconnect(){}start(t){this.at=t}stop(){}}
+class Context {currentTime=10;sampleRate=22050;destination={};createGain(){return new Node()}createOscillator(){return new Node()}createBufferSource(){return new Node()}createBiquadFilter(){return new Node()}createBuffer(_,n){return {getChannelData:()=>new Float32Array(n)}}async resume(){}}
+globalThis.AudioContext=Context;
+const take={bpm:120,steps:32,tracks:Array.from({length:4},()=>[[0,4,60,100],[16,2,64,80]])};
+test('four tracks start on one clock; pause cancels voices; seek resumes remaining notes',async()=>{const p=new Player();p.setTake(take);await p.play();assert.equal(p.voices.length,8);assert.equal(p.voices[0].at,p.voices[2].at);p.ctx.currentTime=11;assert(Math.abs(p.current()-.965)<.001);p.pause();assert.equal(p.voices.length,0);assert.equal(p.playing,false);await p.seek(2);await p.play();assert.equal(p.voices.length,4);p.pause()});
+test('mute and solo affect gains independently, preserving volume',async()=>{const p=new Player();await p.init();p.solo[2]=true;p.updateMix();assert.equal(p.channels[0].gain.value,0);assert.equal(p.channels[2].gain.value,.65);p.muted[2]=true;p.updateMix();assert.equal(p.channels[2].gain.value,0);p.solo.fill(false);p.updateMix();assert.equal(p.channels[0].gain.value,.8)});
+test('changing the performance stops old voices and resets the playhead',async()=>{const p=new Player();p.setTake(take);await p.play();p.setTake({...take,steps:64});assert.equal(p.playing,false);assert.equal(p.position,0);assert.equal(p.duration,8);assert.equal(p.voices.length,0)});
