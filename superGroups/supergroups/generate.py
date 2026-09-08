@@ -31,7 +31,12 @@ def perform(model, identities, steps, rounds=2, temperature=0.85, seed=7, listen
                                torch.tensor([role], device=device))[0, -1]
                 # Undo the training class reweighting before sampling, otherwise
                 # onset upweighting produces unnaturally dense performances.
-                logits = (logits - torch.tensor(CLASS_WEIGHTS, device=device).log()) / temperature
+                if model.config.conditional_weights:
+                    correction = torch.zeros_like(logits)
+                    correction[~active, 0] = torch.tensor(.03, device=device).log()
+                    logits = (logits - correction) / temperature
+                else:
+                    logits = (logits - torch.tensor(CLASS_WEIGHTS, device=device).log()) / temperature
                 # Sustain cannot start a note. Drums are always one-step hits.
                 logits[~active, 1] = -torch.inf
                 if role == 3:

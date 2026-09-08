@@ -50,9 +50,23 @@ def load_checkpoint(path, device):
     return model, ckpt
 
 
+def prediction_loss(logits, target, previous, conditional=False):
+    weights = torch.tensor(CLASS_WEIGHTS, device=logits.device)
+    if not conditional:
+        return F.cross_entropy(logits.flatten(0, 2), target.flatten(), weight=weights)
+    # Balance silence only for inactive pitches; active-note transitions retain
+    # natural duration statistics and need no class-prior correction at sampling.
+    sample_weight = torch.where((previous == 0) & (target == 0), .03, 1.)
+    loss = F.cross_entropy(logits.flatten(0, 2), target.flatten(), reduction="none").reshape_as(target)
+    return (loss * sample_weight).sum() / sample_weight.sum()
+
+
 def train(args):
     if min(args.updates, args.batch_size, args.accumulate, args.eval_every) < 1:
         raise ValueError("Training counts must be positive")
+    if any(not 0 <= getattr(args, name, default) <= 1 for name, default in
+           (("peer_dropout", .4), ("history_dropout", 0.))):
+        raise ValueError("Dropout probabilities must lie between zero and one")
     torch.manual_seed(args.seed)
     rng = np.random.default_rng(args.seed)
     device = choose_device(args.device)
@@ -67,6 +81,8 @@ def train(args):
     if not set(ids[va].flatten().tolist()) <= seen:
         raise ValueError("Validation has a musician absent from training. Add more songs per musician or change split seed.")
     config = Config(len(registry), args.width, args.layers, args.heads, rolls.shape[1])
+    config.local_transition = getattr(args, "local_transition", False)
+    config.conditional_weights = getattr(args, "conditional_weights", False)
     checkpoint = None
     if args.resume:
         model, checkpoint = load_checkpoint(args.resume, device)
@@ -92,7 +108,6 @@ def train(args):
     out.mkdir(parents=True, exist_ok=True)
     # Sparse piano rolls otherwise learn near-universal silence. Keep onsets
     # competitive without copying a majority-class accuracy metric.
-    weights = torch.tensor(CLASS_WEIGHTS, device=device)
     print(json.dumps({"device": str(device), "parameters": sum(p.numel() for p in model.parameters()),
         "train_windows": len(tr), "validation_windows": len(va), "source": source}), flush=True)
 
@@ -109,7 +124,7 @@ def train(args):
                     peer, prev, y = inputs(roll, identity, roles)
                     with torch.autocast(device_type=device.type, dtype=torch.float16, enabled=amp):
                         logits = model(peer, prev, identity, roles)
-                        loss = F.cross_entropy(logits.flatten(0, 2), y.flatten(), weight=weights)
+                        loss = prediction_loss(logits, y, prev, model.config.conditional_weights)
                     losses.append(loss.item())
                     probabilities = logits.softmax(-1)
                     predicted = probabilities[..., 2:].sum(-1) > 0.5
@@ -128,10 +143,15 @@ def train(args):
             idx = rng.choice(tr, args.batch_size, replace=True)
             roll, identity = rolls[idx].to(device), ids[idx].to(device)
             roles = torch.randint(4, (len(idx),), device=device)
-            peer, prev, y = inputs(roll, identity, roles, dropout=0.4)
+            peer, prev, y = inputs(roll, identity, roles, dropout=getattr(args, "peer_dropout", .4))
+            history_dropout = getattr(args, "history_dropout", 0.)
+            if history_dropout:
+                # Drop whole historical steps (not target labels) to reduce
+                # dependence on perfect teacher-forced history.
+                prev = prev * (torch.rand(len(idx), prev.shape[1], 1, device=device) > history_dropout)
             with torch.autocast(device_type=device.type, dtype=torch.float16, enabled=amp):
                 logits = model(peer, prev, identity, roles)
-                loss = F.cross_entropy(logits.flatten(0, 2), y.flatten(), weight=weights)
+                loss = prediction_loss(logits, y, prev, model.config.conditional_weights)
             if not torch.isfinite(loss):
                 raise FloatingPointError("Non-finite loss; lower learning rate or disable mixed precision")
             scaler.scale(loss / args.accumulate).backward()
@@ -151,6 +171,8 @@ def train(args):
             payload = {"format": 1, "config": model.metadata(), "registry": registry,
                 "source": source, "model": model.state_dict(), "optimizer": optimizer.state_dict(),
                 "scaler": scaler.state_dict(), "update": update, "best_val": best,
+                "training_options": {"peer_dropout": getattr(args, "peer_dropout", .4),
+                    "history_dropout": getattr(args, "history_dropout", 0.), "seed": args.seed},
                 "train_groups": sorted(set(groups[tr].tolist())), "val_groups": sorted(set(groups[va].tolist())),
                 "trained_ids": sorted(seen), "torch_rng": torch.get_rng_state(),
                 "cuda_rng": torch.cuda.get_rng_state_all() if amp else [],

@@ -12,7 +12,7 @@ from supergroups.data import demo, note, prepare, read_track, write_midi
 from supergroups.audio import render
 from supergroups.generate import perform
 from supergroups.model import BandModel, Config
-from supergroups.train import inputs, split_groups
+from supergroups.train import inputs, split_groups, prediction_loss
 
 
 class SuperGroupsTests(unittest.TestCase):
@@ -94,6 +94,22 @@ class SuperGroupsTests(unittest.TestCase):
             self.assertTrue(((a[:, role] > 0).sum(axis=-1) <= cap).all())
         for t in range(1, 8):
             self.assertFalse(((a[t] == 1) & (a[t - 1] == 0)).any())
+
+    def test_local_transition_and_conditional_objective(self):
+        model = BandModel(Config(width=32, layers=1, heads=4, steps=8,
+                                 local_transition=True, conditional_weights=True))
+        roll = torch.randint(10, (2, 8, 4, 128))
+        ids = torch.tensor([[0, 3, 6, 9]] * 2)
+        role = torch.tensor([0, 2])
+        peer, prev, y = inputs(roll, ids, role)
+        loss = prediction_loss(model(peer, prev, ids, role), y, prev, True)
+        loss.backward()
+        self.assertTrue(torch.isfinite(loss))
+        self.assertGreater(float(model.transition[0].weight.grad.abs().sum()), 0)
+        generated = perform(model, [0, 3, 6, 9], 8, rounds=1)
+        self.assertFalse((generated[0] == 1).any())
+        for t in range(1, 8):
+            self.assertFalse(((generated[t] == 1) & (generated[t-1] == 0)).any())
 
 
 if __name__ == "__main__":

@@ -16,6 +16,8 @@ class Config:
     heads: int = 6
     steps: int = 128
     dropout: float = 0.1
+    local_transition: bool = False
+    conditional_weights: bool = False
 
 
 class BandModel(nn.Module):
@@ -46,6 +48,10 @@ class BandModel(nn.Module):
                 if parameter.ndim > 1:
                     nn.init.xavier_uniform_(parameter)
         self.output = nn.Sequential(nn.LayerNorm(config.width), nn.Linear(config.width, 128 * STATES))
+        if config.local_transition:
+            # Shared across pitches: learn how an already sounding note behaves
+            # without relearning the same transition independently 128 times.
+            self.transition = nn.Sequential(nn.Linear(36, 64), nn.GELU(), nn.Linear(64, STATES))
 
     def forward(self, peers, previous, ids, role):
         b, t = previous.shape[:2]
@@ -56,7 +62,12 @@ class BandModel(nn.Module):
         x = self.input(x) + self.position(torch.arange(t, device=x.device))[None]
         x = x + self.band(self.identity(ids).flatten(1))[:, None] + self.role(role)[:, None]
         causal = torch.ones(t, t, device=x.device, dtype=torch.bool).triu(1)
-        return self.output(self.transformer(x, mask=causal)).reshape(b, t, 128, STATES)
+        logits = self.output(self.transformer(x, mask=causal)).reshape(b, t, 128, STATES)
+        if self.config.local_transition:
+            target_id = ids[torch.arange(b, device=ids.device), role]
+            identity = self.identity(target_id)[:, None, None].expand(-1, t, 128, -1)
+            logits = logits + self.transition(torch.cat((self.state(previous), identity), dim=-1))
+        return logits
 
     def metadata(self):
         return asdict(self.config)
