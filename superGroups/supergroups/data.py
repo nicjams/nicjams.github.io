@@ -157,3 +157,45 @@ def prepare(manifest_path, output, steps=128):
             identities.append(ids)
             groups.append(song["song_id"])
     save_dataset(output, rolls, identities, groups, registry, "user-labelled MIDI manifest")
+
+
+def conversation(path, songs=256, steps=128, seed=7):
+    """Controlled response task, not a corpus of human improvisation.
+
+    Keyboard cues choose a fresh root every half bar. Bass answers after one
+    step, lead after four; accented cues elicit a later snare response. Thus
+    the target's own past cannot predict each new pitch without its bandmates.
+    """
+    if songs < 2 or steps < 16 or steps % 8:
+        raise ValueError("Use at least two songs and a multiple of eight steps >= 16")
+    rng = np.random.default_rng(seed)
+    styles = ("pocket", "restless", "spacious")
+    registry = [{"name": f"{style}-{role}", "role": role, "style": style}
+                for role in ROLES for style in styles]
+    rolls, identities = [], []
+    for _ in range(songs):
+        choice = rng.integers(0, 3, 4)
+        roll = np.zeros((steps, 4, 128), np.uint8)
+        for at in range(0, steps, 8):
+            root = int(rng.integers(0, 12))
+            accent = bool(rng.integers(0, 2))
+            # Exogenous cue: there is intentionally no way to predict keys'
+            # new root from past history. Report responder losses separately.
+            for interval in (0, 4, 7):
+                note(roll[:, 1], at, (2, 1, 5)[choice[1]], 48 + root + interval, 112 if accent else 64)
+            note(roll[:, 0], at+1, (3, 1, 5)[choice[0]], 36+root, 88)
+            if choice[0] == 1:
+                note(roll[:, 0], at+3, 1, 36+root+7, 72)
+            lead_interval = (4, 7, 0)[choice[2]]
+            note(roll[:, 2], at+4, (2, 1, 4)[choice[2]], 60+root+lead_interval, 88)
+            if choice[2] == 1:
+                note(roll[:, 2], at+6, 1, 60+root+4, 72)
+            for pos in range(0, 8, (2, 1, 4)[choice[3]]):
+                note(roll[:, 3], at+pos, 1, 42, 56)
+            note(roll[:, 3], at+1, 1, 36, 96)
+            if accent:
+                note(roll[:, 3], at+3, 1, 38, 96)
+        rolls.append(roll)
+        identities.append([r*3+int(choice[r]) for r in range(4)])
+    save_dataset(path, rolls, identities, [f"conversation-{i}" for i in range(songs)],
+                 registry, "synthetic call-and-response v1; random keyboard cues with delayed replies")

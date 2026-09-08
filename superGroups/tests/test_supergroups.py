@@ -8,7 +8,7 @@ import mido
 import numpy as np
 import torch
 
-from supergroups.data import demo, note, prepare, read_track, write_midi
+from supergroups.data import demo, conversation, note, prepare, read_track, write_midi
 from supergroups.audio import render
 from supergroups.generate import perform
 from supergroups.model import BandModel, Config
@@ -110,6 +110,18 @@ class SuperGroupsTests(unittest.TestCase):
         self.assertFalse((generated[0] == 1).any())
         for t in range(1, 8):
             self.assertFalse(((generated[t] == 1) & (generated[t-1] == 0)).any())
+
+    def test_conversation_has_delayed_harmonic_responses(self):
+        with tempfile.TemporaryDirectory() as directory:
+            path = Path(directory) / 'conversation.npz'
+            conversation(path, songs=4, steps=32)
+            with np.load(path) as data:
+                for roll in data['rolls']:
+                    for at in range(0, 32, 8):
+                        cue = np.flatnonzero(roll[at, 1] >= 2)
+                        bass = np.flatnonzero(roll[at+1, 0] >= 2)
+                        self.assertEqual(int(cue.min())-12, int(bass[0]))
+                        self.assertFalse((roll[at,0] >= 2).any())
 
 
 if __name__ == "__main__":

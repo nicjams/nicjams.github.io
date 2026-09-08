@@ -2,7 +2,7 @@ import argparse
 import json
 
 from .audio import render
-from .data import demo, prepare
+from .data import demo, prepare, conversation
 from .generate import generate
 from .train import load_checkpoint, train
 
@@ -13,6 +13,11 @@ def main():
     p = sub.add_parser("demo-data", help="Create synthetic practice data, not real artist styles")
     p.add_argument("--out", default="data/demo.npz")
     p.add_argument("--songs", type=int, default=128)
+    p.add_argument("--steps", type=int, default=128)
+    p.add_argument("--seed", type=int, default=7)
+    p = sub.add_parser("conversation-data", help="Synthetic random cues and delayed responses")
+    p.add_argument("--out", default="data/conversation.npz")
+    p.add_argument("--songs", type=int, default=256)
     p.add_argument("--steps", type=int, default=128)
     p.add_argument("--seed", type=int, default=7)
     p = sub.add_parser("prepare", help="Import four labelled MIDI tracks per song")
@@ -56,6 +61,8 @@ def main():
     args = parser.parse_args()
     if args.command == "demo-data":
         demo(args.out, args.songs, args.steps, args.seed)
+    elif args.command == "conversation-data":
+        conversation(args.out, args.songs, args.steps, args.seed)
     elif args.command == "prepare":
         if args.steps < 1:
             parser.error("steps must be positive")
