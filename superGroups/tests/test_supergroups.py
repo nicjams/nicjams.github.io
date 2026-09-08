@@ -123,6 +123,15 @@ class SuperGroupsTests(unittest.TestCase):
                         self.assertEqual(int(cue.min())-12, int(bass[0]))
                         self.assertFalse((roll[at,0] >= 2).any())
 
+    def test_fixed_keyboard_prompt_is_preserved(self):
+        model = BandModel(Config(width=32, heads=4, layers=1, steps=8))
+        prompt = np.zeros((8,4,128),dtype=np.uint8)
+        note(prompt[:,1],0,4,60)
+        saved = prompt.copy()
+        generated = perform(model,[0,3,6,9],8,rounds=1,initial_band=prompt,fixed_roles=(1,))
+        np.testing.assert_array_equal(generated[:,1],prompt[:,1])
+        np.testing.assert_array_equal(prompt,saved)
+
 
 if __name__ == "__main__":
     unittest.main()

@@ -10,18 +10,30 @@ from .train import choose_device, load_checkpoint
 
 
 @torch.inference_mode()
-def perform(model, identities, steps, rounds=2, temperature=0.85, seed=7, listening=True):
+def perform(model, identities, steps, rounds=2, temperature=0.85, seed=7, listening=True,
+            initial_band=None, fixed_roles=()):
     if steps < 1 or steps > model.config.steps or rounds < 1 or temperature <= 0:
         raise ValueError("Invalid steps, rounds, or temperature")
     model.eval()
     device = next(model.parameters()).device
     generator = torch.Generator(device=device).manual_seed(seed)
     band = torch.zeros((1, steps, 4, 128), dtype=torch.long, device=device)
+    if any(role not in range(4) for role in fixed_roles):
+        raise ValueError("Fixed roles must be indices 0..3")
+    if initial_band is not None:
+        initial = torch.as_tensor(initial_band, device=device)
+        if initial.shape != (steps, 4, 128) or (initial < 0).any() or (initial >= 10).any():
+            raise ValueError("Initial band must have shape steps,4,128 and states 0..9")
+        band[0] = initial
+    elif fixed_roles:
+        raise ValueError("Fixed roles require an initial band")
     ids = torch.tensor([identities], device=device)
     # Each round lets everyone revise their part after hearing the others.
     # The fixed order is deliberate and documented; it introduces order bias.
     for _ in range(rounds):
         for role in (3, 0, 1, 2):
+            if role in fixed_roles:
+                continue
             peers = band.clone() if listening else torch.zeros_like(band)
             peers[:, :, role] = 0
             previous = torch.zeros((1, steps, 128), dtype=torch.long, device=device)
