@@ -1,0 +1,22 @@
+{
+  "lineup": [
+    "pocket-bass",
+    "spacious-keys",
+    "restless-lead",
+    "pocket-drums"
+  ],
+  "seed": 17,
+  "temperature": 0.85,
+  "rounds": 2,
+  "bpm": 110,
+  "steps": 32,
+  "listening": true,
+  "checkpoint_update": 801,
+  "training_source": "synthetic practice patterns; not artist performances",
+  "notes_per_role": [
+    2,
+    8,
+    3,
+    8
+  ]
+}
