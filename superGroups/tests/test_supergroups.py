@@ -12,7 +12,7 @@ from supergroups.data import demo, conversation, note, prepare, read_track, writ
 from supergroups.audio import render
 from supergroups.generate import perform
 from supergroups.model import BandModel, Config
-from supergroups.train import inputs, split_groups, prediction_loss
+from supergroups.train import inputs, split_groups, prediction_loss, onset_pitch_loss
 
 
 class SuperGroupsTests(unittest.TestCase):
@@ -146,6 +146,17 @@ class SuperGroupsTests(unittest.TestCase):
         torch.testing.assert_close(first[:,:8],second[:,:8])
         first.square().mean().backward()
         self.assertGreater(float(model.pitch_listener.weight.grad.abs().sum()),0)
+
+    def test_pitch_objective_rewards_correct_monophonic_onset(self):
+        y = torch.zeros((1,2,128),dtype=torch.long);y[0,0,60]=7
+        logits = torch.zeros((1,2,128,10),requires_grad=True)
+        role = torch.tensor([2])
+        wrong = onset_pitch_loss(logits,y,role)
+        better = logits.detach().clone();better[0,0,60,7]=10
+        self.assertLess(float(onset_pitch_loss(better,y,role)),float(wrong.detach()))
+        wrong.backward()
+        self.assertGreater(float(logits.grad.abs().sum()),0)
+        self.assertEqual(float(onset_pitch_loss(better,y,torch.tensor([1]))),0.)
 
 
 if __name__ == "__main__":

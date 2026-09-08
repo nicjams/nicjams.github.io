@@ -43,6 +43,7 @@ def main():
     p.add_argument("--conditional-weights", action="store_true")
     p.add_argument("--peer-dropout", type=float, default=.4)
     p.add_argument("--history-dropout", type=float, default=0.)
+    p.add_argument("--pitch-loss", type=float, default=0.)
     p = sub.add_parser("generate")
     p.add_argument("--checkpoint", default="runs/demo/best.pt")
     p.add_argument("--lineup", default="pocket-bass,spacious-keys,restless-lead,pocket-drums")

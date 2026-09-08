@@ -61,12 +61,26 @@ def prediction_loss(logits, target, previous, conditional=False):
     return (loss * sample_weight).sum() / sample_weight.sum()
 
 
+def onset_pitch_loss(logits, target, roles):
+    # Bass/lead have at most one intended onset at these positions. A separate
+    # pitch-choice objective prevents easy silence/duration decisions from
+    # dominating the error on the comparatively rare new notes.
+    onsets = target >= 2
+    valid = (onsets.sum(-1) == 1) & ((roles == 0) | (roles == 2))[:, None]
+    if not valid.any():
+        return logits.sum() * 0.
+    scores = torch.logsumexp(logits[..., 2:], -1) - torch.logsumexp(logits[..., :2], -1)
+    return F.cross_entropy(scores[valid], onsets.long().argmax(-1)[valid])
+
+
 def train(args):
     if min(args.updates, args.batch_size, args.accumulate, args.eval_every) < 1:
         raise ValueError("Training counts must be positive")
     if any(not 0 <= getattr(args, name, default) <= 1 for name, default in
            (("peer_dropout", .4), ("history_dropout", 0.))):
         raise ValueError("Dropout probabilities must lie between zero and one")
+    if getattr(args, "pitch_loss", 0.) < 0:
+        raise ValueError("Pitch loss weight must be nonnegative")
     torch.manual_seed(args.seed)
     rng = np.random.default_rng(args.seed)
     device = choose_device(args.device)
@@ -153,6 +167,8 @@ def train(args):
             with torch.autocast(device_type=device.type, dtype=torch.float16, enabled=amp):
                 logits = model(peer, prev, identity, roles)
                 loss = prediction_loss(logits, y, prev, model.config.conditional_weights)
+                if getattr(args, "pitch_loss", 0.):
+                    loss = loss + args.pitch_loss * onset_pitch_loss(logits, y, roles)
             if not torch.isfinite(loss):
                 raise FloatingPointError("Non-finite loss; lower learning rate or disable mixed precision")
             scaler.scale(loss / args.accumulate).backward()
@@ -173,7 +189,8 @@ def train(args):
                 "source": source, "model": model.state_dict(), "optimizer": optimizer.state_dict(),
                 "scaler": scaler.state_dict(), "update": update, "best_val": best,
                 "training_options": {"peer_dropout": getattr(args, "peer_dropout", .4),
-                    "history_dropout": getattr(args, "history_dropout", 0.), "seed": args.seed},
+                    "history_dropout": getattr(args, "history_dropout", 0.),
+                    "pitch_loss": getattr(args, "pitch_loss", 0.), "seed": args.seed},
                 "train_groups": sorted(set(groups[tr].tolist())), "val_groups": sorted(set(groups[va].tolist())),
                 "trained_ids": sorted(seen), "torch_rng": torch.get_rng_state(),
                 "cuda_rng": torch.cuda.get_rng_state_all() if amp else [],
