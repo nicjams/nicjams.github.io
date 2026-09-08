@@ -83,6 +83,7 @@ def train(args):
     config = Config(len(registry), args.width, args.layers, args.heads, rolls.shape[1])
     config.local_transition = getattr(args, "local_transition", False)
     config.conditional_weights = getattr(args, "conditional_weights", False)
+    config.pitch_context = getattr(args, "pitch_context", False)
     checkpoint = None
     if args.resume:
         model, checkpoint = load_checkpoint(args.resume, device)

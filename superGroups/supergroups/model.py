@@ -2,6 +2,7 @@ from dataclasses import asdict, dataclass
 
 import torch
 from torch import nn
+from torch.nn import functional as F
 
 ROLES = ("bass", "keys", "lead", "drums")
 STATES = 10  # silence, sustain, eight onset velocity bins
@@ -18,6 +19,7 @@ class Config:
     dropout: float = 0.1
     local_transition: bool = False
     conditional_weights: bool = False
+    pitch_context: bool = False
 
 
 class BandModel(nn.Module):
@@ -52,6 +54,13 @@ class BandModel(nn.Module):
             # Shared across pitches: learn how an already sounding note behaves
             # without relearning the same transition independently 128 times.
             self.transition = nn.Sequential(nn.Linear(36, 64), nn.GELU(), nn.Linear(64, STATES))
+        if config.pitch_context:
+            # Shared relative-pitch receptive field: no fixed chord or response
+            # rules. The network learns intervals across octaves and a causal
+            # eight-step history directly from the other musicians' notes.
+            self.pitch_listener = nn.Conv2d(8, 16, (1, 49), padding=(0, 24))
+            self.time_listener = nn.Conv2d(16, 16, (8, 1))
+            self.response = nn.Sequential(nn.Linear(48, 32), nn.GELU(), nn.Linear(32, STATES))
 
     def forward(self, peers, previous, ids, role):
         b, t = previous.shape[:2]
@@ -67,6 +76,15 @@ class BandModel(nn.Module):
             target_id = ids[torch.arange(b, device=ids.device), role]
             identity = self.identity(target_id)[:, None, None].expand(-1, t, 128, -1)
             logits = logits + self.transition(torch.cat((self.state(previous), identity), dim=-1))
+        if self.config.pitch_context:
+            active = (peers > 0).permute(0, 2, 1, 3).float()
+            onsets = (peers >= 2).permute(0, 2, 1, 3).float()
+            heard = F.gelu(self.pitch_listener(torch.cat((active, onsets), dim=1)))
+            heard = F.gelu(self.time_listener(F.pad(heard, (0, 0, 7, 0))))
+            heard = heard.permute(0, 2, 3, 1)
+            target_id = ids[torch.arange(b, device=ids.device), role]
+            identity = self.identity(target_id)[:, None, None].expand(-1, t, 128, -1)
+            logits = logits + self.response(torch.cat((heard, identity), dim=-1))
         return logits
 
     def metadata(self):

@@ -132,6 +132,21 @@ class SuperGroupsTests(unittest.TestCase):
         np.testing.assert_array_equal(generated[:,1],prompt[:,1])
         np.testing.assert_array_equal(prompt,saved)
 
+    def test_pitch_listener_is_causal_and_trainable(self):
+        model = BandModel(Config(width=32,heads=4,layers=1,steps=16,dropout=0,
+                                 local_transition=True,conditional_weights=True,pitch_context=True)).eval()
+        peer = torch.randint(10,(2,16,4,128))
+        prev = torch.zeros((2,16,128),dtype=torch.long)
+        ids = torch.tensor([[0,3,6,9]]*2)
+        roles = torch.tensor([0,2])
+        peer[torch.arange(2),:,roles] = 0
+        first = model(peer,prev,ids,roles)
+        modified = peer.clone();modified[:,8:]=0
+        second = model(modified,prev,ids,roles)
+        torch.testing.assert_close(first[:,:8],second[:,:8])
+        first.square().mean().backward()
+        self.assertGreater(float(model.pitch_listener.weight.grad.abs().sum()),0)
+
 
 if __name__ == "__main__":
     unittest.main()

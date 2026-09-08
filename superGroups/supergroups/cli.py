@@ -39,6 +39,7 @@ def main():
     p.add_argument("--seed", type=int, default=7)
     p.add_argument("--device", default="auto")
     p.add_argument("--local-transition", action="store_true")
+    p.add_argument("--pitch-context", action="store_true")
     p.add_argument("--conditional-weights", action="store_true")
     p.add_argument("--peer-dropout", type=float, default=.4)
     p.add_argument("--history-dropout", type=float, default=0.)
