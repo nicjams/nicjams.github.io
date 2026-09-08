@@ -123,3 +123,11 @@ These are saved note performances synthesized with Web Audio, not live browser m
 Frontend commands (Node 20+ and Python 3): `npm run dev`, `npm run build`, `npm test`. The dependency-free build validates note bounds and copies static assets into `dist/`. To regenerate performances, install the Python package and run `python scripts/build_web_catalog.py --results PATH_TO_T4_RESULTS --baseline PATH_TO_ORIGINAL_MIDI`.
 
 Validation: note bounds and catalog completeness checked; audio clock, seek, mute/solo and take replacement have unit tests. Visual browser testing was not performed. Optional WebMCP registration is feature-detected; no supported WebMCP test context was available.
+
+## New musician: trancefusion guitarist
+
+Select **Trancefusion guitarist** in the lead slot of the [listening room](https://nicjams.github.io/superGroups/). Its dedicated model was trained in three T4 experiments on sixteen-bar synthetic phrase exercises. The site now has 13 musicians, 108 lineups, and eight progress stages. Guitar rehearsals use fixed backing from the original rhythm players; the guitarist generates a responding part.
+
+Read the [musician profile](musicians/trancefusion/PROFILE.md) and [training report](musicians/trancefusion/TRAINING_REPORT.md). Reproduce the experiments in [Colab](https://colab.research.google.com/github/nicjams/nicjams.github.io/blob/main/superGroups/trancefusion_colab.ipynb). Checkpoints are in the downloaded `trancefusion-guitarist-results.zip`, not in Git.
+
+This specialist has a different event representation from the original ensemble model. Load it with `supergroups.trancefusion.load(checkpoint)` and call `generate(model, backing_roll, seed=1709)` with a 256-step, four-track backing roll. It generates the lead slot and preserves the supplied backing. `scripts/export_guitar_web.py` shows the complete integration.

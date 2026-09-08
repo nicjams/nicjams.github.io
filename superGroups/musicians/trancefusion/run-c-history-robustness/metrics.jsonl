@@ -1,0 +1,6 @@
+{"update": 250, "train_loss": 0.2048029601573944, "validation": {"loss": 0.17852561175823212, "action_accuracy": 0.9970703125, "onset_pitch_accuracy": 0.9308401048183441}, "elapsed_seconds": 4.024984359741211}
+{"update": 500, "train_loss": 0.1774209439754486, "validation": {"loss": 0.1770883910357952, "action_accuracy": 0.9970703125, "onset_pitch_accuracy": 0.9272540360689163}, "elapsed_seconds": 7.929195165634155}
+{"update": 750, "train_loss": 0.20858126878738403, "validation": {"loss": 0.17646971717476845, "action_accuracy": 0.996826171875, "onset_pitch_accuracy": 0.9272540509700775}, "elapsed_seconds": 11.32126784324646}
+{"update": 1000, "train_loss": 0.18092559278011322, "validation": {"loss": 0.17406000569462776, "action_accuracy": 0.9970703125, "onset_pitch_accuracy": 0.9318646937608719}, "elapsed_seconds": 14.717817544937134}
+{"update": 1250, "train_loss": 0.13137000799179077, "validation": {"loss": 0.1662687063217163, "action_accuracy": 0.9969482421875, "onset_pitch_accuracy": 0.9277663379907608}, "elapsed_seconds": 18.769625902175903}
+{"update": 1500, "train_loss": 0.14072057604789734, "validation": {"loss": 0.16567152366042137, "action_accuracy": 0.9967041015625, "onset_pitch_accuracy": 0.9328892827033997}, "elapsed_seconds": 22.1433265209198}

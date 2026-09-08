@@ -1,0 +1,33 @@
+{
+  "runs": [
+    {
+      "run": "run-a-event-baseline",
+      "best_update": 1500,
+      "pitch": 0.9318647086620331,
+      "motif": 0.9583333333333333,
+      "motif_no_peers": 0.4,
+      "loss": 0.1820627972483635
+    },
+    {
+      "run": "run-b-motif-memory",
+      "best_update": 1000,
+      "pitch": 0.943647488951683,
+      "motif": 0.9833333333333334,
+      "motif_no_peers": 0.25833333333333336,
+      "loss": 0.140053853392601
+    },
+    {
+      "run": "run-c-history-robustness",
+      "best_update": 1500,
+      "pitch": 0.9477458447217941,
+      "motif": 1.0,
+      "motif_no_peers": 0.3,
+      "loss": 0.129059586673975
+    }
+  ],
+  "test_pitch": 0.9456966742873192,
+  "test_pitch_no_peers": 0.9052253514528275,
+  "test_motif": 0.9541666666666666,
+  "test_motif_no_peers": 0.29583333333333334,
+  "download_sha256": "e846c95d77b00ad1dc87199941e71724c9833ff192396f182ee164dd356bc03b"
+}

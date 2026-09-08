@@ -1,0 +1,434 @@
+{
+  "checkpoint": "/content/trancefusion-guitarist/run-c-history-robustness/best.pt",
+  "split": "test",
+  "teacher_forced": {
+    "listening": {
+      "loss": 0.13938727974891663,
+      "action_accuracy": 0.9969482421875,
+      "onset_pitch_accuracy": 0.9456966742873192
+    },
+    "no_peers": {
+      "loss": 0.2493654601275921,
+      "action_accuracy": 0.9970703125,
+      "onset_pitch_accuracy": 0.9052253514528275
+    }
+  },
+  "generated": [
+    {
+      "song": 574,
+      "listening": true,
+      "statistics": {
+        "notes": 61,
+        "silent_bars": 3,
+        "rhythm_recurrence": 0.8285714285714285,
+        "register_lift": 11.783333333333331,
+        "mean_duration": 1.7049180327868851,
+        "sustained_fraction": 0.11475409836065574,
+        "motif_continuity": 1.0
+      }
+    },
+    {
+      "song": 574,
+      "listening": false,
+      "statistics": {
+        "notes": 61,
+        "silent_bars": 3,
+        "rhythm_recurrence": 0.8285714285714285,
+        "register_lift": 16.33333333333333,
+        "mean_duration": 1.7049180327868851,
+        "sustained_fraction": 0.11475409836065574,
+        "motif_continuity": 0.0
+      }
+    },
+    {
+      "song": 532,
+      "listening": true,
+      "statistics": {
+        "notes": 61,
+        "silent_bars": 3,
+        "rhythm_recurrence": 0.8285714285714285,
+        "register_lift": 12.616666666666674,
+        "mean_duration": 1.7049180327868851,
+        "sustained_fraction": 0.11475409836065574,
+        "motif_continuity": 1.0
+      }
+    },
+    {
+      "song": 532,
+      "listening": false,
+      "statistics": {
+        "notes": 61,
+        "silent_bars": 3,
+        "rhythm_recurrence": 0.8285714285714285,
+        "register_lift": 9.950000000000003,
+        "mean_duration": 1.7049180327868851,
+        "sustained_fraction": 0.11475409836065574,
+        "motif_continuity": 0.8
+      }
+    },
+    {
+      "song": 204,
+      "listening": true,
+      "statistics": {
+        "notes": 61,
+        "silent_bars": 3,
+        "rhythm_recurrence": 0.8285714285714285,
+        "register_lift": 13.166666666666671,
+        "mean_duration": 1.639344262295082,
+        "sustained_fraction": 0.09836065573770492,
+        "motif_continuity": 1.0
+      }
+    },
+    {
+      "song": 204,
+      "listening": false,
+      "statistics": {
+        "notes": 61,
+        "silent_bars": 3,
+        "rhythm_recurrence": 0.8285714285714285,
+        "register_lift": 9.88333333333334,
+        "mean_duration": 1.7049180327868851,
+        "sustained_fraction": 0.11475409836065574,
+        "motif_continuity": 1.0
+      }
+    },
+    {
+      "song": 173,
+      "listening": true,
+      "statistics": {
+        "notes": 61,
+        "silent_bars": 3,
+        "rhythm_recurrence": 0.8285714285714285,
+        "register_lift": 14.549999999999997,
+        "mean_duration": 1.7049180327868851,
+        "sustained_fraction": 0.11475409836065574,
+        "motif_continuity": 1.0
+      }
+    },
+    {
+      "song": 173,
+      "listening": false,
+      "statistics": {
+        "notes": 61,
+        "silent_bars": 3,
+        "rhythm_recurrence": 0.8285714285714285,
+        "register_lift": 15.11666666666666,
+        "mean_duration": 1.7049180327868851,
+        "sustained_fraction": 0.11475409836065574,
+        "motif_continuity": 1.0
+      }
+    },
+    {
+      "song": 153,
+      "listening": true,
+      "statistics": {
+        "notes": 61,
+        "silent_bars": 3,
+        "rhythm_recurrence": 0.8285714285714285,
+        "register_lift": 18.21666666666667,
+        "mean_duration": 1.7049180327868851,
+        "sustained_fraction": 0.11475409836065574,
+        "motif_continuity": 1.0
+      }
+    },
+    {
+      "song": 153,
+      "listening": false,
+      "statistics": {
+        "notes": 61,
+        "silent_bars": 3,
+        "rhythm_recurrence": 0.8285714285714285,
+        "register_lift": 16.016666666666666,
+        "mean_duration": 1.7049180327868851,
+        "sustained_fraction": 0.11475409836065574,
+        "motif_continuity": 0.4
+      }
+    },
+    {
+      "song": 155,
+      "listening": true,
+      "statistics": {
+        "notes": 61,
+        "silent_bars": 3,
+        "rhythm_recurrence": 0.8285714285714285,
+        "register_lift": 12.566666666666663,
+        "mean_duration": 1.7049180327868851,
+        "sustained_fraction": 0.11475409836065574,
+        "motif_continuity": 0.9333333333333333
+      }
+    },
+    {
+      "song": 155,
+      "listening": false,
+      "statistics": {
+        "notes": 61,
+        "silent_bars": 3,
+        "rhythm_recurrence": 0.8285714285714285,
+        "register_lift": 16.21666666666667,
+        "mean_duration": 1.7049180327868851,
+        "sustained_fraction": 0.11475409836065574,
+        "motif_continuity": 0.6
+      }
+    },
+    {
+      "song": 117,
+      "listening": true,
+      "statistics": {
+        "notes": 61,
+        "silent_bars": 3,
+        "rhythm_recurrence": 0.8285714285714285,
+        "register_lift": 10.699999999999989,
+        "mean_duration": 1.639344262295082,
+        "sustained_fraction": 0.09836065573770492,
+        "motif_continuity": 1.0
+      }
+    },
+    {
+      "song": 117,
+      "listening": false,
+      "statistics": {
+        "notes": 61,
+        "silent_bars": 3,
+        "rhythm_recurrence": 0.8285714285714285,
+        "register_lift": 12.400000000000006,
+        "mean_duration": 1.7049180327868851,
+        "sustained_fraction": 0.11475409836065574,
+        "motif_continuity": 0.0
+      }
+    },
+    {
+      "song": 242,
+      "listening": true,
+      "statistics": {
+        "notes": 61,
+        "silent_bars": 3,
+        "rhythm_recurrence": 0.8285714285714285,
+        "register_lift": 11.0,
+        "mean_duration": 1.7049180327868851,
+        "sustained_fraction": 0.11475409836065574,
+        "motif_continuity": 1.0
+      }
+    },
+    {
+      "song": 242,
+      "listening": false,
+      "statistics": {
+        "notes": 61,
+        "silent_bars": 3,
+        "rhythm_recurrence": 0.8285714285714285,
+        "register_lift": 11.166666666666657,
+        "mean_duration": 1.7049180327868851,
+        "sustained_fraction": 0.11475409836065574,
+        "motif_continuity": 0.0
+      }
+    },
+    {
+      "song": 325,
+      "listening": true,
+      "statistics": {
+        "notes": 61,
+        "silent_bars": 3,
+        "rhythm_recurrence": 0.8285714285714285,
+        "register_lift": 9.616666666666674,
+        "mean_duration": 1.7049180327868851,
+        "sustained_fraction": 0.11475409836065574,
+        "motif_continuity": 1.0
+      }
+    },
+    {
+      "song": 325,
+      "listening": false,
+      "statistics": {
+        "notes": 61,
+        "silent_bars": 3,
+        "rhythm_recurrence": 0.8285714285714285,
+        "register_lift": 8.900000000000006,
+        "mean_duration": 1.7049180327868851,
+        "sustained_fraction": 0.11475409836065574,
+        "motif_continuity": 0.3333333333333333
+      }
+    },
+    {
+      "song": 191,
+      "listening": true,
+      "statistics": {
+        "notes": 61,
+        "silent_bars": 3,
+        "rhythm_recurrence": 0.8285714285714285,
+        "register_lift": 16.39999999999999,
+        "mean_duration": 1.639344262295082,
+        "sustained_fraction": 0.09836065573770492,
+        "motif_continuity": 1.0
+      }
+    },
+    {
+      "song": 191,
+      "listening": false,
+      "statistics": {
+        "notes": 61,
+        "silent_bars": 3,
+        "rhythm_recurrence": 0.8285714285714285,
+        "register_lift": 12.216666666666669,
+        "mean_duration": 1.7049180327868851,
+        "sustained_fraction": 0.11475409836065574,
+        "motif_continuity": 0.2
+      }
+    },
+    {
+      "song": 397,
+      "listening": true,
+      "statistics": {
+        "notes": 61,
+        "silent_bars": 3,
+        "rhythm_recurrence": 0.8285714285714285,
+        "register_lift": 8.366666666666674,
+        "mean_duration": 1.7049180327868851,
+        "sustained_fraction": 0.11475409836065574,
+        "motif_continuity": 1.0
+      }
+    },
+    {
+      "song": 397,
+      "listening": false,
+      "statistics": {
+        "notes": 61,
+        "silent_bars": 3,
+        "rhythm_recurrence": 0.8285714285714285,
+        "register_lift": 15.966666666666669,
+        "mean_duration": 1.7049180327868851,
+        "sustained_fraction": 0.11475409836065574,
+        "motif_continuity": 0.0
+      }
+    },
+    {
+      "song": 106,
+      "listening": true,
+      "statistics": {
+        "notes": 61,
+        "silent_bars": 3,
+        "rhythm_recurrence": 0.8285714285714285,
+        "register_lift": 18.349999999999994,
+        "mean_duration": 1.639344262295082,
+        "sustained_fraction": 0.09836065573770492,
+        "motif_continuity": 1.0
+      }
+    },
+    {
+      "song": 106,
+      "listening": false,
+      "statistics": {
+        "notes": 61,
+        "silent_bars": 3,
+        "rhythm_recurrence": 0.8285714285714285,
+        "register_lift": 12.083333333333329,
+        "mean_duration": 1.639344262295082,
+        "sustained_fraction": 0.09836065573770492,
+        "motif_continuity": 0.2
+      }
+    },
+    {
+      "song": 225,
+      "listening": true,
+      "statistics": {
+        "notes": 61,
+        "silent_bars": 3,
+        "rhythm_recurrence": 0.8285714285714285,
+        "register_lift": 13.61666666666666,
+        "mean_duration": 1.6557377049180328,
+        "sustained_fraction": 0.09836065573770492,
+        "motif_continuity": 1.0
+      }
+    },
+    {
+      "song": 225,
+      "listening": false,
+      "statistics": {
+        "notes": 61,
+        "silent_bars": 3,
+        "rhythm_recurrence": 0.8285714285714285,
+        "register_lift": 11.933333333333337,
+        "mean_duration": 1.7049180327868851,
+        "sustained_fraction": 0.11475409836065574,
+        "motif_continuity": 0.2
+      }
+    },
+    {
+      "song": 251,
+      "listening": true,
+      "statistics": {
+        "notes": 61,
+        "silent_bars": 3,
+        "rhythm_recurrence": 0.8285714285714285,
+        "register_lift": 11.833333333333343,
+        "mean_duration": 1.7049180327868851,
+        "sustained_fraction": 0.11475409836065574,
+        "motif_continuity": 1.0
+      }
+    },
+    {
+      "song": 251,
+      "listening": false,
+      "statistics": {
+        "notes": 61,
+        "silent_bars": 3,
+        "rhythm_recurrence": 0.8285714285714285,
+        "register_lift": 15.133333333333326,
+        "mean_duration": 1.639344262295082,
+        "sustained_fraction": 0.09836065573770492,
+        "motif_continuity": 0.0
+      }
+    },
+    {
+      "song": 375,
+      "listening": true,
+      "statistics": {
+        "notes": 61,
+        "silent_bars": 3,
+        "rhythm_recurrence": 0.8285714285714285,
+        "register_lift": 10.416666666666671,
+        "mean_duration": 1.7049180327868851,
+        "sustained_fraction": 0.11475409836065574,
+        "motif_continuity": 1.0
+      }
+    },
+    {
+      "song": 375,
+      "listening": false,
+      "statistics": {
+        "notes": 61,
+        "silent_bars": 3,
+        "rhythm_recurrence": 0.8285714285714285,
+        "register_lift": 16.5,
+        "mean_duration": 1.639344262295082,
+        "sustained_fraction": 0.09836065573770492,
+        "motif_continuity": 0.0
+      }
+    },
+    {
+      "song": 253,
+      "listening": true,
+      "statistics": {
+        "notes": 60,
+        "silent_bars": 3,
+        "rhythm_recurrence": 0.8035714285714285,
+        "register_lift": 12.266666666666666,
+        "mean_duration": 1.7,
+        "sustained_fraction": 0.11666666666666667,
+        "motif_continuity": 0.3333333333333333
+      }
+    },
+    {
+      "song": 253,
+      "listening": false,
+      "statistics": {
+        "notes": 61,
+        "silent_bars": 3,
+        "rhythm_recurrence": 0.8285714285714285,
+        "register_lift": 15.0,
+        "mean_duration": 1.7049180327868851,
+        "sustained_fraction": 0.11475409836065574,
+        "motif_continuity": 0.0
+      }
+    }
+  ]
+}

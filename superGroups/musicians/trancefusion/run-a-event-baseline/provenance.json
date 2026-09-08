@@ -1,0 +1,27 @@
+{
+  "name": "trancefusion guitarist",
+  "source": "Original synthetic exercises derived from user musical description; no artist recordings",
+  "device": "cuda",
+  "gpu": "Tesla T4",
+  "parameters": 552579,
+  "config": {
+    "memory": false,
+    "width": 128,
+    "layers": 3
+  },
+  "options": {
+    "out": "/content/trancefusion-guitarist/run-a-event-baseline",
+    "device": "cuda",
+    "updates": 1500,
+    "batch": 8,
+    "lr": 0.0003,
+    "memory": false,
+    "init": null,
+    "corruption": 0.0
+  },
+  "train_songs": 512,
+  "validation_songs": 64,
+  "test_songs": 64,
+  "steps": 256,
+  "seed": 19
+}
