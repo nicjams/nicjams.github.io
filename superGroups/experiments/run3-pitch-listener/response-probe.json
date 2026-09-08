@@ -1,0 +1,88 @@
+{
+  "teacher_forced": {
+    "bass": {
+      "listening": 1.0,
+      "no_peers": 0.080078125,
+      "shuffled_peers": 0.083984375
+    },
+    "lead": {
+      "listening": 0.59765625,
+      "no_peers": 0.09375,
+      "shuffled_peers": 0.091796875
+    }
+  },
+  "anchored_generation": [
+    {
+      "song": "conversation-2",
+      "listening": true,
+      "bass": {
+        "correct_reply_fraction": 0.875,
+        "reply_coverage": 0.875
+      },
+      "lead": {
+        "correct_reply_fraction": 0.0625,
+        "reply_coverage": 0.625
+      }
+    },
+    {
+      "song": "conversation-2",
+      "listening": false,
+      "bass": {
+        "correct_reply_fraction": 0.0,
+        "reply_coverage": 0.4375
+      },
+      "lead": {
+        "correct_reply_fraction": 0.0,
+        "reply_coverage": 0.4375
+      }
+    },
+    {
+      "song": "conversation-4",
+      "listening": true,
+      "bass": {
+        "correct_reply_fraction": 0.8125,
+        "reply_coverage": 0.8125
+      },
+      "lead": {
+        "correct_reply_fraction": 0.3125,
+        "reply_coverage": 0.8125
+      }
+    },
+    {
+      "song": "conversation-4",
+      "listening": false,
+      "bass": {
+        "correct_reply_fraction": 0.125,
+        "reply_coverage": 0.6875
+      },
+      "lead": {
+        "correct_reply_fraction": 0.125,
+        "reply_coverage": 0.75
+      }
+    },
+    {
+      "song": "conversation-10",
+      "listening": true,
+      "bass": {
+        "correct_reply_fraction": 0.9375,
+        "reply_coverage": 0.9375
+      },
+      "lead": {
+        "correct_reply_fraction": 0.75,
+        "reply_coverage": 0.8125
+      }
+    },
+    {
+      "song": "conversation-10",
+      "listening": false,
+      "bass": {
+        "correct_reply_fraction": 0.0625,
+        "reply_coverage": 0.6875
+      },
+      "lead": {
+        "correct_reply_fraction": 0.0,
+        "reply_coverage": 0.625
+      }
+    }
+  ]
+}

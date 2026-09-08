@@ -12,15 +12,19 @@ from .generate import perform
 from .train import load_checkpoint, choose_device, inputs
 
 
-def probe(checkpoint, data_path, output, device='auto'):
+def probe(checkpoint, data_path, output, device='auto', start_window=0, windows=32):
     device = choose_device(device)
     model, ckpt = load_checkpoint(checkpoint, device)
     model.eval()
     data = np.load(data_path, allow_pickle=False)
     if not str(data['source']).startswith('synthetic call-and-response'):
         raise ValueError('This probe is specific to the conversation corpus')
-    idx = [i for i, g in enumerate(data['groups']) if g in ckpt['val_groups']][:32]
-    result = {'teacher_forced': {}}
+    if start_window < 0 or windows < 1:
+        raise ValueError('Invalid validation window range')
+    idx = [i for i, g in enumerate(data['groups']) if g in ckpt['val_groups']][start_window:start_window+windows]
+    if not idx:
+        raise ValueError('No validation windows in the requested range')
+    result = {'validation_start':start_window,'validation_windows':len(idx),'teacher_forced': {}}
     with torch.inference_mode():
         for role, offset, label in [(0,1,'bass'), (2,4,'lead')]:
             acc = {'listening':[], 'no_peers':[], 'shuffled_peers':[]}
@@ -62,4 +66,5 @@ def probe(checkpoint, data_path, output, device='auto'):
 
 if __name__=='__main__':
     p=argparse.ArgumentParser();p.add_argument('checkpoint');p.add_argument('data');p.add_argument('--out',required=True);p.add_argument('--device',default='auto')
-    a=p.parse_args();probe(a.checkpoint,a.data,a.out,a.device)
+    p.add_argument('--start-window',type=int,default=0);p.add_argument('--windows',type=int,default=32)
+    a=p.parse_args();probe(a.checkpoint,a.data,a.out,a.device,a.start_window,a.windows)

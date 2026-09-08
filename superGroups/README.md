@@ -6,6 +6,10 @@ Train virtual musicians in PyTorch, assemble a band, and hear how its members re
 
 This is a working **symbolic MIDI research prototype**. It trains from scratch on multitrack performances, with a learned identity for each musician. It generates polyphonic MIDI and a simple synthesized WAV preview. It does not learn recorded instrument timbres, voices, or famous artists from their names. The included twelve musicians learn procedural practice patterns, not human performances.
 
+## Adaptive experiments
+
+Four T4 runs improved note duration and learned pitch responses to other players. See the [results and tradeoffs](experiments/README.md) and [experiment notebook](https://colab.research.google.com/github/nicjams/nicjams.github.io/blob/main/superGroups/experiments_colab.ipynb). The original CLI defaults remain compatible with existing checkpoints.
+
 ## First session
 
 Open the notebook, choose **Runtime → Change runtime type → T4 GPU**, and run the cells. Start with the synthetic dataset to exercise the complete pipeline. The notebook includes musician dropdowns, A/B listening examples, a piano roll, and checkpoint downloads. Optional Google Drive storage lets checkpoints survive Colab disconnects.

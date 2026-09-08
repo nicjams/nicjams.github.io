@@ -1,0 +1,263 @@
+{
+  "checkpoint_update": 1000,
+  "config": {
+    "musicians": 12,
+    "width": 192,
+    "layers": 4,
+    "heads": 6,
+    "steps": 128,
+    "dropout": 0.1,
+    "local_transition": true,
+    "conditional_weights": true,
+    "pitch_context": true
+  },
+  "dataset_source": "synthetic call-and-response v1; random keyboard cues with delayed replies",
+  "validation_windows": 32,
+  "loss_by_role": {
+    "bass": {
+      "listening": 0.00974071433302015,
+      "no_peers": 0.03824249329045415,
+      "shuffled_peers": 0.1908709555864334,
+      "wrong_identity": 0.2125970423221588
+    },
+    "keys": {
+      "listening": 0.10071479249745607,
+      "no_peers": 0.10721041355282068,
+      "shuffled_peers": 0.1086969505995512,
+      "wrong_identity": 0.7112795561552048
+    },
+    "lead": {
+      "listening": 0.020664580166339874,
+      "no_peers": 0.06153684761375189,
+      "shuffled_peers": 0.4436165392398834,
+      "wrong_identity": 0.28572666831314564
+    },
+    "drums": {
+      "listening": 0.005093152693007141,
+      "no_peers": 0.005759370164014399,
+      "shuffled_peers": 0.005884672107640654,
+      "wrong_identity": 0.482721421867609
+    }
+  },
+  "mean_loss": {
+    "listening": 0.03405330992245581,
+    "no_peers": 0.05318728115526028,
+    "shuffled_peers": 0.18726727938337717,
+    "wrong_identity": 0.42308117216452956
+  },
+  "lineup": [
+    "pocket-bass",
+    "spacious-keys",
+    "restless-lead",
+    "pocket-drums"
+  ],
+  "generated": [
+    {
+      "seed": 17,
+      "condition": "listening",
+      "roles": [
+        {
+          "role": "bass",
+          "notes": 5,
+          "mean_duration": 2.8,
+          "one_step_fraction": 0.2
+        },
+        {
+          "role": "keys",
+          "notes": 45,
+          "mean_duration": 4.511111111111111,
+          "one_step_fraction": 0.1111111111111111
+        },
+        {
+          "role": "lead",
+          "notes": 12,
+          "mean_duration": 1.0,
+          "one_step_fraction": 1.0
+        },
+        {
+          "role": "drums",
+          "notes": 66,
+          "mean_duration": 1.0,
+          "one_step_fraction": 1.0
+        }
+      ]
+    },
+    {
+      "seed": 17,
+      "condition": "independent",
+      "roles": [
+        {
+          "role": "bass",
+          "notes": 8,
+          "mean_duration": 2.75,
+          "one_step_fraction": 0.125
+        },
+        {
+          "role": "keys",
+          "notes": 49,
+          "mean_duration": 4.673469387755102,
+          "one_step_fraction": 0.08163265306122448
+        },
+        {
+          "role": "lead",
+          "notes": 7,
+          "mean_duration": 1.0,
+          "one_step_fraction": 1.0
+        },
+        {
+          "role": "drums",
+          "notes": 92,
+          "mean_duration": 1.0,
+          "one_step_fraction": 1.0
+        }
+      ]
+    },
+    {
+      "seed": 17,
+      "changed_steps_per_role": [
+        32,
+        80,
+        14,
+        29
+      ]
+    },
+    {
+      "seed": 29,
+      "condition": "listening",
+      "roles": [
+        {
+          "role": "bass",
+          "notes": 4,
+          "mean_duration": 2.5,
+          "one_step_fraction": 0.25
+        },
+        {
+          "role": "keys",
+          "notes": 51,
+          "mean_duration": 4.549019607843137,
+          "one_step_fraction": 0.09803921568627451
+        },
+        {
+          "role": "lead",
+          "notes": 8,
+          "mean_duration": 1.125,
+          "one_step_fraction": 0.875
+        },
+        {
+          "role": "drums",
+          "notes": 64,
+          "mean_duration": 1.0,
+          "one_step_fraction": 1.0
+        }
+      ]
+    },
+    {
+      "seed": 29,
+      "condition": "independent",
+      "roles": [
+        {
+          "role": "bass",
+          "notes": 10,
+          "mean_duration": 2.5,
+          "one_step_fraction": 0.2
+        },
+        {
+          "role": "keys",
+          "notes": 59,
+          "mean_duration": 4.762711864406779,
+          "one_step_fraction": 0.06779661016949153
+        },
+        {
+          "role": "lead",
+          "notes": 12,
+          "mean_duration": 1.0,
+          "one_step_fraction": 1.0
+        },
+        {
+          "role": "drums",
+          "notes": 93,
+          "mean_duration": 1.0,
+          "one_step_fraction": 1.0
+        }
+      ]
+    },
+    {
+      "seed": 29,
+      "changed_steps_per_role": [
+        30,
+        83,
+        17,
+        35
+      ]
+    },
+    {
+      "seed": 41,
+      "condition": "listening",
+      "roles": [
+        {
+          "role": "bass",
+          "notes": 6,
+          "mean_duration": 2.6666666666666665,
+          "one_step_fraction": 0.16666666666666666
+        },
+        {
+          "role": "keys",
+          "notes": 53,
+          "mean_duration": 4.433962264150943,
+          "one_step_fraction": 0.1320754716981132
+        },
+        {
+          "role": "lead",
+          "notes": 15,
+          "mean_duration": 1.0,
+          "one_step_fraction": 1.0
+        },
+        {
+          "role": "drums",
+          "notes": 68,
+          "mean_duration": 1.0,
+          "one_step_fraction": 1.0
+        }
+      ]
+    },
+    {
+      "seed": 41,
+      "condition": "independent",
+      "roles": [
+        {
+          "role": "bass",
+          "notes": 10,
+          "mean_duration": 2.7,
+          "one_step_fraction": 0.1
+        },
+        {
+          "role": "keys",
+          "notes": 55,
+          "mean_duration": 4.872727272727273,
+          "one_step_fraction": 0.03636363636363636
+        },
+        {
+          "role": "lead",
+          "notes": 8,
+          "mean_duration": 1.0,
+          "one_step_fraction": 1.0
+        },
+        {
+          "role": "drums",
+          "notes": 97,
+          "mean_duration": 1.0,
+          "one_step_fraction": 1.0
+        }
+      ]
+    },
+    {
+      "seed": 41,
+      "changed_steps_per_role": [
+        31,
+        58,
+        18,
+        29
+      ]
+    }
+  ]
+}

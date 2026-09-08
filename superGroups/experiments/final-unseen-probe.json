@@ -1,0 +1,90 @@
+{
+  "validation_start": 32,
+  "validation_windows": 19,
+  "teacher_forced": {
+    "bass": {
+      "listening": 1.0,
+      "no_peers": 0.08881578947368421,
+      "shuffled_peers": 0.08223684210526316
+    },
+    "lead": {
+      "listening": 0.8980263157894737,
+      "no_peers": 0.09210526315789473,
+      "shuffled_peers": 0.09539473684210527
+    }
+  },
+  "anchored_generation": [
+    {
+      "song": "conversation-156",
+      "listening": true,
+      "bass": {
+        "correct_reply_fraction": 1.0,
+        "reply_coverage": 1.0
+      },
+      "lead": {
+        "correct_reply_fraction": 0.9375,
+        "reply_coverage": 1.0
+      }
+    },
+    {
+      "song": "conversation-156",
+      "listening": false,
+      "bass": {
+        "correct_reply_fraction": 0.125,
+        "reply_coverage": 0.375
+      },
+      "lead": {
+        "correct_reply_fraction": 0.0,
+        "reply_coverage": 0.125
+      }
+    },
+    {
+      "song": "conversation-158",
+      "listening": true,
+      "bass": {
+        "correct_reply_fraction": 1.0,
+        "reply_coverage": 1.0
+      },
+      "lead": {
+        "correct_reply_fraction": 0.375,
+        "reply_coverage": 0.75
+      }
+    },
+    {
+      "song": "conversation-158",
+      "listening": false,
+      "bass": {
+        "correct_reply_fraction": 0.0,
+        "reply_coverage": 0.4375
+      },
+      "lead": {
+        "correct_reply_fraction": 0.0,
+        "reply_coverage": 0.6875
+      }
+    },
+    {
+      "song": "conversation-159",
+      "listening": true,
+      "bass": {
+        "correct_reply_fraction": 1.0,
+        "reply_coverage": 1.0
+      },
+      "lead": {
+        "correct_reply_fraction": 0.625,
+        "reply_coverage": 1.0
+      }
+    },
+    {
+      "song": "conversation-159",
+      "listening": false,
+      "bass": {
+        "correct_reply_fraction": 0.0,
+        "reply_coverage": 0.6875
+      },
+      "lead": {
+        "correct_reply_fraction": 0.0,
+        "reply_coverage": 0.4375
+      }
+    }
+  ]
+}
