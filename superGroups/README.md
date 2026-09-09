@@ -135,3 +135,11 @@ This specialist has a different event representation from the original ensemble 
 ## Staged next version: custom instruments
 
 [v0.2 design and backlog](docs/v0.2-instruments.md) separates musician behavior from instrument sound: MIDI plus expression → selected sample or neural instrument → aligned audio stems → mixer and WAV/MP3 export. Start with a sampled baseline, then a compact PyTorch neural guitar pilot using isolated recordings. This is staged future work; no neural audio renderer is shipped yet.
+
+## Hidden rehearsal before playback
+
+Band-builder takes now include a four-bar generated lead-in that is omitted from the playable recording. Original ensembles generate eight bars over three listening passes and export the final four bars. The trancefusion guitarist generates sixteen bars against the rehearsed, fixed rhythm-section loop, then exports the final twelve. Its backing musicians remain fixed during guitar generation.
+
+This is offline pre-roll, not a loading delay, live synchronization, or a guarantee that harmony has converged. Play starts at the exported take. All tracks are cut at the same position; held notes crossing the edit retain their original velocity. Training-stage and response-test clips remain raw reference performances. `warmup_bars` and `rehearsal_rounds` in the catalog record what actually happened.
+
+To reproduce the original-ensemble warm-up, run `scripts/build_web_catalog.py` with the downloaded T4 results, `--warmup-bars 4 --rounds 3 --skip-reference-clips`, then run `scripts/export_guitar_web.py` against that new catalog. Full generated rolls are saved beside exports as `rehearsal-*.npz` for auditing; only trimmed MIDI and note events go into the website.

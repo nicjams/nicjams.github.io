@@ -4,6 +4,7 @@ import numpy as np,torch,mido
 from supergroups.train import load_checkpoint
 from supergroups.data import read_track,write_midi
 from supergroups.rehearsal import trim_warmup
+from supergroups.cached_band import CachedBand
 parser=argparse.ArgumentParser()
 parser.add_argument('--results',type=Path,required=True,help='Extracted t4-iterations directory')
 parser.add_argument('--baseline',type=Path,required=True,help='Original supergroup.mid')
@@ -12,6 +13,7 @@ parser.add_argument('--device',default='cpu')
 parser.add_argument('--warmup-bars',type=int,default=4)
 parser.add_argument('--rounds',type=int,default=3)
 parser.add_argument('--skip-reference-clips',action='store_true')
+parser.add_argument('--resume',action='store_true',help='Resume an incomplete original-ensemble catalog in the output directory')
 args=parser.parse_args()
 if args.warmup_bars not in range(5) or args.rounds<1:parser.error('Use 0–4 warm-up bars and at least one round')
 ROOT=args.out; ROOT.mkdir(exist_ok=True,parents=True)
@@ -39,7 +41,11 @@ if not args.skip_reference_clips:
     (ROOT/'response.json').write_text(json.dumps({'tracks':[read_track(mid,r+1) for r in range(4)],'steps':128,'bpm':110,'lineup':[1,4,6,10]}));(ROOT/'response.mid').write_bytes(p.read_bytes())
 torch.set_num_threads(4)
 model,_=load_checkpoint(args.results/'run4-pitch-objective/best.pt',args.device);model.eval()
-combos=list(itertools.product(range(3),repeat=4)); catalog={}
+combos=list(itertools.product(range(3),repeat=4)); catalog=json.loads((ROOT/'catalog.json').read_text()) if args.resume and (ROOT/'catalog.json').exists() else {}
+if catalog:
+    expected={''.join(map(str,c)) for c in combos[:len(catalog)]}
+    if set(catalog)!=expected or len(catalog)%9 or any(t.get('warmup_bars')!=args.warmup_bars or t.get('rehearsal_rounds')!=args.rounds for t in catalog.values()):
+        raise ValueError('Resume requires matching settings and complete batches of nine original lineups')
 @torch.inference_mode()
 def batch(choices):
     b=len(choices);steps=64+args.warmup_bars*16;device=torch.device(args.device)
@@ -50,9 +56,10 @@ def batch(choices):
             peers=band.clone();peers[:,:,role]=0
             prev=torch.zeros(b,steps,128,dtype=torch.long,device=device);active=torch.zeros(b,128,dtype=torch.bool,device=device)
             roles=torch.full((b,),role,device=device)
+            cache=CachedBand(model,ids,roles)
             lo,hi=((28,60),(36,96),(48,96),(35,82))[role];cap=(1,5,1,3)[role]
             for t in range(steps):
-                logits=model(peers[:,:t+1],prev[:,:t+1],ids,roles)[:,-1].clone()
+                logits=cache.step(peers[:,:t+1],prev[:,t],t).clone()
                 logits[:,:,0]-=(~active)*np.log(.03);logits/=.85
                 logits[:,:,1].masked_fill_(~active,-torch.inf)
                 if role==3:logits[:,:,1]=-torch.inf
@@ -67,7 +74,7 @@ def batch(choices):
                 band[:,t,role]=state;active=state>0
                 if t+1<steps:prev[:,t+1]=state
     return band.cpu().numpy().astype(np.uint8)
-for n in range(0,81,9):
+for n in range(len(catalog),81,9):
     choices=combos[n:n+9];out=batch(choices)
     for c,roll in zip(choices,out):
         key=''.join(map(str,c));np.savez_compressed(ROOT/f'rehearsal-{key}.npz',roll=roll);roll=trim_warmup(roll,args.warmup_bars*16);catalog[key]={'tracks':events(roll),'warmup_bars':args.warmup_bars,'rehearsal_rounds':args.rounds,'steps':64,'bpm':110,'lineup':[r*3+c[r] for r in range(4)]}
