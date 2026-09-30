@@ -1,0 +1,190 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <script src="../app/entry.js"></script>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>Penrose Tiling — Cut & Project from ℝ⁵ → ℝ²</title>
+    <meta name="graphics-description"
+        content="Penrose rhombus tilings by cut and project: phason flips, waves, ripples, an endless deflation zoom, and colorings by direction, de Bruijn ribbons, hidden coordinates and matching arrows.">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link
+        href="https://fonts.googleapis.com/css2?family=Fraunces:ital,opsz,wght@0,9..144,400;0,9..144,500;1,9..144,400;1,9..144,500&family=JetBrains+Mono:wght@400;500&family=Manrope:wght@400;500;600&display=swap"
+        rel="stylesheet">
+    <link rel="stylesheet" href="css/style.css">
+</head>
+
+<body>
+    <div class="app">
+
+        <header>
+            <div class="title">Penrose · <em>cut &amp; project</em></div>
+            <div class="sub">from ℤ⁵ through the five-fold plane E ⊂ ℝ⁵</div>
+            <div class="meta"><span id="rhombCount">— rhombi</span><span id="flipCount"></span></div>
+        </header>
+
+        <main>
+            <div class="stage" id="stage">
+                <canvas id="tiling"></canvas>
+                <div class="legend" id="legend"></div>
+                <div class="readout" id="readout"></div>
+            </div>
+
+            <aside>
+
+                <!-- Motion -->
+                <section class="section" data-control-group="Motion">
+                    <div class="section-title">
+                        <h2>Motion</h2>
+                        <span class="hint"><kbd>space</kbd> pause · <kbd>M</kbd> next</span>
+                    </div>
+                    <div class="chips" id="motionChips" role="radiogroup" aria-label="Motion">
+                        <label class="chip"><input type="radio" name="motion" value="still" checked><i>Still</i></label>
+                        <label class="chip"><input type="radio" name="motion" value="wander"><i>Wander</i></label>
+                        <label class="chip"><input type="radio" name="motion" value="orbit"><i>Orbit</i></label>
+                        <label class="chip"><input type="radio" name="motion" value="bloom"><i>Bloom</i></label>
+                        <label class="chip"><input type="radio" name="motion" value="wave"><i>Wave</i></label>
+                        <label class="chip"><input type="radio" name="motion" value="ripples"><i>Ripples</i></label>
+                        <label class="chip"><input type="radio" name="motion" value="deflate"><i>Deflate</i></label>
+                    </div>
+                    <p class="caption" id="motionCaption"></p>
+                    <div class="slider-row slim">
+                        <label for="speed" class="name-sm">Speed</label>
+                        <input type="range" id="speed" min="0.1" max="3" step="0.05" value="1">
+                        <span class="val" id="speedVal">1.00</span>
+                    </div>
+                    <div class="slider-row slim">
+                        <label for="amp" class="name-sm">Reach</label>
+                        <input type="range" id="amp" min="0" max="1" step="0.01" value="0.5">
+                        <span class="val" id="ampVal">0.50</span>
+                    </div>
+                    <div class="row-2">
+                        <div class="field">
+                            <label for="flipStyle">Flips</label>
+                            <select id="flipStyle">
+                                <option value="slide" selected>Slide</option>
+                                <option value="launch">Launch</option>
+                                <option value="instant">Instant</option>
+                            </select>
+                        </div>
+                        <button id="pauseBtn" type="button">Pause</button>
+                    </div>
+                    <div class="checks">
+                        <label class="check"><input type="checkbox" id="glow" checked><i>Glow on flips</i></label>
+                        <label class="check"><input type="checkbox" id="drift"><i>Camera drift</i></label>
+                    </div>
+                </section>
+
+                <!-- Color -->
+                <section class="section" data-control-group="Color">
+                    <div class="section-title">
+                        <h2>Color by</h2>
+                        <span class="hint" id="schemeHint"></span>
+                    </div>
+                    <div class="chips" id="schemeChips" role="radiogroup" aria-label="Color by">
+                        <label class="chip"><input type="radio" name="scheme" value="type" checked><i>Fat / thin</i></label>
+                        <label class="chip"><input type="radio" name="scheme" value="orient"><i>Direction</i></label>
+                        <label class="chip"><input type="radio" name="scheme" value="ribbons"><i>Ribbons</i></label>
+                        <label class="chip"><input type="radio" name="scheme" value="supertiles"><i>Supertiles</i></label>
+                        <label class="chip"><input type="radio" name="scheme" value="stability"><i>Stability</i></label>
+                        <label class="chip"><input type="radio" name="scheme" value="level"><i>Arrows</i></label>
+                        <label class="chip"><input type="radio" name="scheme" value="cubes"><i>Cubes</i></label>
+                    </div>
+                    <p class="caption" id="schemeCaption"></p>
+
+                    <div class="sub-title">Palette</div>
+                    <div class="swatches" id="paletteChips" role="radiogroup" aria-label="Palette"></div>
+
+                    <div class="sub-title">Finish</div>
+                    <div class="chips seg" id="styleChips" role="radiogroup" aria-label="Finish">
+                        <label class="chip"><input type="radio" name="style" value="flat" checked><i>Flat</i></label>
+                        <label class="chip"><input type="radio" name="style" value="grout"><i>Grout</i></label>
+                        <label class="chip"><input type="radio" name="style" value="bevel"><i>Bevel</i></label>
+                        <label class="chip"><input type="radio" name="style" value="line"><i>Line</i></label>
+                    </div>
+
+                    <div class="checks">
+                        <label class="check"><input type="checkbox" id="ribbonsOverlay"><i>Ribbons overlay</i></label>
+                        <label class="check"><input type="checkbox" id="arcsOverlay"><i>Matching arcs</i></label>
+                    </div>
+                </section>
+
+                <!-- Internal space -->
+                <section class="section" data-control-group="Hidden space">
+                    <div class="section-title">
+                        <h2>Acceptance windows</h2>
+                        <span class="hint">drag to shift</span>
+                    </div>
+                    <canvas id="inset" aria-label="Acceptance windows in the internal plane"></canvas>
+                    <p class="caption">
+                        Every vertex of the tiling, lifted to ℤ⁵ and projected onto the internal plane, lands in the
+                        window for its index. Dragging here shifts the phason γ⊥: dots pushed out of a window drop out
+                        of the tiling, and new vertices come in on the other side.
+                    </p>
+                    <div class="slider-row slim">
+                        <label for="sigma" class="name-sm nc">Σγ</label>
+                        <input type="range" id="sigma" min="0" max="5" step="0.001" value="1">
+                        <span class="val" id="sigmaVal">1.000</span>
+                    </div>
+                    <div class="sum-pill" id="sumPill">
+                        <span>γ⊥ <span class="value" id="perpVal">(0.000, 0.000)</span></span>
+                        <span class="class-tag" id="classTag">classical</span>
+                    </div>
+                    <div class="btn-row one">
+                        <button id="snapBtn" type="button">Snap Σγ to nearest integer (classical)</button>
+                    </div>
+                </section>
+
+                <!-- Internal shift -->
+                <section class="section" data-control-group="Shift γ">
+                    <div class="section-title">
+                        <h2>Internal shift <span class="nc">γ</span></h2>
+                        <span class="hint">&gamma; ∈ (ℝ/ℤ)⁵</span>
+                    </div>
+                    <div id="sliders"></div>
+                </section>
+
+                <!-- Presets -->
+                <section class="section" data-control-group="Presets">
+                    <div class="section-title">
+                        <h2>Presets</h2>
+                        <span class="hint"><kbd>R</kbd> random</span>
+                    </div>
+                    <div class="btn-row">
+                        <button id="presetSun" type="button" data-preset="sunny">Sun · γ = ⅕</button>
+                        <button id="presetStar" type="button" data-preset="starry">Star · γ = ⅖</button>
+                        <button id="presetHalf" type="button" data-preset="half">Halved · γ = ½</button>
+                        <button id="presetGraded" type="button" data-preset="graded">Graded · k/5</button>
+                        <button id="presetCart" type="button" data-preset="cartwheel">Cartwheel · γ = 0</button>
+                        <button id="presetGeneric" type="button" data-preset="generic">Generic</button>
+                        <button id="presetRandom" type="button" data-preset="random">Random</button>
+                        <button id="resetView" type="button">Reset view <kbd>0</kbd></button>
+                    </div>
+                </section>
+
+                <!-- Projection note -->
+                <section class="section">
+                    <div class="proj-wrap">
+                        <em>π : ℝ⁵ → ℝ²,</em> e<sub>k</sub> ↦ (cos 2πk/5, sin 2πk/5), and the internal
+                        <em>π⊥</em>, e<sub>k</sub> ↦ (cos 4πk/5, sin 4πk/5). Together with the diagonal
+                        (1,1,1,1,1) they split ℝ⁵. The tiling depends only on γ⊥ and Σγ. The physical part of γ only
+                        relabels the grid.
+                        <div class="matrix" id="projMat"></div>
+                    </div>
+                    <div class="keys">
+                        <kbd>space</kbd> pause <kbd>M</kbd> motion <kbd>K</kbd> coloring <kbd>P</kbd> palette
+                        <kbd>G</kbd> ribbons <kbd>A</kbd> arcs <kbd>R</kbd> random <kbd>0</kbd> reset view
+                    </div>
+                </section>
+
+            </aside>
+        </main>
+
+    </div>
+
+    <script type="module" src="js/main.js"></script>
+</body>
+
+</html>

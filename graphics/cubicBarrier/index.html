@@ -1,0 +1,238 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <script src="../app/entry.js"></script>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Cubic Barrier Braids</title>
+  <meta name="description"
+    content="Penetration-free rod simulation after ZOZO's ppf-contact-solver: the cubic barrier with elasticity-inclusive dynamic stiffness, CCD-filtered Newton steps and strain limiting. Braid strands with half-twists of their bottom pins, tighten knots, twist ropes, pour noodles.">
+  <meta name="graphics-description"
+    content="A braid lab driven by a penetration-free contact solver: weighted strands hang from a bar, and each generator σᵢ^±1 is a half-twist of two bottom pins. Because no step ever lets strands pass through each other, the braid read back from the simulated geometry always equals the word you typed — checked live with the Garside normal form, alongside the Burau matrix and the Alexander polynomial of the closure.">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Fraunces:opsz,wght@9..144,400;9..144,600&family=Inter:wght@300;400;500;600&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="style.css">
+  <script type="importmap">{"imports":{"three":"https://cdn.jsdelivr.net/npm/three@0.160.0/build/three.module.js","three/addons/":"https://cdn.jsdelivr.net/npm/three@0.160.0/examples/jsm/"}}</script>
+</head>
+
+<body>
+  <canvas id="scene" aria-label="Rod contact simulation"></canvas>
+
+  <aside id="controls" class="panel left">
+    <header class="brand">
+      <div class="eyebrow">after st-tech/ppf-contact-solver</div>
+      <h1>Cubic Barrier</h1>
+      <p class="tagline">Penetration-free rods, braids &amp; knots</p>
+      <button id="collapseLeft" class="icon-btn" aria-label="Collapse panel" title="Collapse panel">
+        <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M15 6l-6 6 6 6" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg>
+      </button>
+    </header>
+
+    <div class="scroll">
+      <section class="card" data-control-group="Scene">
+        <div class="seg" role="radiogroup" aria-label="Scene">
+          <label><input type="radio" name="scene" value="braid" checked><i>Braid</i></label>
+          <label><input type="radio" name="scene" value="knot"><i>Knot</i></label>
+          <label><input type="radio" name="scene" value="rope"><i>Rope</i></label>
+          <label><input type="radio" name="scene" value="noodles"><i>Noodles</i></label>
+        </div>
+        <p id="about" class="about"></p>
+      </section>
+
+      <section class="card scene-opts" data-scene="braid" data-control-group="Braid">
+        <div class="control-group">
+          <label for="nStrands">Strands <span id="nStrandsV" class="value-badge">4</span></label>
+          <input type="range" id="nStrands" min="2" max="7" step="1" value="4">
+        </div>
+        <div class="control-group">
+          <label for="beadMass">Bead weight <span id="beadMassV" class="value-badge">60 g</span></label>
+          <input type="range" id="beadMass" min="0.01" max="0.2" step="0.005" value="0.06">
+        </div>
+        <div class="control-group">
+          <label for="twistTime">Half-twist time <span id="twistTimeV" class="value-badge">1.1 s</span></label>
+          <input type="range" id="twistTime" min="0.35" max="3" step="0.05" value="1.1">
+        </div>
+      </section>
+
+      <section class="card scene-opts" data-scene="knot" data-control-group="Knot" hidden>
+        <div class="control-group">
+          <label for="knotType">Knot</label>
+          <select id="knotType"></select>
+        </div>
+        <div class="control-group">
+          <label for="pull">Pull <span id="pullV" class="value-badge">60%</span></label>
+          <input type="range" id="pull" min="0" max="1" step="0.01" value="0.6">
+        </div>
+        <div class="control-group">
+          <label for="loose">Initial looseness <span id="looseV" class="value-badge">2.6</span></label>
+          <input type="range" id="loose" min="1.8" max="4" step="0.1" value="2.6">
+        </div>
+      </section>
+
+      <section class="card scene-opts" data-scene="rope" data-control-group="Rope" hidden>
+        <div class="control-group">
+          <label for="ropeN">Strands <span id="ropeNV" class="value-badge">5</span></label>
+          <input type="range" id="ropeN" min="2" max="8" step="1" value="5">
+        </div>
+        <div class="control-group">
+          <label for="spinSpeed">Spin <span id="spinSpeedV" class="value-badge">0.35 rev/s</span></label>
+          <input type="range" id="spinSpeed" min="-1" max="1" step="0.01" value="0.35">
+        </div>
+        <div class="row-2">
+          <div class="control-group toggle-row">
+            <label for="spin">Spinning</label>
+            <input type="checkbox" id="spin" checked>
+          </div>
+          <div id="twistReadout" class="readout"></div>
+        </div>
+      </section>
+
+      <section class="card scene-opts" data-scene="noodles" data-control-group="Noodles" hidden>
+        <div class="control-group">
+          <label for="noodleCount">Noodles <span id="noodleCountV" class="value-badge">6</span></label>
+          <input type="range" id="noodleCount" min="1" max="12" step="1" value="6">
+        </div>
+        <div class="control-group">
+          <label for="noodleLength">Length <span id="noodleLengthV" class="value-badge">2.2 m</span></label>
+          <input type="range" id="noodleLength" min="0.8" max="3.5" step="0.1" value="2.2">
+        </div>
+      </section>
+
+      <section class="card" data-control-group="Contact solver">
+        <div class="control-group">
+          <label for="barrier">Barrier</label>
+          <select id="barrier">
+            <option value="cubic" selected>Cubic −(2/3ĝ)(g−ĝ)³</option>
+            <option value="log">Log (IPC) −(g−ĝ)² ln(g/ĝ)</option>
+            <option value="quad">Quadratic (ĝ−g)²</option>
+          </select>
+        </div>
+        <div class="row-2">
+          <div class="control-group toggle-row">
+            <label for="dynK" title="κ = m/g² + nᵀHn, re-evaluated every Newton step">Dynamic κ</label>
+            <input type="checkbox" id="dynK" checked>
+          </div>
+          <div class="control-group toggle-row">
+            <label for="ccd" title="Clip every Newton step with continuous collision detection">CCD filter</label>
+            <input type="checkbox" id="ccd" checked>
+          </div>
+        </div>
+        <div class="control-group">
+          <label for="friction">Friction μ <span id="frictionV" class="value-badge">0.08</span></label>
+          <input type="range" id="friction" min="0" max="0.8" step="0.01" value="0.08">
+        </div>
+        <div class="control-group">
+          <label for="ghat">Contact gap ĝ <span id="ghatV" class="value-badge">6 mm</span></label>
+          <input type="range" id="ghat" min="1" max="15" step="0.5" value="6">
+        </div>
+        <div class="control-group">
+          <label for="strainLimit">Strain limit τ <span id="strainLimitV" class="value-badge">3%</span></label>
+          <input type="range" id="strainLimit" min="0.5" max="10" step="0.5" value="3">
+        </div>
+        <p id="unsafeNote" class="note warn" hidden>Without the CCD filter only the barrier's force stands between two strands. Yank a strand quickly through its neighbour with the mouse: it tunnels, and the intersection counter lights up. With the filter on it never happens.</p>
+      </section>
+
+      <section class="card" data-control-group="Playback">
+        <div class="row-2">
+          <div class="control-group toggle-row">
+            <label for="running">Running</label>
+            <input type="checkbox" id="running" checked>
+          </div>
+          <button id="resetBtn" class="btn">↺ Reset</button>
+        </div>
+        <div class="control-group">
+          <label for="speed">Time scale <span id="speedV" class="value-badge">1×</span></label>
+          <input type="range" id="speed" min="0.1" max="3" step="0.05" value="1">
+        </div>
+        <div class="row-2">
+          <div class="control-group">
+            <label for="colorMode">Color by</label>
+            <select id="colorMode">
+              <option value="strand" selected>Strand</option>
+              <option value="strain">Strain / τ</option>
+              <option value="contact">Contact</option>
+            </select>
+          </div>
+          <div class="control-group toggle-row">
+            <label for="showContacts">Contacts</label>
+            <input type="checkbox" id="showContacts">
+          </div>
+        </div>
+      </section>
+
+      <details class="card theory" open>
+        <summary>How the solver works</summary>
+        <canvas id="barrierPlot" class="plot"></canvas>
+        <div class="legend"><span class="sw cubic"></span>cubic <span class="sw log"></span>log <span class="sw quad"></span>quadratic <span class="sw live"></span>live gaps</div>
+        <ol class="steps">
+          <li><b>Cubic barrier.</b> Each pair closer than ĝ gets energy κ·ψ(g) with ψ(g) = −(2/3ĝ)(g−ĝ)³. It is finite at contact.</li>
+          <li><b>Dynamic stiffness.</b> κ = m/g² + nᵀHn is recomputed at every Newton step from the mass and the elastic Hessian, so the force still diverges as g → 0.</li>
+          <li><b>CCD-filtered step.</b> Each Newton step is cut to the fraction that CCD over 1.25× the step allows. Once the accepted fractions sum to ¼, Δt shrinks to match. No energy line search, and no step ever crosses.</li>
+          <li><b>Strain limiting.</b> The same barrier on each edge's stretch keeps it under τ.</li>
+        </ol>
+      </details>
+    </div>
+  </aside>
+
+  <aside id="braidPanel" class="panel right">
+    <header class="brand small">
+      <div class="eyebrow">Artin braid group</div>
+      <h2 id="groupName">B₄</h2>
+      <button id="collapseRight" class="icon-btn" aria-label="Collapse panel" title="Collapse panel">
+        <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M9 6l6 6-6 6" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg>
+      </button>
+    </header>
+    <div class="scroll">
+      <section class="card" data-control-group="Generators">
+        <div class="pad-label">Half-twist two bottom pins <span class="muted">(keys 1–6, ⇧ for inverse)</span></div>
+        <div id="genPad" class="gen-pad"></div>
+        <div class="pad-row">
+          <button id="deltaBtn" class="btn gen" title="Half twist of every pin (key D)">Δ</button>
+          <button id="deltaInvBtn" class="btn gen" title="Inverse half twist (⇧D)">Δ⁻¹</button>
+          <button id="fullTwistBtn" class="btn gen" title="Full twist, central in Bₙ (key F)">Δ²</button>
+          <button id="undoBtn" class="btn" title="Undo (U / Backspace)">⟲ Undo</button>
+        </div>
+        <div class="pad-row">
+          <select id="preset" aria-label="Preset braid">
+            <option value="">Presets…</option>
+          </select>
+          <button id="clearBtn" class="btn" title="Straighten: rebuild with no braid">Clear</button>
+        </div>
+      </section>
+
+      <section class="card word-card">
+        <div id="wordLine" class="word"></div>
+        <div id="blockNote" class="note warn" hidden></div>
+        <div id="diagramWrap" class="diagram-wrap"><svg id="diagram" width="100%"></svg></div>
+        <div id="readback" class="readback"></div>
+      </section>
+
+      <section class="card">
+        <dl id="invariants" class="inv"></dl>
+      </section>
+    </div>
+  </aside>
+
+  <div id="hud" class="hud">
+    <div class="chip opt" title="Newton iterations and PCG iterations per substep"><span class="k">Newton · PCG</span><span class="v"><span id="hNewton">–</span> · <span id="hCg">–</span></span></div>
+    <div class="chip wide opt" title="Smallest accepted step fraction (CCD / strain limit), and Δt actually advanced as a share of the nominal Δt"><span class="k">toi · Δt</span><span id="hToi" class="v">–</span><canvas id="sToi" class="spark"></canvas></div>
+    <div class="chip" title="Pairs closer than the activation gap ĝ"><span class="k">contacts</span><span id="hContacts" class="v">–</span></div>
+    <div class="chip wide" title="Smallest distance between any two surfaces (history: gap / ĝ)"><span class="k">min gap</span><span id="hGap" class="v">–</span><canvas id="sGap" class="spark"></canvas></div>
+    <div class="chip opt"><span class="k">max strain</span><span id="hStrain" class="v">–</span></div>
+    <div class="chip" title="Pairs of strands overlapping in the accepted configuration"><span class="k">intersections</span><span id="hBad" class="v ok">0</span></div>
+    <div class="chip opt"><span class="k">speed</span><span id="hSpeed" class="v">–</span></div>
+  </div>
+
+  <div id="hint" class="hint">Drag a strand to pull it · orbit with the mouse · <kbd>Space</kbd> pause · <kbd>C</kbd> contacts · <kbd>H</kbd> hide panels</div>
+  <button id="showUi" class="show-ui" hidden title="Show panels (H)">☰</button>
+  <div class="tabs">
+    <button id="openLeft" class="tab left" title="Scene and solver controls">☰ Controls</button>
+    <button id="openRight" class="tab right" title="Braid generators and invariants">Braid</button>
+  </div>
+
+  <script type="module" src="js/main.js"></script>
+</body>
+
+</html>
