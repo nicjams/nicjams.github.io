@@ -1,0 +1,9 @@
+{
+  "name": "theory-of-harmony",
+  "private": true,
+  "type": "module",
+  "scripts": {
+    "test": "node --test tests/*.test.js",
+    "check": "node --check js/app.js && node --check js/model.js && node --check js/audio.js"
+  }
+}

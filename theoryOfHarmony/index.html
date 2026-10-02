@@ -1,0 +1,70 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>A Theory of Harmony — Sound, Scales & a Theorem</title>
+    <meta
+      name="description"
+      content="Explore beating, vibrating strings, tuning and voice leading. Prove that a harmonicity model selects major triads, then IV–I–V and a uniquely centered major scale."
+    />
+    <link rel="stylesheet" href="style.css" />
+  </head>
+  <body>
+    <a class="skip" href="#experiment">Skip to experiment</a>
+    <header>
+      <a class="wordmark" href="#intro">A Theory of <em>Harmony</em></a
+      ><span class="edition">An interactive investigation</span>
+    </header>
+    <main id="app">
+      <aside id="walkthrough" aria-label="Walkthrough">
+        <nav id="chapters" aria-label="Chapters"></nav>
+        <article id="story" tabindex="-1"></article>
+        <div class="page-nav">
+          <button id="prev" type="button">← Previous</button
+          ><span id="chapter-count"></span
+          ><button id="next" type="button">Next →</button>
+        </div>
+      </aside>
+      <section id="experiment" tabindex="-1" aria-labelledby="lab-title">
+        <div class="lab-heading">
+          <div>
+            <span class="eyebrow">Listen · change · discover</span>
+            <h2 id="lab-title"></h2>
+          </div>
+          <button id="reset" type="button">Reset</button>
+        </div>
+        <div id="lab-controls"></div>
+        <div id="visual">
+          <canvas
+            id="main-canvas"
+            role="img"
+            aria-label="Experiment diagram; numerical results and equivalent controls appear alongside it."
+          ></canvas>
+          <div id="diagram"></div>
+        </div>
+        <div id="readout" aria-live="polite" aria-atomic="true"></div>
+        <div id="lab-extra"></div>
+        <div class="transport">
+          <button id="play" class="primary" type="button">▶ Play</button
+          ><button id="stop" type="button" disabled>■ Stop</button
+          ><label class="volume"
+            >Volume
+            <input
+              id="volume"
+              type="range"
+              min="0"
+              max="0.7"
+              step="0.01"
+              value="0.3" /></label
+          ><span id="sound-status" role="status">Ready to listen</span>
+        </div>
+      </section>
+    </main>
+    <noscript
+      >This walkthrough needs JavaScript for its experiments. Read the
+      <a href="THEOREM.md">theorem and proof</a> as a text document.</noscript
+    >
+    <script type="module" src="js/app.js"></script>
+  </body>
+</html>
