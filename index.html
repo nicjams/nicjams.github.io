@@ -4,59 +4,718 @@
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
 <title>nicjams</title>
+<meta name="description" content="Small instruments for ears and eyes: paint music with musicalCanvas, build a band of virtual musicians in superGroups, follow A Theory of Harmony, and explore the Graphics Studio's interactive mathematics.">
+<meta name="theme-color" content="#f2efe8" media="(prefers-color-scheme: light)">
+<meta name="theme-color" content="#121418" media="(prefers-color-scheme: dark)">
+<meta property="og:title" content="nicjams">
+<meta property="og:description" content="Small instruments for ears and eyes: paint a tune, prove a scale, set mathematics in motion.">
+<link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 32 32'%3E%3Crect width='32' height='32' rx='7' fill='%23f2efe8'/%3E%3Cpath d='M4 21c4-6 8-6 12 0s8 6 12 0' fill='none' stroke='%231170a8' stroke-width='3' stroke-linecap='round'/%3E%3Cpath d='M8 12l4-4 4 4' fill='none' stroke='%23c2185b' stroke-width='2.6' stroke-linecap='round' stroke-linejoin='round'/%3E%3C/svg%3E">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Fraunces:ital,opsz,wght@0,9..144,500..700;1,9..144,500..700&family=Inter:wght@400;500;600&display=swap" rel="stylesheet">
 <style>
   :root {
+    color-scheme: light dark;
     --bg: #f2efe8;
-    --surface: #ffffff;
-    --line: rgba(28, 32, 40, 0.14);
-    --text: #1e242e;
-    --text-dim: #6c7480;
-    --accent: #0e7c96;
+    --surface: #fbfaf6;
+    --paper: #f7f4ec;
+    --line: rgba(28, 32, 40, 0.12);
+    --line-strong: rgba(28, 32, 40, 0.24);
+    --ink: #1e242e;
+    --ink-dim: #5b6370;
+    --accent: #0b6a80;
+    --shadow: 0 1px 2px rgba(28, 32, 40, 0.06), 0 8px 24px -12px rgba(28, 32, 40, 0.18);
+
+    /* brush colours, from musicalCanvas/js/audio.js */
+    --bass: #1170a8;
+    --keys: #c07800;
+    --strings: #7b3fd4;
+    --lead: #c2185b;
+    --bells: #0f8a5f;
+    --drums: #4b5563;
+
+    --serif: 'Fraunces', 'Iowan Old Style', 'Palatino Linotype', Georgia, serif;
+    --sans: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', system-ui, sans-serif;
+    --gutter: clamp(16px, 4vw, 40px);
   }
+  @media (prefers-color-scheme: dark) {
+    :root {
+      --bg: #121418;
+      --surface: #1a1d23;
+      --paper: #16191e;
+      --line: rgba(236, 235, 230, 0.10);
+      --line-strong: rgba(236, 235, 230, 0.22);
+      --ink: #ecebe6;
+      --ink-dim: #a3a9b3;
+      --accent: #5cc6de;
+      --shadow: 0 1px 2px rgba(0, 0, 0, 0.3), 0 10px 28px -14px rgba(0, 0, 0, 0.6);
+
+      --bass: #5bb3e8;
+      --keys: #f2b13c;
+      --strings: #b28cf5;
+      --lead: #f0679d;
+      --bells: #46cf98;
+      --drums: #9aa3af;
+    }
+  }
+
   * { box-sizing: border-box; margin: 0; padding: 0; }
+  html { -webkit-text-size-adjust: 100%; }
   body {
     background: var(--bg);
-    color: var(--text);
-    font: 16px/1.6 -apple-system, BlinkMacSystemFont, 'Segoe UI', system-ui, sans-serif;
-    min-height: 100vh;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    padding: 32px;
+    color: var(--ink);
+    font: 16px/1.6 var(--sans);
+    -webkit-font-smoothing: antialiased;
   }
-  main { width: 100%; max-width: 640px; }
-  h1 { font-size: 26px; letter-spacing: -0.01em; }
-  .sub { color: var(--text-dim); margin: 6px 0 28px; }
-  .card {
+  a { color: var(--accent); }
+  img { display: block; max-width: 100%; }
+  :focus-visible { outline: 2px solid var(--accent); outline-offset: 3px; }
+
+  .wrap { width: min(1120px, 100% - 2 * var(--gutter)); margin-inline: auto; }
+
+  /* ---- top ---------------------------------------------------------------- */
+
+  .top {
+    display: flex;
+    justify-content: flex-end;
+    gap: 22px;
+    padding-top: 22px;
+    font-size: 14px;
+  }
+  .top a { color: var(--ink-dim); text-decoration: none; }
+  .top a:hover { color: var(--ink); }
+
+  .hero { padding: clamp(28px, 6vw, 64px) 0 clamp(48px, 7vw, 80px); }
+  h1 {
+    font: 600 clamp(60px, 17vw, 156px)/0.9 var(--serif);
+    font-optical-sizing: auto;
+    letter-spacing: -0.035em;
+  }
+  h1 em { color: var(--accent); font-weight: 500; }
+  .lede {
+    max-width: 34em;
+    margin-top: clamp(16px, 2.4vw, 26px);
+    color: var(--ink-dim);
+    font-size: clamp(18px, 2.1vw, 21px);
+    line-height: 1.5;
+    text-wrap: pretty;
+  }
+
+  /* the jam: a pocket musicalCanvas */
+  .jam { margin-top: clamp(28px, 4.5vw, 48px); }
+  .jam canvas {
     display: block;
+    width: 100%;
+    height: clamp(190px, 26vw, 290px);
+    background: var(--paper);
+    border: 1px solid var(--line);
+    border-radius: 16px;
+    box-shadow: var(--shadow);
+  }
+  .jam-bar {
+    display: flex;
+    flex-wrap: wrap;
+    align-items: center;
+    justify-content: space-between;
+    gap: 10px 20px;
+    margin-top: 14px;
+  }
+  .jam figcaption { color: var(--ink-dim); font-size: 14px; }
+  .jam-controls { display: flex; gap: 8px; }
+  .pill {
+    display: inline-flex;
+    align-items: center;
+    gap: 7px;
+    min-height: 40px;
+    padding: 0 16px;
+    border: 1px solid var(--line-strong);
+    border-radius: 999px;
+    background: var(--surface);
+    color: var(--ink);
+    font: 500 14px/1 var(--sans);
+    cursor: pointer;
+    transition: background-color 0.15s, color 0.15s, border-color 0.15s;
+  }
+  .pill:hover { border-color: var(--ink-dim); }
+  .pill[aria-pressed="true"] { background: var(--ink); color: var(--bg); border-color: var(--ink); }
+  .pill svg { width: 15px; height: 15px; flex: none; }
+
+  /* ---- sections ------------------------------------------------------------ */
+
+  .section { padding-bottom: clamp(56px, 8vw, 96px); }
+  .section-head {
+    display: flex;
+    flex-wrap: wrap;
+    align-items: baseline;
+    justify-content: space-between;
+    gap: 6px 20px;
+    padding-top: 18px;
+    margin-bottom: 26px;
+    border-top: 1px solid var(--line-strong);
+  }
+  h2 { font: 600 clamp(24px, 3vw, 30px)/1.2 var(--serif); letter-spacing: -0.01em; }
+  .section-head a { font-size: 15px; font-weight: 500; text-decoration: none; }
+  .section-head a:hover { text-decoration: underline; text-underline-offset: 3px; }
+
+  /* ---- project cards ------------------------------------------------------- */
+
+  .cards { display: grid; grid-template-columns: repeat(2, 1fr); gap: 22px; }
+  .card {
+    display: flex;
+    flex-direction: column;
+    overflow: hidden;
     background: var(--surface);
     border: 1px solid var(--line);
-    border-radius: 12px;
-    padding: 18px 20px;
-    margin-bottom: 12px;
-    text-decoration: none;
+    border-radius: 16px;
+    box-shadow: var(--shadow);
     color: inherit;
-    transition: border-color 0.15s, transform 0.15s;
+    text-decoration: none;
+    transition: transform 0.2s, border-color 0.2s;
   }
-  .card:hover { border-color: var(--accent); transform: translateY(-1px); }
-  .card h2 { font-size: 17px; color: var(--accent); margin-bottom: 4px; }
-  .card p { color: var(--text-dim); font-size: 14px; }
-  footer { color: var(--text-dim); font-size: 13px; margin-top: 24px; }
+  .card:hover { transform: translateY(-3px); border-color: var(--line-strong); }
+  .card:focus-visible { outline-offset: 4px; border-radius: 16px; }
+  .shot {
+    aspect-ratio: 16 / 10;
+    overflow: hidden;
+    border-bottom: 1px solid var(--line);
+    background: var(--paper);
+  }
+  .shot img { width: 100%; height: 100%; object-fit: cover; transition: transform 0.5s; }
+  .card:hover .shot img { transform: scale(1.03); }
+  .shot.mosaic { display: grid; grid-template: 1fr 1fr / repeat(3, 1fr); gap: 2px; background: #05070f; }
+  .card-body { display: flex; flex-direction: column; flex: 1; padding: 20px 22px 22px; }
+  .kind { display: flex; align-items: center; gap: 8px; color: var(--ink-dim); font-size: 13px; }
+  .dot { width: 8px; height: 8px; border-radius: 50%; background: var(--c); flex: none; }
+  h3 { margin: 6px 0 8px; font: 600 24px/1.2 var(--serif); letter-spacing: -0.01em; }
+  .nowrap { white-space: nowrap; }
+  .card-body p.desc { color: var(--ink-dim); font-size: 15px; line-height: 1.55; }
+  .meta {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    gap: 12px;
+    margin-top: auto;
+    padding-top: 18px;
+    color: var(--ink-dim);
+    font-size: 13px;
+  }
+  .go { color: var(--accent); font-weight: 600; font-size: 14px; white-space: nowrap; }
+  .go::after { content: '→'; display: inline-block; margin-left: 0.3em; transition: transform 0.2s; }
+  .card:hover .go::after { transform: translateX(3px); }
+
+  @media (max-width: 959px) {
+    .cards { grid-template-columns: 1fr; }
+    .card { flex-direction: row; }
+    .shot { flex: 0 0 46%; aspect-ratio: auto; min-height: 220px; border-bottom: 0; border-right: 1px solid var(--line); }
+  }
+  @media (max-width: 599px) {
+    .card { flex-direction: column; }
+    .shot { flex: none; aspect-ratio: 16 / 10; min-height: 0; border-right: 0; border-bottom: 1px solid var(--line); }
+  }
+
+  /* ---- graphics strip ------------------------------------------------------ */
+
+  .strip { display: grid; grid-template-columns: repeat(6, 1fr); gap: 18px 14px; list-style: none; }
+  .strip a { display: block; color: inherit; text-decoration: none; }
+  .strip img {
+    width: 100%;
+    height: auto;
+    aspect-ratio: 16 / 10;
+    object-fit: cover;
+    border-radius: 10px;
+    border: 1px solid var(--line);
+    background: var(--paper);
+    transition: transform 0.2s;
+  }
+  .strip a:hover img { transform: translateY(-2px); }
+  .strip span { display: flex; align-items: flex-start; gap: 7px; margin-top: 8px; font-size: 14px; line-height: 1.3; }
+  .strip .dot { margin-top: 5px; }
+  .strip a:hover span { text-decoration: underline; text-underline-offset: 3px; }
+  @media (max-width: 959px) { .strip { grid-template-columns: repeat(3, 1fr); } }
+  @media (max-width: 519px) { .strip { grid-template-columns: repeat(2, 1fr); } }
+
+  footer {
+    padding: 22px 0 40px;
+    border-top: 1px solid var(--line);
+    color: var(--ink-dim);
+    font-size: 14px;
+  }
+
+  @media (prefers-reduced-motion: reduce) {
+    *, *::before, *::after { transition: none !important; }
+  }
 </style>
 </head>
 <body>
+
+<nav class="top wrap" aria-label="Site">
+  <a href="#projects">Projects</a>
+  <a href="#graphics">Graphics</a>
+  <a href="https://github.com/nicjams">GitHub</a>
+</nav>
+
 <main>
-  <h1>nicjams</h1>
-  
-  <a class="card" href="musicalCanvas/">
-    <h2>musicalCanvas 🎨</h2>
-    <p>Paint on a canvas and a cycling playhead turns the strokes into MIDI.
-       Pick a brush per instrument, a key and a quantize grid, then press Demo
-       to watch it paint itself.</p>
-  </a>
+  <header class="hero wrap">
+    <h1>nic<em>jams</em></h1>
+    <p class="lede">Small instruments for ears and eyes. Paint a tune, form a band of
+      virtual musicians, prove where the major scale comes from, or set some
+      mathematics in motion.</p>
 
+    <figure class="jam">
+      <canvas id="jam" role="img"
+        aria-label="A painted tune: coloured lines for bass, strings, keys, bells and drums, with a playhead sweeping across them."></canvas>
+      <div class="jam-bar">
+        <figcaption>A pocket musicalCanvas: each line is a part, and the playhead plays what it crosses.</figcaption>
+        <div class="jam-controls">
+          <button id="soundBtn" class="pill" type="button" aria-pressed="false">
+            <svg viewBox="0 0 16 16" aria-hidden="true"><path d="M2 6h3l4-3.5v11L5 10H2z" fill="currentColor"/><path d="M11.5 5.5a3.5 3.5 0 0 1 0 5M13.5 3.5a6.3 6.3 0 0 1 0 9" fill="none" stroke="currentColor" stroke-width="1.4" stroke-linecap="round"/></svg>
+            <span>Listen</span>
+          </button>
+          <button id="newBtn" class="pill" type="button">New tune</button>
+        </div>
+      </div>
+    </figure>
+  </header>
 
-<a class="card" href="superGroups/"><h2>superGroups 🎛</h2><p>Meet twelve virtual musicians, assemble a supergroup, and mix their performances as they learn to play together.</p></a>
+  <section id="projects" class="section wrap" aria-labelledby="projects-title">
+    <div class="section-head"><h2 id="projects-title">Projects</h2></div>
+    <div class="cards">
+
+      <a class="card" href="musicalCanvas/">
+        <div class="shot">
+          <img src="assets/musical-canvas.webp" width="1200" height="720" loading="lazy"
+            alt="A painting in musicalCanvas: a sailboat, an island with a palm tree, the sun and waves, each drawn with a different instrument's brush.">
+        </div>
+        <div class="card-body">
+          <p class="kind"><span class="dot" style="--c: var(--keys)"></span>Music · Instrument</p>
+          <h3>musicalCanvas</h3>
+          <p class="desc">Paint music. Each brush is an instrument, and a playhead sweeps
+            the canvas turning your strokes into notes. Smear a stroke to play a chord,
+            press Scene for a picture that plays, then export MIDI.</p>
+          <p class="meta">7 brushes · MIDI export <span class="go">Paint</span></p>
+        </div>
+      </a>
+
+      <a class="card" href="superGroups/">
+        <div class="shot">
+          <img src="assets/supergroups.webp" width="1200" height="750" loading="lazy" style="object-position: left center"
+            alt="The superGroups listening room: the headline “Different minds. One groove.” beside four tiles labelled B, K, L and D for bass, keys, lead and drums.">
+        </div>
+        <div class="card-body">
+          <p class="kind"><span class="dot" style="--c: var(--lead)"></span>Music · Machine learning</p>
+          <h3>superGroups</h3>
+          <p class="desc">Thirteen virtual musicians, trained from scratch in PyTorch. Hear
+            how they learned to listen to each other, then build an unlikely band and
+            mix its takes.</p>
+          <p class="meta">13 musicians · 108 lineups <span class="go">Listen</span></p>
+        </div>
+      </a>
+
+      <a class="card" href="theoryOfHarmony/">
+        <div class="shot">
+          <img src="assets/theory-of-harmony.webp" width="1200" height="750" loading="lazy" style="object-position: left center"
+            alt="The opening chapter of A Theory of Harmony: the seven notes of C major lit up on a circle of twelve pitch classes.">
+        </div>
+        <div class="card-body">
+          <p class="kind"><span class="dot" style="--c: var(--strings)"></span>Music theory · Interactive essay</p>
+          <h3>A Theory of Harmony</h3>
+          <p class="desc">Hear beating, pluck a string and compare tunings, then follow a
+            proof that one harmonicity model selects major triads, <span class="nowrap">IV–I–V</span> and the
+            major scale.</p>
+          <p class="meta">9 chapters · with proofs <span class="go">Read</span></p>
+        </div>
+      </a>
+
+      <a class="card" href="graphics/">
+        <div class="shot mosaic">
+          <img src="graphics/thumbs/newtonFractals.webp" width="320" height="200" loading="lazy" alt="">
+          <img src="graphics/thumbs/hatTiling.webp" width="320" height="200" loading="lazy" alt="">
+          <img src="graphics/thumbs/fire.webp" width="320" height="200" loading="lazy" alt="">
+          <img src="graphics/thumbs/donutSpiral.webp" width="320" height="200" loading="lazy" alt="">
+          <img src="graphics/thumbs/cyclicCellularAutomaton.webp" width="320" height="200" loading="lazy" alt="">
+          <img src="graphics/thumbs/picardOrbit.webp" width="320" height="200" loading="lazy" alt="">
+        </div>
+        <div class="card-body">
+          <p class="kind"><span class="dot" style="--c: var(--bells)"></span>Mathematics · Visuals</p>
+          <h3>Graphics Studio</h3>
+          <p class="desc">Fractals, tilings, fluids and botanical studies in one gallery.
+            Build playlists, present them full screen, and drive them from your phone
+            as a remote.</p>
+          <p class="meta"><span><span data-viz-count>35</span> visualizations</span> <span class="go">Explore</span></p>
+        </div>
+      </a>
+
+    </div>
+  </section>
+
+  <section id="graphics" class="section wrap" aria-labelledby="graphics-title">
+    <div class="section-head">
+      <h2 id="graphics-title">From the Graphics Studio</h2>
+      <a href="graphics/">Browse all <span data-viz-count>35</span> →</a>
+    </div>
+    <ul class="strip">
+      <li><a href="graphics/mandelbrot/"><img src="graphics/thumbs/mandelbrot.webp" width="320" height="200" loading="lazy" alt=""><span><i class="dot" style="--c: #ff6b6b"></i>Mandelbrot Explorer</span></a></li>
+      <li><a href="graphics/passiflora/"><img src="graphics/thumbs/passiflora.webp" width="320" height="200" loading="lazy" alt=""><span><i class="dot" style="--c: #a9e34b"></i>Passiflora</span></a></li>
+      <li><a href="graphics/penrose/"><img src="graphics/thumbs/penrose.webp" width="320" height="200" loading="lazy" alt=""><span><i class="dot" style="--c: #5cc8ff"></i>Penrose Tiling</span></a></li>
+      <li><a href="graphics/smoke/"><img src="graphics/thumbs/smoke.webp" width="320" height="200" loading="lazy" alt=""><span><i class="dot" style="--c: #ffa94d"></i>Domain Warping</span></a></li>
+      <li><a href="graphics/indrasPearls/"><img src="graphics/thumbs/indrasPearls.webp" width="320" height="200" loading="lazy" alt=""><span><i class="dot" style="--c: #ff6b6b"></i>Indra’s Pearls</span></a></li>
+      <li><a href="graphics/ballMachine/"><img src="graphics/thumbs/ballMachine.webp" width="320" height="200" loading="lazy" alt=""><span><i class="dot" style="--c: #63e6be"></i>Glass House Ball Machine</span></a></li>
+    </ul>
+  </section>
 </main>
+
+<footer class="wrap">
+  nicjams · made for fun, built in the open on
+  <a href="https://github.com/nicjams/nicjams.github.io">GitHub</a>.
+</footer>
+
+<script type="module">
+  // Keep the visualization count in step with the Graphics Studio catalog.
+  import { VISUALIZATIONS } from './graphics/app/manifest.js';
+  for (const el of document.querySelectorAll('[data-viz-count]')) el.textContent = VISUALIZATIONS.length;
+</script>
+
+<script>
+// The jam: a tiny generated tune drawn the way musicalCanvas paints, with a
+// playhead that sweeps it in a loop. Sound is opt-in through the Listen button.
+(() => {
+  const canvas = document.getElementById('jam');
+  const ctx = canvas.getContext('2d');
+  const soundBtn = document.getElementById('soundBtn');
+  const newBtn = document.getElementById('newBtn');
+  const reduceMotion = matchMedia('(prefers-reduced-motion: reduce)');
+  const darkMode = matchMedia('(prefers-color-scheme: dark)');
+
+  const STEPS = 32;                  // four bars of eighth notes
+  const ROWS = 15;                   // three octaves of major pentatonic
+  const STEP_SEC = 60 / 100 / 2;     // 100 BPM
+  const LOOP_SEC = STEPS * STEP_SEC;
+  const PENTA = [0, 2, 4, 7, 9];
+  const REVEAL_SEC = 1.1;
+
+  const rand = (a, b) => a + Math.random() * (b - a);
+  const pick = (list) => list[Math.floor(Math.random() * list.length)];
+  const clamp = (v, lo, hi) => Math.max(lo, Math.min(hi, v));
+
+  // ---- the tune -------------------------------------------------------------
+  // A stroke is a list of {step, row} points; a note is what plays at a step.
+
+  let root, strokes, ticks, notes, byStep;
+
+  function compose() {
+    root = pick([48, 50, 53, 55, 57]);
+    const midi = (row) => root + PENTA[((row % 5) + 5) % 5] + 12 * Math.floor(row / 5);
+    strokes = []; ticks = []; notes = [];
+    const note = (part, step, row, len, vrow = row, row2) =>
+      notes.push({ part, step, len, midi: midi(row), vrow, midi2: row2 === undefined ? undefined : midi(row2) });
+
+    // bass: a slow wave whose centre follows the chord roots, in a tresillo
+    const prog = pick([[0, 4, 3, 0], [0, 3, 4, 3], [0, 2, 3, 0], [4, 3, 0, 0], [0, 4, 2, 3]]);
+    const phase = rand(0, Math.PI * 2);
+    const bassAt = (s) => prog[clamp(Math.floor(s / 8), 0, 3)] + 0.35 * Math.sin(s * Math.PI / 4 + phase);
+    const bass = [];
+    for (let s = -1; s <= STEPS; s++) bass.push({ step: s, row: bassAt(s) + rand(-0.05, 0.05) });
+    strokes.push({ part: 'bass', pts: bass, width: 5 });
+    prog.forEach((r, bar) => [[0, 3], [3, 3], [6, 2]].forEach(([at, len]) =>
+      note('bass', bar * 8 + at, r, len, bassAt(bar * 8 + at))));
+
+    // strings: one held chord tone per bar, gliding between them
+    const pad = [];
+    prog.forEach((r, bar) => {
+      const row = 5 + ((r + 2) % 5);
+      pad.push({ step: bar * 8 - 0.5 + (bar ? 1.2 : 0), row }, { step: bar * 8 + 6.8, row: row + rand(-0.12, 0.12) });
+      note('strings', bar * 8, row, 8, row, row + 2);
+    });
+    pad[0].step = -1; pad[pad.length - 1].step = STEPS;
+    strokes.push({ part: 'strings', pts: pad, width: 4 });
+
+    // keys: two phrases of a stepwise melody, held notes drawn flat
+    const RHYTHMS = [[1, 0, 1, 0, 1, 1, 0, 1], [1, 1, 0, 1, 0, 1, 1, 0], [1, 0, 0, 1, 1, 0, 1, 0],
+                     [1, 0, 1, 1, 1, 0, 1, 0], [0, 1, 1, 0, 1, 0, 1, 1], [1, 0, 1, 0, 1, 0, 1, 1]];
+    let row = 9 + Math.floor(rand(0, 3));
+    for (const phraseStart of [0, 16]) {
+      const onsets = [];
+      for (let bar = 0; bar < 2; bar++) {
+        const rhythm = pick(RHYTHMS);
+        rhythm.forEach((on, i) => { if (on && !(bar === 1 && i >= 6)) onsets.push(phraseStart + bar * 8 + i); });
+      }
+      const pts = [];
+      onsets.forEach((step, i) => {
+        row = clamp(row + pick([-2, -1, -1, 0, 1, 1, 2]), 7, 13);
+        const len = Math.min(3, (onsets[i + 1] ?? phraseStart + 15) - step);
+        note('keys', step, row, len);
+        pts.push({ step: step - 0.15, row }, { step: step + len - 0.45, row });
+      });
+      strokes.push({ part: 'keys', pts, width: 4.5 });
+    }
+
+    // bells: a few high glints, drawn as little ^ marks
+    const bellSteps = new Set();
+    while (bellSteps.size < 5) bellSteps.add(2 * Math.floor(rand(0, STEPS / 2)) + (Math.random() < 0.3 ? 1 : 0));
+    for (const step of bellSteps) {
+      const r = Math.floor(rand(12, 15));
+      note('bells', step, r, 2);
+      ticks.push({ part: 'bells', step, row: r, shape: 'caret' });
+    }
+
+    // drums: kick on the downbeats (and a push), hats on the off-beats
+    for (let s = 0; s < STEPS; s++) {
+      if (s % 8 === 0 || s % 16 === 14) { notes.push({ part: 'kick', step: s, len: 1, vrow: -0.9 }); ticks.push({ part: 'drums', step: s, row: -0.9, shape: 'dot' }); }
+      if (s % 2 === 1) { notes.push({ part: 'hat', step: s, len: 1, vrow: -0.9 }); ticks.push({ part: 'drums', step: s, row: -0.9, shape: 'dash' }); }
+    }
+
+    byStep = Array.from({ length: STEPS }, () => []);
+    for (const n of notes) byStep[n.step].push(n);
+  }
+
+  // ---- drawing --------------------------------------------------------------
+
+  let W = 0, H = 0, dpr = 1, colors = {}, grain = null;
+
+  function readColors() {
+    const css = getComputedStyle(document.documentElement);
+    for (const k of ['paper', 'ink', 'bass', 'strings', 'keys', 'bells', 'drums']) colors[k] = css.getPropertyValue('--' + k).trim();
+    colors.kick = colors.hat = colors.drums;
+    grain = makeGrain(darkMode.matches);
+  }
+
+  function makeGrain(dark) {
+    const g = document.createElement('canvas');
+    g.width = g.height = 160;
+    const gx = g.getContext('2d');
+    const img = gx.createImageData(160, 160);
+    for (let i = 0; i < img.data.length; i += 4) {
+      const v = dark ? 255 : 60;
+      img.data[i] = img.data[i + 1] = img.data[i + 2] = v;
+      img.data[i + 3] = Math.random() * (dark ? 9 : 14);
+    }
+    gx.putImageData(img, 0, 0);
+    return ctx.createPattern(g, 'repeat');
+  }
+
+  function resize() {
+    dpr = Math.min(window.devicePixelRatio || 1, 2);
+    W = canvas.clientWidth; H = canvas.clientHeight;
+    canvas.width = Math.round(W * dpr); canvas.height = Math.round(H * dpr);
+    draw();
+  }
+
+  const X = (step) => (step + 0.5) * W / STEPS;
+  const Y = (row) => {
+    const top = 18, bottom = 16, rowH = (H - top - bottom) / (ROWS + 1);
+    return H - bottom - (row + 1.6) * rowH;
+  };
+
+  function curve(pts) {
+    const p = pts.map((q) => ({ x: X(q.step), y: Y(q.row) }));
+    ctx.beginPath();
+    ctx.moveTo(p[0].x, p[0].y);
+    for (let i = 0; i < p.length - 1; i++) {
+      const a = p[i - 1] || p[i], b = p[i], c = p[i + 1], d = p[i + 2] || c;
+      ctx.bezierCurveTo(b.x + (c.x - a.x) / 6, b.y + (c.y - a.y) / 6,
+                        c.x - (d.x - b.x) / 6, c.y - (d.y - b.y) / 6, c.x, c.y);
+    }
+  }
+
+  function paintStroke(color, width, path) {
+    width *= clamp(W / 760, 0.7, 1);    // thinner brushes on a phone-sized canvas
+    ctx.strokeStyle = color;
+    ctx.globalAlpha = 0.16; ctx.lineWidth = width * 2.6; path(); ctx.stroke();
+    ctx.globalAlpha = 0.92; ctx.lineWidth = width; path(); ctx.stroke();
+    ctx.globalAlpha = 1;
+  }
+
+  let t = 0, reveal = 1, glows = [];
+
+  function draw() {
+    if (!W) return;
+    ctx.setTransform(dpr, 0, 0, dpr, 0, 0);
+    ctx.clearRect(0, 0, W, H);
+    ctx.fillStyle = grain; ctx.fillRect(0, 0, W, H);
+
+    ctx.save();
+    ctx.beginPath(); ctx.rect(0, 0, W * reveal, H); ctx.clip();
+    ctx.lineCap = 'round'; ctx.lineJoin = 'round';
+    for (const s of strokes) paintStroke(colors[s.part], s.width, () => curve(s.pts));
+    const cw = W / STEPS;
+    for (const k of ticks) {
+      const x = X(k.step), y = Y(k.row), c = colors[k.part];
+      if (k.shape === 'caret') {
+        const u = Math.min(7, cw * 0.38);
+        paintStroke(c, 3, () => { ctx.beginPath(); ctx.moveTo(x - u, y + u * 0.8); ctx.lineTo(x, y - u * 0.5); ctx.lineTo(x + u, y + u * 0.8); });
+      } else if (k.shape === 'dash') {
+        paintStroke(c, 3, () => { ctx.beginPath(); ctx.moveTo(x - cw * 0.18, y); ctx.lineTo(x + cw * 0.18, y); });
+      } else {
+        ctx.fillStyle = c; ctx.globalAlpha = 0.9;
+        ctx.beginPath(); ctx.arc(x, y, 3.6, 0, Math.PI * 2); ctx.fill();
+        ctx.globalAlpha = 1;
+      }
+    }
+    ctx.restore();
+
+    const now = performance.now() / 1000;
+    glows = glows.filter((g) => now - g.t0 < 0.7);
+    for (const g of glows) {
+      const k = (now - g.t0) / 0.7;
+      ctx.globalAlpha = 0.45 * (1 - k);
+      ctx.fillStyle = g.color;
+      ctx.beginPath(); ctx.arc(g.x, g.y, 4 + 12 * k, 0, Math.PI * 2); ctx.fill();
+    }
+    ctx.globalAlpha = 1;
+
+    if (playing || t > 0) {
+      const x = Math.round((reveal < 1 ? W * reveal : t / LOOP_SEC * W)) + 0.5;
+      ctx.strokeStyle = colors.ink; ctx.fillStyle = colors.ink;
+      ctx.globalAlpha = 0.7; ctx.lineWidth = 1.25;
+      ctx.beginPath(); ctx.moveTo(x, 0); ctx.lineTo(x, H); ctx.stroke();
+      ctx.beginPath(); ctx.moveTo(x - 5, 0); ctx.lineTo(x + 5, 0); ctx.lineTo(x, 6); ctx.fill();
+      ctx.globalAlpha = 1;
+    }
+  }
+
+  // ---- sound ----------------------------------------------------------------
+
+  let ac = null, master = null, noise = null, soundOn = false;
+
+  function startAudio() {
+    if (!ac) {
+      const AC = window.AudioContext || window.webkitAudioContext;
+      if (!AC) return false;
+      ac = new AC();
+      const comp = ac.createDynamicsCompressor();
+      master = ac.createGain();
+      master.gain.value = 0;
+      master.connect(comp).connect(ac.destination);
+      noise = ac.createBuffer(1, Math.floor(ac.sampleRate * 0.1), ac.sampleRate);
+      const d = noise.getChannelData(0);
+      for (let i = 0; i < d.length; i++) d[i] = Math.random() * 2 - 1;
+    }
+    ac.resume();
+    return true;
+  }
+
+  const hz = (m) => 440 * 2 ** ((m - 69) / 12);
+
+  function tone(when, freq, { type = 'triangle', attack = 0.006, decay = 0.4, gain = 0.2, cutoff = 4000, detune = 0 }) {
+    const o = ac.createOscillator(), f = ac.createBiquadFilter(), g = ac.createGain();
+    o.type = type; o.frequency.value = freq; o.detune.value = detune;
+    f.type = 'lowpass'; f.frequency.value = cutoff;
+    g.gain.setValueAtTime(0, when);
+    g.gain.linearRampToValueAtTime(gain, when + attack);
+    g.gain.exponentialRampToValueAtTime(0.0001, when + attack + decay);
+    o.connect(f).connect(g).connect(master);
+    o.start(when); o.stop(when + attack + decay + 0.05);
+  }
+
+  const VOICES = {
+    bass: (w, n) => tone(w, hz(n.midi - 12), { decay: n.len * STEP_SEC, gain: 0.34, cutoff: 700 }),
+    strings: (w, n) => {
+      const d = n.len * STEP_SEC;
+      for (const [m, det] of [[n.midi, -7], [n.midi, 7], [n.midi2, 0]])
+        tone(w, hz(m), { type: 'sawtooth', attack: 0.35, decay: d, gain: 0.035, cutoff: 1300, detune: det });
+    },
+    keys: (w, n) => {
+      tone(w, hz(n.midi), { decay: 0.25 + n.len * STEP_SEC * 0.6, gain: 0.16, cutoff: 3200 });
+      tone(w, hz(n.midi) * 2, { type: 'sine', decay: 0.25, gain: 0.05 });
+    },
+    bells: (w, n) => {
+      tone(w, hz(n.midi), { type: 'sine', decay: 1.4, gain: 0.09 });
+      tone(w, hz(n.midi) * 2.76, { type: 'sine', decay: 0.5, gain: 0.025 });
+    },
+    kick: (w) => {
+      const o = ac.createOscillator(), g = ac.createGain();
+      o.frequency.setValueAtTime(130, w);
+      o.frequency.exponentialRampToValueAtTime(42, w + 0.12);
+      g.gain.setValueAtTime(0.5, w);
+      g.gain.exponentialRampToValueAtTime(0.0001, w + 0.3);
+      o.connect(g).connect(master);
+      o.start(w); o.stop(w + 0.32);
+    },
+    hat: (w, n) => {
+      const src = ac.createBufferSource(), f = ac.createBiquadFilter(), g = ac.createGain();
+      src.buffer = noise;
+      f.type = 'highpass'; f.frequency.value = 7000;
+      g.gain.setValueAtTime(n.step % 4 === 3 ? 0.07 : 0.045, w);
+      g.gain.exponentialRampToValueAtTime(0.0001, w + 0.05);
+      src.connect(f).connect(g).connect(master);
+      src.start(w); src.stop(w + 0.06);
+    },
+  };
+
+  function trigger(step) {
+    const now = performance.now() / 1000;
+    const when = soundOn && ac ? ac.currentTime + 0.02 : 0;
+    for (const n of byStep[step]) {
+      glows.push({ x: X(n.step), y: Y(n.vrow), color: colors[n.part], t0: now });
+      if (when) VOICES[n.part](when, n);
+    }
+  }
+
+  function setSound(on) {
+    if (on && !startAudio()) return;
+    soundOn = on;
+    soundBtn.setAttribute('aria-pressed', String(on));
+    if (ac) master.gain.setTargetAtTime(on ? 0.4 : 0, ac.currentTime, 0.04);
+    if (on && reveal >= 1 && t === 0) t = LOOP_SEC - 0.05;   // start right on the downbeat
+    sync();
+  }
+
+  // ---- the loop -------------------------------------------------------------
+
+  let playing = false, onScreen = true, last = 0;
+
+  const shouldPlay = () => !document.hidden && (soundOn || (onScreen && !reduceMotion.matches));
+
+  function sync() {
+    if (shouldPlay() && !playing) {
+      playing = true;
+      last = performance.now();
+      requestAnimationFrame(frame);
+    }
+    if (!shouldPlay()) draw();
+  }
+
+  function frame(nowMs) {
+    if (!shouldPlay()) { playing = false; draw(); return; }
+    const dt = Math.min(0.1, (nowMs - last) / 1000);
+    last = nowMs;
+    if (reveal < 1) {
+      reveal = Math.min(1, reveal + dt / REVEAL_SEC);
+    } else {
+      const before = t;
+      t += dt;
+      const from = Math.floor(before / STEP_SEC), to = Math.floor(t / STEP_SEC);
+      for (let s = from + 1; s <= to; s++) trigger(s % STEPS);
+      if (before === 0) trigger(0);
+      t %= LOOP_SEC;
+    }
+    draw();
+    requestAnimationFrame(frame);
+  }
+
+  function fresh() {
+    compose();
+    glows = [];
+    t = 0;
+    reveal = shouldPlay() ? 0 : 1;
+    if (soundOn) { reveal = 1; t = LOOP_SEC - 0.05; }
+    draw();
+  }
+
+  soundBtn.addEventListener('click', () => setSound(!soundOn));
+  newBtn.addEventListener('click', fresh);
+  document.addEventListener('visibilitychange', sync);
+  reduceMotion.addEventListener('change', sync);
+  darkMode.addEventListener('change', () => { readColors(); draw(); });
+  new ResizeObserver(resize).observe(canvas);
+  new IntersectionObserver(([e]) => { onScreen = e.isIntersecting; sync(); }).observe(canvas);
+
+  readColors();
+  compose();
+  reveal = shouldPlay() ? 0 : 1;
+  resize();
+  sync();
+})();
+</script>
 </body>
 </html>
