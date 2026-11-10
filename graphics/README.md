@@ -181,6 +181,21 @@ dependencies), opens each visualization in presentation mode, and waits a few
 seconds before capturing. Tools that start blank get per-id help in its `PREP`
 table (extra wait, a script such as starting a MIDI demo, or painted strokes).
 
+## Link previews
+
+Each page has Open Graph tags, so a shared link shows a title, a line of
+description and `<id>/preview.jpg` (1200×630) in iMessage, Slack and the like.
+Passiflora keeps its own `social-preview.png`. Recapture with:
+
+```sh
+node graphics/scripts/make-thumbs.mjs --og mandelbrot # one page (omit ids for all)
+```
+
+`OG_PREP` in the script adds preview-only tweaks, such as hiding panels that
+would cover a full-size frame. Game of Life's preview is a hand-picked moment,
+so a run without ids skips it (and Passiflora). A new visualization needs the tags copied from
+any page's `<head>`, with its own title, description, URL and alt text.
+
 ## Regression checks
 
 Install Playwright in your development environment, serve the repository on

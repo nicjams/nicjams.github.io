@@ -3,10 +3,13 @@
 // Serve the repository (default http://localhost:8124), then run:
 //   node graphics/scripts/make-thumbs.mjs            # every visualization
 //   node graphics/scripts/make-thumbs.mjs mandelbrot # just some ids
+//   node graphics/scripts/make-thumbs.mjs --og [ids] # link-preview images instead
 //
 // Each visualization is opened in the stage in presentation mode (its own
 // UI hidden), left to animate for a few seconds, then captured at 960×600 and
-// downscaled to 320×200 WebP in graphics/thumbs/<id>.webp.
+// downscaled to 320×200 WebP in graphics/thumbs/<id>.webp. With --og it saves
+// a full-size 1200×630 JPEG to graphics/<id>/preview.jpg instead: the image
+// iMessage, Slack and others show for a shared link (see each page's og:image).
 // Uses installed Google Chrome over the DevTools protocol — no npm deps.
 // Override CHROME_PATH, GRAPHICS_TEST_URL, or THUMB_WAIT_MS if needed.
 
@@ -22,7 +25,10 @@ const OUT = join(HERE, '..', 'thumbs');
 const BASE = (process.env.GRAPHICS_TEST_URL || 'http://localhost:8124/graphics/').replace(/\/?$/, '/');
 const CHROME = process.env.CHROME_PATH || '/Applications/Google Chrome.app/Contents/MacOS/Google Chrome';
 const WAIT = Number(process.env.THUMB_WAIT_MS || 4500);
-const W = 960, H = 600, SCALE = 1 / 3, QUALITY = 72;
+const args = process.argv.slice(2);
+const OG = args.includes('--og');
+const [W, H, SCALE, FORMAT, QUALITY] = OG ? [1200, 630, 1, 'jpeg', 86] : [960, 600, 1 / 3, 'webp', 72];
+const outFile = (id) => (OG ? join(HERE, '..', id, 'preview.jpg') : join(OUT, `${id}.webp`));
 
 // Per-visualization tweaks: extra settle time, a script run inside the
 // visualization's frame after load, and/or mouse drags across the canvas.
@@ -43,7 +49,22 @@ const PREP = {
   ballMachine: { wait: 12000, run: "(function go() { const M = window.__machine; if (!M) return setTimeout(go, 250); const box = document.getElementById('labels'); if (box.checked) box.click(); M.setView('orbit'); M.rig.fly = null; M.camera.position.set(6.4, 3.1, 2.2); M.rig.controls.target.set(1.9, 3.3, -1.1); M.camera.fov = M.rig.baseFov; M.camera.updateProjectionMatrix(); M.rig.controls.update(); })()" },
 };
 
-const ids = process.argv.slice(2).length ? process.argv.slice(2) : VISUALIZATIONS.map((v) => v.id);
+// Link-preview tweaks (--og), applied over PREP: hide in-page panels that would cover a
+// full-size frame, and pick a richer moment than the gallery thumbnail needs.
+const hide = (sel) => `document.head.insertAdjacentHTML('beforeend', '<style>${sel} { display: none !important; }</style>')`;
+const OG_PREP = {
+  hatTiling: { run: `${PREP.hatTiling.run}; ${hide('#tourCaption')}` },
+  island: { run: hide('#fieldLesson, #hud') },
+  mandelbrot: { run: hide('#juliaPanel, #minimapPanel') },
+  origins: { wait: 6000, run: "(function go() { const O = window.origins; if (!O) return setTimeout(go, 200); O.captions.setEnabled(false); O.director.seek(0, 70); })()" },
+  turingPatterns: { wait: 4000, run: "(function go() { const b = document.getElementById('stepBtn'), p = document.querySelector('[data-preset=maze]'); if (!b || !p) return setTimeout(go, 200); p.click(); for (let i = 0; i < 300; i++) b.click(); })()" },
+};
+if (OG) Object.assign(PREP, OG_PREP);
+
+const picked = args.filter((a) => !a.startsWith('--'));
+// Game of Life's preview is a hand-picked moment and Passiflora has its own, so --og skips them unless named.
+const OG_KEEP = ['gameOfLife', 'passiflora'];
+const ids = picked.length ? picked : VISUALIZATIONS.map((v) => v.id).filter((id) => !(OG && OG_KEEP.includes(id)));
 const sleep = (ms) => new Promise((r) => setTimeout(r, ms));
 
 mkdirSync(OUT, { recursive: true });
@@ -111,7 +132,18 @@ try {
     const url = `${BASE}stage.html?viz=${encodeURIComponent(id)}&mode=remote&room=thumbs`;
     process.stdout.write(`${id.padEnd(26)} `);
     try {
-      await cdp.send('Page.navigate', { url });
+      // A local server can drop a module request now and then; reload until the frame is up.
+      for (let attempt = 0; ; attempt++) {
+        await cdp.send('Page.navigate', { url });
+        let up = false;
+        for (let i = 0; i < 24 && !up; i++) {
+          await sleep(250);
+          const r = await cdp.send('Runtime.evaluate', { returnByValue: true,
+            expression: "document.querySelector('#viz')?.contentDocument?.readyState === 'complete'" });
+          up = r.result.value;
+        }
+        if (up || attempt === 2) break;
+      }
       const prep = PREP[id] || {};
       await sleep(prep.run || prep.drag ? 2500 : 0);
       if (prep.run) {
@@ -129,11 +161,11 @@ try {
       })()` });
       await sleep(150);
       const { data } = await cdp.send('Page.captureScreenshot', {
-        format: 'webp', quality: QUALITY,
+        format: FORMAT, quality: QUALITY,
         clip: { x: 0, y: 0, width: W, height: H, scale: SCALE },
       });
       const buf = Buffer.from(data, 'base64');
-      writeFileSync(join(OUT, `${id}.webp`), buf);
+      writeFileSync(outFile(id), buf);
       console.log(`${(buf.length / 1024).toFixed(1)} KB`);
     } catch (err) {
       console.log(`failed: ${err.message}`);
