@@ -7,8 +7,11 @@
 // only the selected one is live: the others are `inert`, which keeps them out
 // of the focus order and accessibility tree (the same control can appear on
 // both Simple and Advanced).
+//
+// With `fitHeight`, the strip takes the height of the selected page (the stage panel
+// is a floating card only as tall as what it shows). CSS can still override it.
 
-export function mountPager({ tabs, pager, initial = 0, onChange }) {
+export function mountPager({ tabs, pager, initial = 0, onChange, fitHeight = false }) {
   const buttons = [...tabs.querySelectorAll('[role=tab]')];
   const pages = [...pager.children];
   const reduced = matchMedia('(prefers-reduced-motion: reduce)');
@@ -49,7 +52,16 @@ export function mountPager({ tabs, pager, initial = 0, onChange }) {
       else pages[j].setAttribute('aria-hidden', 'true');
     });
     if (stranded) buttons[i].focus({ preventScroll: true });
+    fit();
     onChange?.(i, pages[i]);
+  }
+
+  function fit() {
+    if (fitHeight && pages[index]) pager.style.height = `${pages[index].offsetHeight}px`;
+  }
+  if (fitHeight) {
+    const watch = new ResizeObserver(fit);
+    pages.forEach((p) => watch.observe(p));
   }
 
   const at = () => pager.scrollLeft / (pager.clientWidth || 1);

@@ -6,7 +6,7 @@
 // is a rigid body (a root atom plus attached atoms at slot positions) that
 // tumbles as it drifts. Bonding events are scheduled so the story reads —
 // hydrogen pairs up first, then water, methane, ammonia, carbon monoxide —
-// but each one happens between real neighbours in the simulation. Helium
+// but each one happens between real neighbors in the simulation. Helium
 // and neon never bond: noble gases.
 
 import { SHAPE } from '../../gfx/renderer.js';
@@ -98,7 +98,7 @@ export class MolecularCloud {
     const pick = (list) => list.length ? rng.pick(list) : null;
     const r = rng.next();
     const late = smoothstep(15, 22, T);
-    // centres that still have open slots
+    // centers that still have open slots
     const open = (el) => this.atoms.filter((a) => a.el === el && !a.busy && inView(a) &&
       (!a.mol || (a.mol.root === a && a.mol.kind === el && a.mol.members.length + a.mol.pending < SLOTS[el].length)));
     for (const a of this.atoms) if (a.mol) a.mol.pending = this.fx.filter((f) => f.kind === 'capture' && f.m === a.mol).length;

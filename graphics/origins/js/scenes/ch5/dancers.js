@@ -4,7 +4,7 @@
 // tempo (bounce on every beat, sway every two, a move that changes every
 // bar), rendered as a cloud of ~100 glowing particles strung along the bones —
 // the same kind of points the piece began with. Near the end the particles
-// take on the colours of the elements they are actually made of.
+// take on the colors of the elements they are actually made of.
 
 import { SHAPE } from '../../gfx/renderer.js';
 import { RNG, TAU, lerp, hash } from '../../lib/math.js';
@@ -78,7 +78,7 @@ export class Crowd {
   constructor(n = 84) {
     const rng = new RNG(555);
     this.dancers = [];
-    // the lead dancer — front and centre — then rows fading back into haze
+    // the lead dancer — front and center — then rows fading back into haze
     const rows = [[1, 0], [7, 0], [10, 1], [12, 2], [14, 3], [17, 4]];
     let id = 0;
     for (const [count, row] of rows) {

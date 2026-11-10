@@ -1,4 +1,4 @@
-// PathBuilder — designs track centre-lines the way railway engineers do:
+// PathBuilder — designs track center-lines the way railway engineers do:
 // a plan (straights + circular arcs, Dubins connections) plus an elevation
 // profile (grades with smooth vertical-curve transitions), and a couple of
 // genuinely 3D pieces (vertical loops).
@@ -6,7 +6,7 @@
 // Plan convention: x = east, z = south (three.js), heading psi in radians,
 // direction = (cos psi, 0, -sin psi): psi = 0 east, +90deg north.
 // Positive turn angles are LEFT turns (counter-clockwise seen from above).
-// Grade g is "drop per metre of plan distance": positive = downhill.
+// Grade g is "drop per meter of plan distance": positive = downhill.
 
 import { deg, smoothstep } from './math.js';
 
@@ -20,7 +20,7 @@ export class PathBuilder {
     this.g = grade;
     this.h = 0.004;              // plan step (m)
     this.pts = [{ x, y, z }];
-    this.d = 0;                  // plan distance travelled
+    this.d = 0;                  // plan distance traveled
     this.trans = null;           // active grade transition
     this.sched = [];             // scheduled grade transitions [{at, g, L}]
     this.marks = {};             // name -> point index
@@ -56,7 +56,7 @@ export class PathBuilder {
 
   // --- plan ------------------------------------------------------------------
   _advance(total, curvature) {
-    // move `total` metres of plan distance with signed curvature (1/r, + = left)
+    // move `total` meters of plan distance with signed curvature (1/r, + = left)
     const n = Math.max(1, Math.ceil(total / this.h));
     const h = total / n;
     for (let i = 0; i < n; i++) {

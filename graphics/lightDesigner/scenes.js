@@ -2,7 +2,7 @@
 //
 // A scene is a held look (the same vocabulary as the shows), a formation for the
 // 30 truss sticks, and every optional device, given as panel control values.
-// Launching one always moves smoothly: colour and intensity crossfade, heads
+// Launching one always moves smoothly: color and intensity crossfade, heads
 // pan/tilt at motor speed, sticks travel and flip at hoist speed, and devices
 // come and go on their own travel — tubes rise out of the deck or grow out of
 // the truss, balls fly in from the grid, the projection screen flies in.

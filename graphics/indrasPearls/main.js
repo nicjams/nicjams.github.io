@@ -17,13 +17,13 @@ const CAPTIONS = {
     It is within a few thousandths of the doubly degenerate group of Fig 10.13.`,
   '10.13': `<b>Figure 10.13. Partition of the world.</b> The limit set of Jørgensen's
     doubly-degenerate group, t<sub>a</sub> = (3−√3i)/2, t<sub>b</sub> = (3+√3i)/2,
-    with limit points coloured red, blue, green and yellow according to the
+    with limit points colored red, blue, green and yellow according to the
     <i>third</i> generator (a, b, A, B) of their infinite word. The limit set is
-    the whole sphere; the white disks are the unresolved neighbourhoods of cusps.`,
+    the whole sphere; the white disks are the unresolved neighborhoods of cusps.`,
   '12.1': `<b>Figure 12.1. A picture Klein and Poincaré would have envied.</b>
     The quasifuchsian group of Grandma's recipe with Tr a = Tr b = 2.2. The plane
-    is coloured by the argument of the automorphic function
-    Σ(az+b)/(cz+d)⁵ / Σ(cz+d)⁻⁴ — a <i>fonction kleinéenne</i> — so the colouring
+    is colored by the argument of the automorphic function
+    Σ(az+b)/(cz+d)⁵ / Σ(cz+d)⁻⁴ — a <i>fonction kleinéenne</i> — so the coloring
     tiles the ordinary set. Let the traces drift to watch it move.`,
 };
 
@@ -98,7 +98,7 @@ const cLimit = $('canvas1013');
 const ctxLimit = cLimit.getContext('2d');
 let jobId = 0, job = null, imageData = null, colours = null;
 
-/** Spread labels to unreached pixels within `radius` (8-neighbour BFS). */
+/** Spread labels to unreached pixels within `radius` (8-neighbor BFS). */
 function flood(lab, W, H, radius) {
   let q = [];
   for (let i = 0; i < W * H; i++) if (lab[i]) q.push(i);
@@ -290,7 +290,7 @@ function startLimit() {
 let restartTimer = 0;
 const restartLimit = (delay = 150) => { clearTimeout(restartTimer); restartTimer = setTimeout(startLimit, delay); };
 for (const id of ['scheme', 'finest', 'maxLevel', 'minNorm', 'fill', 'spikes', 'mirror', 'showChains']) $(id).addEventListener('change', () => restartLimit(0));
-// A new palette only recolours the labels already computed.
+// A new palette only recolors the labels already computed.
 $('palette').addEventListener('change', () => {
   if (LIMIT_FIGS[figure]) { updateColours(); paint(); } else { fig121?.setLut(rampFor121()); dirty = true; }
 });
@@ -336,7 +336,7 @@ function setFigure(f) {
 const c121 = $('canvas121'), o121 = $('overlay121');
 let fig121 = null;
 try { fig121 = createFig121(c121, o121); } catch (err) { console.error(err); }
-/** Fig 12.1 colours arg f around a cyclic ramp: the book's rainbow or a theme's. */
+/** Fig 12.1 colors arg f around a cyclic ramp: the book's rainbow or a theme's. */
 const rampFor121 = () => ($('palette').value === 'book' ? rainbowRamp() : cyclicRamp(THEMES[$('palette').value]));
 const HOME_121 = { center: [0, 0], zoom: 1.12 };
 const v121 = { ...HOME_121, center: [...HOME_121.center] };

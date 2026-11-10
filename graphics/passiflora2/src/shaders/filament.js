@@ -1,4 +1,4 @@
-// Corona filaments: instanced tubes. Each tube's centreline is a curve evaluated in
+// Corona filaments: instanced tubes. Each tube's centerline is a curve evaluated in
 // the vertex shader (outward, lifted, drooping, crinkled at the tip), with a
 // frame built on the fly so the tube follows it.
 import { common } from './common.js';

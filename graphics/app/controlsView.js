@@ -136,20 +136,26 @@ function buildSimple(root, m, ctx) {
 
   const fields = m.picks.filter((c) => c.kind !== 'button');
   const buttons = m.picks.filter((c) => c.kind === 'button');
+  // Poincaré layout: the picks sit in one card, actions and keys in a second.
+  const card = el('div', { class: 'pc-card' });
   let grid = null; // consecutive toggles share a two-up grid
   for (const c of fields) {
     if (c.kind === 'checkbox') {
-      if (!grid) stack.append(grid = el('div', { class: 'tiles' }));
+      if (!grid) card.append(grid = el('div', { class: 'tiles' }));
       grid.append(toggleTile(c, ctx));
     } else {
       grid = null;
-      stack.append(fieldWidget(c, ctx, 'large'));
+      card.append(fieldWidget(c, ctx, 'large'));
     }
   }
+  if (card.children.length) stack.append(card);
   if (buttons.length || m.simpleKeys.length) {
-    stack.append(el('div', { class: 'tiles' }, [
-      ...buttons.map((c) => buttonTile(c, ctx)),
-      ...m.simpleKeys.map((k) => keyTile(k, ctx)),
+    stack.append(el('div', { class: 'pc-card' }, [
+      el('div', { class: 'pc-label' }, 'Actions'),
+      el('div', { class: 'tiles' }, [
+        ...buttons.map((c) => buttonTile(c, ctx)),
+        ...m.simpleKeys.map((k) => keyTile(k, ctx)),
+      ]),
     ]));
   }
   stack.querySelectorAll('.tiles').forEach(balance);
@@ -415,7 +421,7 @@ function toggleTile(c, ctx) {
   return node;
 }
 
-/** Compact labelled switch row (Advanced page); the whole row is the hit target. */
+/** Compact labeled switch row (Advanced page); the whole row is the hit target. */
 function switchRow(c, ctx) {
   let lastLocal = 0;
   const set = setter(c, ctx);

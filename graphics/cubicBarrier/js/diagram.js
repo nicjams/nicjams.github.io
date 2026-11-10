@@ -1,5 +1,5 @@
 // diagram.js — the braid word as a standard braid diagram (SVG), strands
-// coloured like the 3D strands, read top to bottom like the simulation.
+// colored like the 3D strands, read top to bottom like the simulation.
 // Committed letters are solid, the move in flight is drawn to its progress,
 // queued letters are ghosted.
 

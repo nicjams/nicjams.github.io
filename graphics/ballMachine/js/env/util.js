@@ -33,7 +33,7 @@ export const TAU = Math.PI * 2;
 export const DEG = Math.PI / 180;
 
 // ----------------------------------------------------------------- noise ---
-/** Tileable fbm value noise, normalised to [0,1]. Returns Float32Array(size*size). */
+/** Tileable fbm value noise, normalized to [0,1]. Returns Float32Array(size*size). */
 export function fbm2D(size, { cells = 4, octaves = 5, gain = 0.5, seed = 1 } = {}) {
   const out = new Float32Array(size * size);
   const rng = new Rng(seed);
@@ -83,7 +83,7 @@ export function makeCanvas(w, h) {
   return c;
 }
 
-/** Paint a noise field into a canvas via a colour function (v in [0,1], x, y) -> [r,g,b]. */
+/** Paint a noise field into a canvas via a color function (v in [0,1], x, y) -> [r,g,b]. */
 export function noiseCanvas(size, noise, colorFn) {
   const c = makeCanvas(size, size);
   const ctx = c.getContext('2d');
@@ -124,7 +124,7 @@ export function canvasTexture(canvas, { srgb = true, repeat = true, anisotropy =
 }
 
 /**
- * Alpha (grey) canvas -> texture with a hand-built mip chain whose alpha is rescaled
+ * Alpha (gray) canvas -> texture with a hand-built mip chain whose alpha is rescaled
  * per level so the fraction of texels above `threshold` stays constant
  * (prevents alpha-tested foliage from thinning out with distance).
  */
@@ -266,7 +266,7 @@ export class GeoBuilder {
 /**
  * Sweep a closed 2D cross-section along a polyline with frames.
  * pts: Vector3[]; frames: [{b, n}] per point (section x -> b, section y -> n).
- * section: [[x,y],...] CCW. Hard edges (flat per side). uv: u = along-curve metres, v = around.
+ * section: [[x,y],...] CCW. Hard edges (flat per side). uv: u = along-curve meters, v = around.
  */
 export function sweepSection(gb, pts, frames, section, { capStart = false, capEnd = false, uScale = 1 } = {}) {
   const m = section.length;

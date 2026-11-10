@@ -72,7 +72,7 @@ export class ChainLift {
   }
   slotPos(i, o) { o.x = this.lineX; o.y = this.yB + this.shelfU(i) + R + 0.004; o.z = this.lineZ; return o; }
   slotVel(i, o) { o.x = 0; o.y = this.speed; o.z = 0; return o; }
-  // chain centre-line point, tangent and outward normal for rendering
+  // chain center-line point, tangent and outward normal for rendering
   chainFrame(u, o) {
     const { H, rs, ax, az } = this;
     u = wrap(u / this.Lc * TAU) / TAU * this.Lc;
@@ -201,7 +201,7 @@ export class Funnel {
 // --------------------------------------------------------------------------
 // Splash pool with a whirlpool drain: a round bowl whose floor is a shallow
 // cone steepening into a hyperbolic throat at the drain, under a few
-// centimetres of water that swirls round the drain. Under water the ball
+// centimeters of water that swirls round the drain. Under water the ball
 // weighs a third as much, carries an added mass of water with it, and is
 // dragged round and in by the vortex.
 export class Pool extends Funnel {
@@ -511,7 +511,7 @@ export class Plinko {
   constructor(world, o) {
     this.kind = 'plinko';
     this.world = world;
-    this.center = o.center;         // board centre
+    this.center = o.center;         // board center
     this.right = o.right;           // horizontal unit along the board
     this.normal = { x: -o.right.z, y: 0, z: o.right.x };
     this.width = o.width; this.height = o.height; this.depth = o.depth ?? 0.075;

@@ -1,6 +1,6 @@
 /**
  * Group model: turns a preset (either explicit mirrors in R^3 or a Coxeter
- * Gram matrix) into a normalised list of mirrors for the shader, together
+ * Gram matrix) into a normalized list of mirrors for the shader, together
  * with the diagnostics that say what kind of group it actually is.
  */
 
@@ -71,7 +71,7 @@ export function relationsFromGram(gram) {
 }
 
 /* ------------------------------------------------------------------ */
-/* Normalisation                                                       */
+/* Normalization                                                       */
 /* ------------------------------------------------------------------ */
 
 /** The point of H^4 equidistant from every mirror, when it exists. */
@@ -355,8 +355,8 @@ export function boundingSphere(mirrors) {
 }
 
 /**
- * A point deep inside the fundamental chamber, used as the centre of the
- * inscribed-ball trap.  We take the boundary point that maximises the
+ * A point deep inside the fundamental chamber, used as the center of the
+ * inscribed-ball trap.  We take the boundary point that maximizes the
  * minimum distance to the mirrors, found by a short multi-start search.
  */
 export function chamberPoint(mirrors, bound) {

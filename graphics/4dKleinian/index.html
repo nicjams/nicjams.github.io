@@ -63,7 +63,7 @@
             <button class="tab is-active" data-tab="group" type="button">Group</button>
             <button class="tab" data-tab="shape" type="button">Shape</button>
             <button class="tab" data-tab="motion" type="button">Motion</button>
-            <button class="tab" data-tab="color" type="button">Colour</button>
+            <button class="tab" data-tab="color" type="button">Color</button>
             <button class="tab" data-tab="render" type="button">Render</button>
         </nav>
 
@@ -79,7 +79,7 @@
             <label class="control">
                 <span class="control-label">Mirror radius<em id="radiusScaleValue">1.000</em></span>
                 <input type="range" id="radiusScale" min="0.55" max="1.25" step="0.002" value="1">
-                <span class="hint">Scales every mirror sphere about its centre. Below 1 the mirrors pull
+                <span class="hint">Scales every mirror sphere about its center. Below 1 the mirrors pull
                     apart and the limit set falls to a Cantor set; above 1 they overlap.</span>
             </label>
 
@@ -194,7 +194,7 @@
                 <span class="control-label">Breath depth<em id="breatheAmountValue">±8%</em></span>
                 <input type="range" id="breatheAmount" min="0.01" max="0.3" step="0.005" value="0.08">
                 <span class="hint">Oscillates the mirror radius about its set value. Shrinking tears the
-                    limit set into Cantor dust; growing makes neighbouring mirrors overlap, so the group
+                    limit set into Cantor dust; growing makes neighboring mirrors overlap, so the group
                     stops being discrete and the picture turns to foam.</span>
             </label>
 
@@ -207,15 +207,15 @@
                 soon as everything is still.</p>
         </section>
 
-        <!-- Colour ------------------------------------------------ -->
-        <section class="tab-page" data-page="color" data-control-group="Colour">
+        <!-- Color ------------------------------------------------ -->
+        <section class="tab-page" data-page="color" data-control-group="Color">
             <label class="control">
                 <span class="control-label">Palette</span>
                 <select id="palette"></select>
             </label>
 
             <label class="control">
-                <span class="control-label">Colour by</span>
+                <span class="control-label">Color by</span>
                 <select id="scheme"></select>
                 <span class="hint" id="schemeHint"></span>
             </label>
@@ -308,7 +308,7 @@
                 <span class="control-label">Step safety<em id="stepScaleValue">0.55</em></span>
                 <input type="range" id="stepScale" min="0.1" max="1" step="0.01" value="0.55">
                 <span class="hint">Fraction of the distance estimate taken per step. Lower is slower but
-                    removes overshoot artefacts.</span>
+                    removes overshoot artifacts.</span>
             </label>
 
             <label class="control">

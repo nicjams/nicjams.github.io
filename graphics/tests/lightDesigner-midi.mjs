@@ -94,7 +94,7 @@ try {
   const c = await js('({ r: ck5.engine.render[30].r, g: ck5.engine.render[30].g, b: ck5.engine.render[30].b })');
   assert(c.r > 2 * c.g && c.r > 2 * c.b, `C is red: ${JSON.stringify(c)}`);
   assert(await js(`${I(0)} < 0.05 && ${I(59)} < 0.05`), 'other heads stay dark under blackout');
-  pass('note on lights the mapped head, in the pitch colour, and auto-enables play mode');
+  pass('note on lights the mapped head, in the pitch color, and auto-enables play mode');
 
   const velSoft = await (async () => { await midi(0x90, 64, 30); await waitFor(`${I(33)} > 0.02`, 'the soft note to light'); await sleep(80); return js(`${I(33)}`); })(); // E4 → head 4 (index 33)
   assert(velSoft > 0.05 && velSoft < 0.4, `soft velocity is dim (${velSoft})`);
@@ -122,12 +122,12 @@ try {
   await waitFor(`${I(30)} > 0.5`, 'the bend test note');
   const before = await js('ck5.engine.render[30].g');
   await midi(0xe0, 127, 127);
-  await waitFor(`ck5.engine.render[30].g > ${before + 0.1}`, 'the bend to shift the colour');
+  await waitFor(`ck5.engine.render[30].g > ${before + 0.1}`, 'the bend to shift the color');
   const after = await js('ck5.engine.render[30].g');
-  assert(after > before + 0.1, `bend shifts colour (g ${before.toFixed(2)} → ${after.toFixed(2)})`);
+  assert(after > before + 0.1, `bend shifts color (g ${before.toFixed(2)} → ${after.toFixed(2)})`);
   await midi(0xe0, 0, 64);
   await midi(0x80, 60, 0);
-  pass('pitch bend rotates the note colour');
+  pass('pitch bend rotates the note color');
 
   // channel 10 drum map: a crash lights the whole rig
   // a crash decays in ~0.3 s, so record its peak in the page rather than polling for it

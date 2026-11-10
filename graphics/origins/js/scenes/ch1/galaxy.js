@@ -2,7 +2,7 @@
 // the cosmic web, then the camera dives into one of its stars.
 //
 // Spiral arms as density waves (Lin & Shu): every star moves on an ellipse,
-// and the ellipse's orientation twists with radius. Where neighbouring
+// and the ellipse's orientation twists with radius. Where neighboring
 // ellipses crowd together — near their far ends — stars pile up, and those
 // pile-ups trace two arms that rotate rigidly while the stars flow through
 // them. Young blue stars, pink star-forming nebulae and dark dust are placed

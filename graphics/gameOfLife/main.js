@@ -18,7 +18,7 @@ const PALETTES = {
   riso: { label: 'Riso', bg: '#0b0a10', a: '#ff4f9a', b: '#2f86ff', c: '#f6e94a', mono: '#f2f2f2' },
   paper: { label: 'Paper (light)', bg: '#f1ece1', a: '#d1495b', b: '#00798c', c: '#e0a030', mono: '#25303b' },
 };
-// Lens: which display colour each state gets. Indices: 1–3 a/b/c, 4 kernel, 5 coset, 6 mono.
+// Lens: which display color each state gets. Indices: 1–3 a/b/c, 4 kernel, 5 coset, 6 mono.
 const LENSES = { full: [0, 1, 2, 3], qa: [0, 4, 5, 5], qb: [0, 5, 4, 5], qc: [0, 5, 5, 4], shadow: [0, 6, 6, 6] };
 
 let life, story = null, beatIndex = 0, storyIndex = 0;

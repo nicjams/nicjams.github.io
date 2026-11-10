@@ -27,7 +27,7 @@
 <body>
 <div id="info">
   <b>PSL₂(ℤ[i]) orbit — Poincaré ball view</b><br>
-  Camera starts at the centre of the Poincaré ball — sight-lines through the
+  Camera starts at the center of the Poincaré ball — sight-lines through the
   origin are honest hyperbolic geodesics, and each sphere subtends its true
   hyperbolic angular size (radius (1−|Q|²)/2). Drag to orbit, scroll to zoom.
   <div id="controls">
@@ -382,8 +382,8 @@ import { OrbitControls } from 'three/addons/controls/OrbitControls.js';
   const scene = new THREE.Scene();
   scene.background = new THREE.Color(0x05070d);
 
-  // Camera starts at the centre of the Poincaré ball. Euclidean straight
-  // lines through the origin are hyperbolic geodesics, so the default centre
+  // Camera starts at the center of the Poincaré ball. Euclidean straight
+  // lines through the origin are hyperbolic geodesics, so the default center
   // view looks along honest geodesics. OrbitControls lets you pull back, pan,
   // and zoom for a more conventional view.
   const camera = new THREE.PerspectiveCamera(75, window.innerWidth/window.innerHeight, 0.0005, 100);
@@ -409,7 +409,7 @@ import { OrbitControls } from 'three/addons/controls/OrbitControls.js';
 
   // Boundary sphere ∂B³: a translucent solid surface seen from inside, plus
   // three great circles in the coordinate planes for orientation. No
-  // lat/long wireframe — from the centre that grid reads as a perspective
+  // lat/long wireframe — from the center that grid reads as a perspective
   // floor, which is exactly the UHS look we are avoiding.
   const boundary = new THREE.Mesh(
     new THREE.SphereGeometry(1.0, 96, 64),

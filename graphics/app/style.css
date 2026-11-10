@@ -155,6 +155,11 @@ summary:focus-visible, [role='slider']:focus-visible, a:focus-visible {
 .icon-btn:hover { color: var(--ink); background: var(--w08); border-color: var(--stroke-strong); text-decoration: none; }
 .icon-btn:active { transform: scale(0.92); }
 .icon-btn svg { width: 18px; height: 18px; }
+.btn svg { width: 1.15em; height: 1.15em; flex: none; }
+.btn.icon svg { width: 18px; height: 18px; }
+.icon-btn .collapse-icon { display: inline-block; line-height: 1; transition: transform 0.45s var(--ease-spring); }
+.icon-btn.spin-hover svg { transition: transform 0.45s var(--ease-spring); }
+.icon-btn.spin-hover:hover svg { transform: rotate(180deg); }
 
 .chip {
   display: inline-flex;
@@ -396,6 +401,8 @@ details.pc-card > .pc-card-body { padding: 2px 14px 14px; display: flex; flex-di
   box-shadow: 0 0 14px var(--accent-glow), inset 0 1px 0 rgba(255, 255, 255, 0.08);
 }
 .tbtn[aria-checked='true'] .led { background: var(--accent-2); box-shadow: 0 0 10px var(--accent-2); }
+.tbtn[role='switch'] { justify-content: center; text-align: center; }
+.tbtn[role='switch'] .led { display: none; }
 
 /* ── segmented options (Poincaré Cayley Off/S/T) ── */
 .seg {
@@ -416,19 +423,21 @@ details.pc-card > .pc-card-body { padding: 2px 14px 14px; display: flex; flex-di
 }
 .seg.compact button { min-height: 34px; font-size: 12px; }
 
-/* ── option chips ── */
-.chips { display: flex; flex-wrap: wrap; gap: 6px; }
-.chips button {
-  min-height: 38px; padding: 0 14px; border-radius: 999px;
-  border: 1px solid var(--stroke); background: var(--w05); color: var(--ink-dim);
-  font-size: 13px; font-weight: 500; cursor: pointer;
-  transition: background 0.15s ease, color 0.15s ease, border-color 0.15s ease, box-shadow 0.2s ease;
+/* ── option chips: a segmented group (Poincaré Cayley Off/S/T) that wraps ── */
+.chips {
+  display: flex; flex-wrap: wrap; gap: 3px; padding: 3px;
+  background: var(--field-bg); border: 1px solid var(--stroke); border-radius: var(--r-md);
 }
-.chips button:hover { color: var(--ink); background: var(--w08); }
+.chips button {
+  flex: 1 1 auto; min-height: 38px; padding: 0 12px; border-radius: 7px;
+  border: none; background: transparent; color: var(--ink-dim);
+  font-size: 13px; font-weight: 600; cursor: pointer;
+  transition: background 0.15s ease, color 0.15s ease, box-shadow 0.2s ease;
+}
+.chips button:hover { color: var(--ink); background: var(--w05); }
 .chips button[aria-checked='true'] {
-  color: var(--ink); border-color: var(--accent-line);
-  background: linear-gradient(180deg, var(--accent-soft), rgba(129, 140, 248, 0.07));
-  box-shadow: 0 0 12px var(--accent-glow);
+  color: var(--ink); background: var(--accent-soft);
+  box-shadow: 0 0 10px var(--accent-glow), inset 0 1px 0 rgba(255, 255, 255, 0.08);
 }
 
 /* ── field wrappers ── */
@@ -523,10 +532,50 @@ kbd, .kbd {
 .pair-qr[hidden] { display:none; }
 .pair-status { color:var(--accent-2); font-weight: 500; }
 
+/* ══════════════════════════════════════════════════════════════════════════
+   STAGE PANEL — the Poincaré workbench card: one top bar of segmented tabs and
+   small round icon buttons, a page title, then cards of compact controls.
+   ══════════════════════════════════════════════════════════════════════════ */
+.panel-bar {
+  flex: none; display: flex; align-items: center; gap: 6px; padding: 10px 12px;
+  background: rgba(0, 0, 0, 0.25); border-bottom: 1px solid var(--stroke);
+}
+.panel-bar .seg-tabs { flex: 1; min-width: 0; padding: 0; gap: 4px; background: none; border: 0; }
+.panel-bar .seg-tab { flex: 1 1 auto; min-height: 32px; }
+.panel-bar .icon-btn { width: 30px; height: 30px; min-width: 30px; font-size: 17px; }
+.panel-bar .icon-btn svg { width: 15px; height: 15px; }
+.panel-bar .panel-transport { display: flex; gap: 4px; }
+.panel-bar .panel-transport[hidden] { display: none; }
+
+/* With a mouse the panel uses Poincaré's compact sizes; touch keeps thumb-sized controls. */
+@media (pointer: fine) {
+  #panel .dslider { min-height: 38px; padding: 0 14px; border-radius: var(--r-md); }
+  #panel .dslider .dl-label { font-size: 13px; font-weight: 500; color: var(--ink-dim); }
+  #panel .dslider.dragging .dl-label, #panel .dslider:hover .dl-label { color: var(--ink); }
+  #panel .dslider .dl-value { font-size: 12px; }
+  #panel .dslider::after { top: 7px; bottom: 7px; width: 2px; margin-left: -1px; }
+  #panel .tbtn { min-height: 36px; padding: 8px 14px; font-size: 13px; }
+  #panel .tile { min-height: 38px; font-size: 13px; }
+  #panel .seg button, #panel .chips button { min-height: 30px; font-size: 12px; }
+  #panel .cv-row { min-height: 34px; }
+  #panel .cv-row-label { font-size: 13px; }
+  #panel .cv-select { min-height: 34px; }
+  #panel select, #panel input[type='text'], #panel input[type='number'], #panel input[type='url'], #panel input[type='search'] { padding: 7px 10px; font-size: 13px; }
+  #panel .cv-filter input { min-height: 34px; padding-left: 34px; }
+  #panel .cv-color { min-height: 38px; }
+  #panel .cv-color span { font-size: 13px; }
+  #panel .cv-color input[type='color'] { height: 26px; width: 40px; }
+  #panel .cv-more { min-height: 36px; font-size: 13px; }
+  #panel details.pc-card > summary { min-height: 40px; }
+  #panel .btn-row .btn { min-height: 34px; }
+  #panel .simple-stack { gap: 14px; }
+}
+
 /* Touch screens: every control at least ~44px tall. */
 @media (pointer: coarse) {
   .seg-tab, .chips button, .seg.compact button, .btn-row .btn, .pairing-fields .btn { min-height: 44px; }
   .icon-btn { width: 42px; height: 42px; min-width: 42px; }
+  .panel-bar .icon-btn { width: 38px; height: 38px; min-width: 38px; }
   .dslider.compact, .cv-color.compact, .cv-row { min-height: 48px; }
 }
 

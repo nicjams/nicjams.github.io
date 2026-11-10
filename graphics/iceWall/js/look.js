@@ -1,5 +1,5 @@
 // ═══════════════════════════════════════════════════════════════════
-//  Ice Wall — palettes, scenes, colour math
+//  Ice Wall — palettes, scenes, color math
 //
 //  The relief is gradient-mapped: the shader computes how much light
 //  reaches each point and looks the answer up in a 256-entry ramp. The
@@ -97,7 +97,7 @@
     } },
   ];
 
-  // ─── colour math ───
+  // ─── color math ───
   const hexToRgb = (hex) => {
     const n = parseInt(hex.slice(1), 16);
     return [(n >> 16) & 255, (n >> 8) & 255, n & 255].map((v) => v / 255);
@@ -152,7 +152,7 @@
     return out;
   }
 
-  /** Linear-RGB tint for the meltwater, normalised so it only shifts hue. */
+  /** Linear-RGB tint for the meltwater, normalized so it only shifts hue. */
   function waterTint(id, hueDeg = 0) {
     const pal = PALETTES[id] || PALETTES.linq;
     const lin = oklabToLinear(hexToOklab(pal.water, hueDeg)).map(clamp01);

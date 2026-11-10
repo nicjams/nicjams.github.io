@@ -1,9 +1,9 @@
 // midi.js — MIDI play mode: every keystroke fires lights.
 //
 // NoteLayer is pure (no DOM) so it can be tested headlessly: MIDI bytes go in,
-// and each frame it publishes per-fixture intensity, colour and a tilt kick plus
+// and each frame it publishes per-fixture intensity, color and a tilt kick plus
 // a lift for each pod. The engine lays this over the show (HTP on intensity, the
-// note's colour wins in proportion to its level) just before the masters, so
+// note's color wins in proportion to its level) just before the masters, so
 // flash, blackout and the grand master still apply.
 //
 // setupMidi() wires Web MIDI, the on-screen and computer keyboards, a demo
@@ -20,17 +20,17 @@ const clamp01 = (x) => (x < 0 ? 0 : x > 1 ? 1 : x);
 export const MAPPINGS = {
   keys: 'Keys across the stage',
   octaves: 'Octave → pod, note → head',
-  scatter: 'Scatter (colour organ)',
+  scatter: 'Scatter (color organ)',
   rig: 'Whole rig on every note',
 };
 export const COLOR_MODES = {
   pitch: 'Pitch → hue (C red … B magenta)',
   velocity: 'Velocity → heat',
-  show: 'Keep the show’s colour',
-  fixed: 'One colour',
+  show: 'Keep the show’s color',
+  fixed: 'One color',
 };
 
-// General MIDI percussion (channel 10) → what it lights and in what colour.
+// General MIDI percussion (channel 10) → what it lights and in what color.
 const DRUM_COLOR = { kick: '#ff8a00', snare: '#ffffff', hat: '#d4ecff', tom: null, crash: '#ffffff', ride: '#ffbb3a' };
 function drumKind(n) {
   if (n === 35 || n === 36) return 'kick';

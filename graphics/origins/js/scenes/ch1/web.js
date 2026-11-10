@@ -24,7 +24,7 @@ out vec3 v_col; out float v_a;
 void main() {
   vec3 x = a_q + u_D * a_psi;
   vec3 rel = x - u_cam;
-  rel -= floor(rel + 0.5);             // periodic box, always centred on the camera
+  rel -= floor(rel + 0.5);             // periodic box, always centered on the camera
   vec4 clip = u_vp * vec4(u_cam + rel, 1.0);
   float dist = length(rel);
   vec3 f = 1.0 - u_D * a_lam;
@@ -156,7 +156,7 @@ export class CosmicWeb {
       if ((p & 32767) === 32767) yield;
     }
 
-    // normalise D so that D = 1 is when ~12% of the volume has shell-crossed
+    // normalize D so that D = 1 is when ~12% of the volume has shell-crossed
     const sample = [];
     for (let p = 0; p < N; p += 13) sample.push(lam[p * 3]);
     sample.sort((a, b) => a - b);

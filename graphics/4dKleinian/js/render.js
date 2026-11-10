@@ -365,7 +365,7 @@ export class KleinianRenderer {
     }
 
     cancelExport() {
-        if (this.exportJob) this.finishExport(new Error('Export cancelled.'));
+        if (this.exportJob) this.finishExport(new Error('Export canceled.'));
     }
 
     finishExport(error, blob) {

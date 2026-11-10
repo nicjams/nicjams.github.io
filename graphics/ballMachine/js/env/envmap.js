@@ -1,5 +1,5 @@
 // Glasshouse environment — reflection/IBL map. A single procedural "interior panorama"
-// (as seen from the machine's centre) is rendered into a cube map and prefiltered with
+// (as seen from the machine's center) is rendered into a cube map and prefiltered with
 // PMREM. The PMREM target is reused, so regeneration allocates nothing.
 import * as THREE from 'three';
 import { NOISE_GLSL } from './sky.js';

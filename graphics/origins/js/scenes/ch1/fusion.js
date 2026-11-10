@@ -202,7 +202,7 @@ export class FusionCore {
     }
   }
 
-  /** Draw nuclei and effects centred at (cx, cy) with arena radius Rpx. */
+  /** Draw nuclei and effects centered at (cx, cy) with arena radius Rpx. */
   draw(R, { cx, cy, Rpx, alpha, heart }) {
     if (alpha <= 0.001) return;
     const S = R.sprites, L = R.lines;

@@ -1,9 +1,10 @@
 // gallery.js — the studio home: browse the library, build & manage playlists,
 // and launch the stage / remote.
 
-import { VISUALIZATIONS, CATEGORIES, vizById, vizPath, vizThumb } from './manifest.js';
+import { VISUALIZATIONS, CATEGORIES, vizById, vizPage, vizStage, vizThumb } from './manifest.js';
 import { PlaylistStore } from './store.js';
 import { qs, el, clear, params } from './util.js';
+import { icon } from './icons.js';
 
 const catalog = qs('#catalog');
 const editor = qs('#editor');
@@ -32,7 +33,7 @@ function openRemote(id) {
   window.open(url, 'graphics-remote', 'width=420,height=820');
 }
 function playSingle(vizId) {
-  location.href = `stage.html?viz=${encodeURIComponent(vizId)}`;
+  location.href = vizStage(vizId);
 }
 
 // ── library ──────────────────────────────────────────────────────────────────
@@ -70,7 +71,7 @@ function renderCatalog() {
 function thumb(v, inPlaylist) {
   const img = el('img', { src: vizThumb(v.id), alt: '', loading: 'lazy', decoding: 'async', width: '320', height: '200' });
   img.addEventListener('error', () => img.remove(), { once: true });
-  return el('a', { class: 'thumb', href: vizPath(v.id), 'aria-label': `Open ${v.title}`, tabindex: '-1' }, [
+  return el('a', { class: 'thumb', href: vizPage(v.id), 'aria-label': `Open ${v.title}`, tabindex: '-1' }, [
     img,
     el('span', { class: 'glyph', 'aria-hidden': 'true' }, v.glyph),
     inPlaylist ? el('span', { class: 'in-pl', title: 'In the current playlist' }, inPlaylist > 1 ? `✓ ×${inPlaylist}` : '✓') : null,
@@ -82,8 +83,9 @@ function links(v) {
   return el('div', { class: 'links' }, [
     el('button', { class: 'mini add', title: 'Add to current playlist', onclick: () => addToActive(v.id) }, '+ Add'),
     el('span', { class: 'spacer' }),
-    el('a', { class: 'mini', href: `${vizPath(v.id)}?standalone=1`, target: '_blank', rel: 'noopener', title: 'Open the original page on its own, without the studio shell (new tab)' }, '↗'),
-    el('button', { class: 'mini', title: `Copy link to ${vizPath(v.id)}`, onclick: () => copyLink(v) }, '⧉'),
+    el('a', { class: 'mini', href: vizPage(v.id), title: `Open the page itself (${vizPage(v.id)})` }, 'Page'),
+    el('a', { class: 'mini', href: vizStage(v.id), title: 'Open in the studio shell, with the controls panel, remote and phone pairing' }, 'Shell'),
+    el('button', { class: 'mini', title: `Copy link to ${vizPage(v.id)}`, 'aria-label': `Copy link to ${v.title}`, onclick: () => copyLink(v) }, icon('copy')),
   ]);
 }
 
@@ -91,7 +93,7 @@ function card(v, accent, inPlaylist) {
   return el('article', { class: 'card', style: { '--cat': accent } }, [
     thumb(v, inPlaylist),
     el('div', { class: 'meta' }, [
-      el('a', { class: 'name', href: vizPath(v.id) }, v.title),
+      el('a', { class: 'name', href: vizPage(v.id) }, v.title),
       el('div', { class: 'blurb' }, v.blurb),
     ]),
     links(v),
@@ -103,7 +105,7 @@ function row(v, accent, inPlaylist) {
     thumb(v, inPlaylist),
     el('div', { style: { minWidth: '0' } }, [
       el('div', { class: 'row', style: { gap: '0.5rem' } }, [
-        el('a', { class: 'name', href: vizPath(v.id) }, v.title),
+        el('a', { class: 'name', href: vizPage(v.id) }, v.title),
         el('span', { class: 'path' }, `${v.id}/`),
       ]),
       el('div', { class: 'blurb', title: v.blurb }, v.blurb),
@@ -113,7 +115,7 @@ function row(v, accent, inPlaylist) {
 }
 
 async function copyLink(v) {
-  const url = new URL(vizPath(v.id), location.href).href;
+  const url = new URL(vizPage(v.id), location.href).href;
   try {
     await navigator.clipboard.writeText(url);
     toast(`Copied ${url}`);
@@ -221,11 +223,11 @@ function renderEditor() {
 
   // actions
   editor.append(el('div', { class: 'pl-actions' }, [
-    el('button', { class: 'btn primary full', disabled: !pl.items.length, onclick: () => playPlaylist(pl.id) }, '▶ Play on stage'),
-    el('button', { class: 'btn', onclick: () => openRemote(pl.id) }, '🕹 Remote'),
-    el('button', { class: 'btn', onclick: () => { PlaylistStore.duplicate(pl.id); refresh(); toast('Duplicated'); } }, '⧉ Duplicate'),
-    el('button', { class: 'btn', onclick: () => exportPlaylist(pl.id) }, '⇩ Export'),
-    el('button', { class: 'btn danger', onclick: () => { if (confirm(`Delete "${pl.name}"?`)) { PlaylistStore.remove(pl.id); activeId = null; refresh(); } } }, '🗑 Delete'),
+    el('button', { class: 'btn primary full', disabled: !pl.items.length, onclick: () => playPlaylist(pl.id) }, 'Play on stage'),
+    el('button', { class: 'btn', onclick: () => openRemote(pl.id) }, 'Remote'),
+    el('button', { class: 'btn', onclick: () => { PlaylistStore.duplicate(pl.id); refresh(); toast('Duplicated'); } }, 'Duplicate'),
+    el('button', { class: 'btn', onclick: () => exportPlaylist(pl.id) }, 'Export'),
+    el('button', { class: 'btn danger', onclick: () => { if (confirm(`Delete "${pl.name}"?`)) { PlaylistStore.remove(pl.id); activeId = null; refresh(); } } }, 'Delete'),
   ]));
 }
 
@@ -240,12 +242,12 @@ function itemRow(pl, it, i) {
   const row = el('div', { class: 'pl-item', draggable: 'true', dataset: { index: String(i) } }, [
     el('span', { class: 'idx' }, String(i + 1)),
     el('span', { class: 'g' }, v ? plThumb(v) : '▦'),
-    v ? el('a', { class: 't', href: vizPath(v.id), title: `Open ${v.title}` }, v.title) : el('span', { class: 't' }, it.vizId),
+    v ? el('a', { class: 't', href: vizPage(v.id), title: `Open ${v.title}` }, v.title) : el('span', { class: 't' }, it.vizId),
     el('span', { class: 'ord' }, [
-      el('button', { title: 'Move up', onclick: () => { PlaylistStore.moveItem(pl.id, i, i - 1); refresh(); } }, '▲'),
-      el('button', { title: 'Move down', onclick: () => { PlaylistStore.moveItem(pl.id, i, i + 1); refresh(); } }, '▼'),
+      el('button', { title: 'Move up', 'aria-label': 'Move up', onclick: () => { PlaylistStore.moveItem(pl.id, i, i - 1); refresh(); } }, icon('up')),
+      el('button', { title: 'Move down', 'aria-label': 'Move down', onclick: () => { PlaylistStore.moveItem(pl.id, i, i + 1); refresh(); } }, icon('down')),
     ]),
-    el('button', { class: 'x', title: 'Remove', onclick: () => { PlaylistStore.removeItemAt(pl.id, i); refresh(); } }, '✕'),
+    el('button', { class: 'x', title: 'Remove', 'aria-label': 'Remove', onclick: () => { PlaylistStore.removeItemAt(pl.id, i); refresh(); } }, icon('close')),
   ]);
   // drag-to-reorder
   row.addEventListener('dragstart', (e) => { e.dataTransfer.setData('text/plain', String(i)); e.dataTransfer.effectAllowed = 'move'; });

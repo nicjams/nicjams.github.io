@@ -202,7 +202,7 @@
 
     const clamp01 = (x) => Math.max(0, Math.min(1, x));
 
-    // === colour helpers ===
+    // === color helpers ===
     const parseHex = (hex) => [
         parseInt(hex.slice(1, 3), 16),
         parseInt(hex.slice(3, 5), 16),
@@ -212,7 +212,7 @@
     const rgba = (c, alpha = 1) => `rgba(${c[0]},${c[1]},${c[2]},${alpha})`;
 
     // Donuts heat up as they fall toward the horizon: fg → near-white.
-    // Quantized so we build a handful of colour strings per palette change.
+    // Quantized so we build a handful of color strings per palette change.
     const HEAT_LEVELS = 24;
     const WHITE_HOT = [255, 246, 228];
     let heatCache = { fg: null, bg: null };
@@ -232,7 +232,7 @@
         return heatCache;
     }
 
-    // === suction (phase 4): a black hole at the centre ===
+    // === suction (phase 4): a black hole at the center ===
     // Each ring falls inward in log-radius: r_i(t) = ringR_i · e^{-Δ_i(t)}, and its
     // donuts shrink by the same factor. Inner rings start falling first, so
     // Δ_i ≥ Δ_{i+1} always — the ratio of consecutive ring radii only grows, so rings

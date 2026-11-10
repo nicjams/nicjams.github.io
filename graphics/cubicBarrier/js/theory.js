@@ -60,8 +60,8 @@ export function drawBarrierPlot(canvas, { current = 'cubic', samples, nSamples =
   g.fillText('ψ(g) / ψ(0)', 0, 0);
   g.restore();
 
-  // curves, normalised so that the cubic and quadratic read 1 at contact;
-  // the log barrier is normalised at g = 0.05ĝ and runs off the top
+  // curves, normalized so that the cubic and quadratic read 1 at contact;
+  // the log barrier is normalized at g = 0.05ĝ and runs off the top
   for (const [key, col] of CURVES) {
     const B = BARRIERS[key];
     const norm = key === 'log' ? B.energy(0.05, 1) : B.energy(0, 1);

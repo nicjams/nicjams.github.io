@@ -28,7 +28,7 @@ export const deg = Math.PI / 180;
 
 // Quaternion helpers ([x,y,z,w] arrays) for ball orientation.
 export function quatIntegrate(q, wx, wy, wz, dt) {
-  // q += 0.5 * (0,w) * q * dt, then renormalise
+  // q += 0.5 * (0,w) * q * dt, then renormalize
   const x = q[0], y = q[1], z = q[2], w = q[3];
   const h = 0.5 * dt;
   q[0] = x + h * (wx * w + wy * z - wz * y);

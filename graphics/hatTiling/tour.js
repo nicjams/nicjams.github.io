@@ -5,7 +5,7 @@
 //  the renderer resets the per-hat arrays to the palette at rest,
 //  then chapter.frame(F) dims, tints, lifts, flips, moves and adds to
 //  them, sets the camera, and queues overlay drawings. Chapters begin
-//  and end in the state their neighbours expect, so the loop is seamless.
+//  and end in the state their neighbors expect, so the loop is seamless.
 // ────────────────────────────────────────────────────────────────
 
 const TAU = PI * 2;
@@ -224,7 +224,7 @@ function makeTour(P) {
     for (let i = 0; i < n; i++) orientCount[P.code[i]]++;
     chapters.push({
         id: 'orient', title: 'Twelve orientations', dur: 14,
-        text: 'Each hat points in one of six directions and is either face-up or flipped: twelve orientations. Colour by orientation and all twelve turn up everywhere, woven together without any preferred axis.',
+        text: 'Each hat points in one of six directions and is either face-up or flipped: twelve orientations. Color by orientation and all twelve turn up everywhere, woven together without any preferred axis.',
         frame(F) {
             const t = F.t, k = envelope(t, 14, 1.5, 1.5);
             const slot = (t - 2) / 0.8, cur = Math.floor(slot);
@@ -284,10 +284,10 @@ function makeTour(P) {
         chapters.push({
             id: 'connections', title: 'Local connections', dur: 38,
             text: F => F.t < B0 - 0.3
-                ? `Which neighbours are possible? A hat sharing an edge with this one can sit in exactly ${legal} positions; in ${legalFlip} of them it is flipped.`
+                ? `Which neighbors are possible? A hat sharing an edge with this one can sit in exactly ${legal} positions; in ${legalFlip} of them it is flipped.`
                 : F.t < C0 - 0.3
                     ? `Another ${dead} placements (red) fit snugly on the grid but never occur in any hat tiling: each one eventually paints itself into a corner.`
-                    : `Surround a hat completely and only ${nCor} different neighbourhoods are possible, counting rotations and reflections as the same.`,
+                    : `Surround a hat completely and only ${nCor} different neighborhoods are possible, counting rotations and reflections as the same.`,
             frame(F) {
                 const t = F.t;
                 const away = smooth(0.3, 2.2, t) * (1 - smooth(35, 37.6, t));
@@ -296,7 +296,7 @@ function makeTour(P) {
                 F.cam.y = lerp(F.home.y, hatC.y, away);
                 F.cam.span = Math.exp(lerp(Math.log(F.home.span), Math.log(17), away));
                 const ghosts = [];
-                // Phase A: the legal edge-to-edge neighbours, one at a time.
+                // Phase A: the legal edge-to-edge neighbors, one at a time.
                 const fadeAB = 1 - smooth(C0 - 0.8, C0 - 0.1, t);
                 legalT.forEach((g, i) => {
                     const s = A0 + i * stepA, age = t - s;
@@ -323,7 +323,7 @@ function makeTour(P) {
                         ghosts.push({ T: g.T, rgb: CORAL, a: 0.7 * fadeAB, dash: true });
                     }
                 });
-                // Phase C: complete neighbourhoods, morphing one into the next.
+                // Phase C: complete neighborhoods, morphing one into the next.
                 const x = (t - C0) / stepC, k = Math.floor(x), a = (x - k) * stepC;
                 const cOut = 1 - smooth(34.8, 35.6, t);
                 if (k >= 0 && k < nCor + 1) {
@@ -338,9 +338,9 @@ function makeTour(P) {
                         if (!inC && inP) { al = 1 - smooth(0, 0.1, a); sc = lerp(1, 0.7, smooth(0, 0.1, a)); }
                         F.extras.push({ T, rgb: F.pal.byLabel[lab], a: al * cOut, s: sc, l: 0.35 * al });
                     }
-                    if (k < nCor) F.stat = `neighbourhood ${k + 1} of ${nCor} · found around ${fmt(P.coronas[k].count)} hats in this patch`;
+                    if (k < nCor) F.stat = `neighborhood ${k + 1} of ${nCor} · found around ${fmt(P.coronas[k].count)} hats in this patch`;
                 } else if (t >= A0 && t < B0) {
-                    F.stat = `edge-to-edge neighbour ${Math.min(legal, Math.floor((t - A0) / stepA) + 1)} of ${legal}`;
+                    F.stat = `edge-to-edge neighbor ${Math.min(legal, Math.floor((t - A0) / stepA) + 1)} of ${legal}`;
                 } else if (t >= B0 && t < C0) {
                     F.stat = `dead end ${Math.min(dead, Math.floor((t - B0) / stepB) + 1)} of ${dead} · ${legal} legal, ${dead} impossible`;
                 }
@@ -376,13 +376,13 @@ function makeTour(P) {
         });
     }
 
-    // 6 ─ Every neighbourhood recurs ──────────────────────────
+    // 6 ─ Every neighborhood recurs ──────────────────────────
     {
         const interior = P.coronaType.reduce((s, v) => s + (v >= 0 ? 1 : 0), 0);
         const picks = [0, 3, 7, 11, 15, nCor - 1].filter((v, i, a) => v >= 0 && v < nCor && a.indexOf(v) === i);
         chapters.push({
-            id: 'recur', title: 'Every neighbourhood recurs', dur: 17,
-            text: `Now colour every hat by its neighbourhood. Each of the ${nCor} kinds keeps coming back all over the plane, each with its own fixed frequency, yet they never settle into a repeating lattice.`,
+            id: 'recur', title: 'Every neighborhood recurs', dur: 17,
+            text: `Now color every hat by its neighborhood. Each of the ${nCor} kinds keeps coming back all over the plane, each with its own fixed frequency, yet they never settle into a repeating lattice.`,
             frame(F) {
                 const t = F.t, k = envelope(t, 17, 2, 2);
                 const slot = (t - 3) / 1.9, cur = Math.floor(slot);
@@ -399,7 +399,7 @@ function makeTour(P) {
                     }
                 }
                 F.cam.span = lerp(F.home.span, 46, k);
-                if (on) F.stat = `neighbourhood ${type + 1}: ${fmt(P.coronas[type].count)} hats, about 1 in ${Math.round(interior / P.coronas[type].count)}`;
+                if (on) F.stat = `neighborhood ${type + 1}: ${fmt(P.coronas[type].count)} hats, about 1 in ${Math.round(interior / P.coronas[type].count)}`;
             }
         });
     }

@@ -7,7 +7,7 @@ const R = BALL.R;
 export class GeoBuilder {
   constructor() { this.pos = []; this.nor = []; this.uv = []; this.idx = []; }
   get count() { return this.pos.length / 3; }
-  // tube through centres c[] with frames (a,b) perpendicular to the path
+  // tube through centers c[] with frames (a,b) perpendicular to the path
   tube(c, fa, fb, radius, radial = 8, v0 = 0) {
     const base = this.count;
     for (let i = 0; i < c.length; i++) {
@@ -25,7 +25,7 @@ export class GeoBuilder {
       this.idx.push(a, c2, b, b, c2, d);
     }
   }
-  // sweep a 2D profile [(s,u,ns,nu)] along centres with frames S,U
+  // sweep a 2D profile [(s,u,ns,nu)] along centers with frames S,U
   sweep(c, S, U, prof) {
     const base = this.count, m = prof.length;
     for (let i = 0; i < c.length; i++) {
@@ -53,7 +53,7 @@ export class GeoBuilder {
   }
 }
 
-// sample a track every `step` metres; returns arrays of centre/T/U/S
+// sample a track every `step` meters; returns arrays of center/T/U/S
 export function frames(track, step = 0.02, s0 = 0, s1 = track.L) {
   const out = { P: [], T: [], U: [], S: [], s: [] };
   const f = {};
@@ -231,7 +231,7 @@ export function buildSupports(machine, M, keepOut, floorAt, colorOf) {
   const arms = [];
   const brackets = [];
   const f = {};
-  // how far below the ball centre the track's underside is
+  // how far below the ball center the track's underside is
   const dropOf = (t) => (t.kind === 'trough' ? R + 0.01 : t.kind === 'flume' ? R + 0.012 : RAIL.drop + 0.012);
   const tracks = [...world.tracks].sort((a, b) => b.start.y - a.start.y); // high tracks first: they plant the tall masts
   for (const t of tracks) {
@@ -286,7 +286,7 @@ export function buildSupports(machine, M, keepOut, floorAt, colorOf) {
       }
     }
   }
-  // instanced cylinders per colour
+  // instanced cylinders per color
   const byColor = new Map();
   const m4 = new THREE.Matrix4(), q = new THREE.Quaternion(), s3 = new THREE.Vector3(), v3 = new THREE.Vector3(), d3 = new THREE.Vector3(), Y = new THREE.Vector3(0, 1, 0);
   const put = (color, a, b, r) => {

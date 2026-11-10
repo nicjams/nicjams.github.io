@@ -33,7 +33,7 @@ class Builder {
     return idx;
   }
   done(name) {
-    // centre on the centroid
+    // center on the centroid
     const n = this.atoms.length, c = [0, 0, 0];
     for (const a of this.atoms) { c[0] += a.p[0] / n; c[1] += a.p[1] / n; c[2] += a.p[2] / n; }
     for (const a of this.atoms) { a.p[0] -= c[0]; a.p[1] -= c[1]; a.p[2] -= c[2]; }

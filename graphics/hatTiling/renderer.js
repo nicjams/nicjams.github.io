@@ -45,7 +45,7 @@
         const stroke = hexRgb(p.stroke);
         const byLabel = ['H1', 'H', 'T', 'P', 'F'].map(k => hexRgb(p[k]));
         const ink = light ? [0.12, 0.11, 0.14] : [1, 1, 1];
-        // Colours that stay visible when a hat stands alone on the background.
+        // Colors that stay visible when a hat stands alone on the background.
         const solo = byLabel.map(c => Math.abs(lum(c) - lum(bg)) < 0.1
             ? c.map((v, i) => v + (ink[i] - v) * 0.3) : c);
         const diff = Math.abs(stroke[0] - bg[0]) + Math.abs(stroke[1] - bg[1]) + Math.abs(stroke[2] - bg[2]);

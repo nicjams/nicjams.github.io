@@ -217,10 +217,10 @@ function normalize4(v) {
  * Boundary points are the null directions X(u) = (u, 1) with u a unit vector
  * of R^4, and X(u) lies in the fundamental chamber exactly when
  * <X(u), v_i> = u.s_i - t_i <= 0 for every mirror.  Picking the u that
- * maximises min_i (t_i - u.s_i) sends the deepest boundary point of the
+ * maximizes min_i (t_i - u.s_i) sends the deepest boundary point of the
  * chamber to infinity, which is what makes every mirror come out as a
- * sphere of positive radius with the limit set bounded and centred.
- * For a cocompact group no such point exists; the maximiser is then the
+ * sphere of positive radius with the limit set bounded and centered.
+ * For a cocompact group no such point exists; the maximizer is then the
  * least bad choice and exactly one mirror keeps a negative radius.
  */
 export function chamberPole(vectors, exclude = -1) {

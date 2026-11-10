@@ -297,7 +297,7 @@ function det(A) {
 /**
  * Alexander polynomial of the braid closure:
  *   Δ(t) ≐ det(I − B̄(β)) · (1 − t)/(1 − tⁿ),
- * normalised to be symmetric under t ↦ t⁻¹ when possible, with Δ(1) > 0.
+ * normalized to be symmetric under t ↦ t⁻¹ when possible, with Δ(1) > 0.
  */
 export function alexander(word, n) {
   if (n === 1) return L.mono(1);
@@ -308,7 +308,7 @@ export function alexander(word, n) {
   const den = norm({ lo: 0, c: [1n, ...new Array(n - 1).fill(0n), -1n] });
   let P = L.div(num, den);
   if (!P.c.length) return P;
-  // centre: shift so exponents run −d … d (or 0 … 2d+1 if the span is odd)
+  // center: shift so exponents run −d … d (or 0 … 2d+1 if the span is odd)
   const span = P.c.length - 1;
   P = { lo: span % 2 === 0 ? -span / 2 : 0, c: P.c };
   const v1 = L.evalAt1(P);
@@ -316,7 +316,7 @@ export function alexander(word, n) {
   return P;
 }
 
-// Conway-normalised Alexander polynomials, coefficients from t^(−d) to t^d.
+// Conway-normalized Alexander polynomials, coefficients from t^(−d) to t^d.
 const KNOTS = [
   ['0₁ (unknot)', [1]],
   ['3₁ (trefoil)', [1, -1, 1]],

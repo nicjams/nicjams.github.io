@@ -49,7 +49,7 @@ export function mountPlaylistEditor(container, transport) {
       const move = delta => { const j = i + delta; if (j < 0 || j >= draft.items.length) return; [draft.items[i], draft.items[j]] = [draft.items[j], draft.items[i]]; renderRows(); };
       rows.append(el('div', { class: 'editor-item' }, [
         el('strong', {}, `${i + 1}. ${vizById(item.vizId)?.title || item.vizId}`),
-        el('div', { class: 'btn-row' }, [button('↑', () => move(-1)), button('↓', () => move(1)), button('Remove', () => { draft.items.splice(i, 1); renderRows(); }, 'danger')]), seconds,
+        el('div', { class: 'btn-row' }, [button('Move up', () => move(-1)), button('Move down', () => move(1)), button('Remove', () => { draft.items.splice(i, 1); renderRows(); }, 'danger')]), seconds,
         el('details', {}, [el('summary', {}, 'Load payload (JSON)'), json]),
       ]));
     });

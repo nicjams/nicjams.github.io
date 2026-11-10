@@ -166,6 +166,9 @@
     .pl-item .ord { display: flex; flex-direction: column; }
     .pl-item .ord button, .pl-item .x { background: none; border: none; color: var(--ink-faint); cursor: pointer; padding: 0 0.2rem; line-height: 1; font-size: 0.8rem; }
     .pl-item .ord button:hover, .pl-item .x:hover { color: var(--ink); }
+    .pl-item .ord svg { width: 13px; height: 13px; display: block; }
+    .pl-item .x svg { width: 14px; height: 14px; display: block; }
+    .mini svg { width: 14px; height: 14px; }
     .pl-item.dragover { border-color: var(--accent); }
     .empty-hint { color: var(--ink-faint); font-size: 0.85rem; text-align: center; padding: 1.4rem 0.6rem; border: 1px dashed var(--stroke); border-radius: var(--radius-sm); }
 
@@ -183,10 +186,10 @@
     <div class="brand"><span class="glyph">◧</span> Graphics <b>Studio</b></div>
     <span class="chip" title="Playlists are stored locally in this browser">local</span>
     <div class="spacer"></div>
-    <a class="btn ghost" href="#editor" id="plJump" title="Jump to the playlist editor">▤ Playlist</a>
-    <button class="btn ghost" id="importBtn">⇪ Import</button>
+    <a class="btn ghost" href="#editor" id="plJump" title="Jump to the playlist editor">Playlist</a>
+    <button class="btn ghost" id="importBtn">Import</button>
     <button class="btn" id="newPlBtn">+ New playlist</button>
-    <a class="btn ghost" href="../index.html" title="Back to nicjams.github.io">↩ Site</a>
+    <a class="btn ghost" href="../index.html" title="Back to nicjams.github.io">Site</a>
   </header>
 
   <main class="layout">
@@ -198,8 +201,8 @@
       <div class="lib-tools">
         <input type="search" id="search" placeholder="Search visualizations…" aria-label="Search visualizations" autocomplete="off">
         <div class="view-toggle" role="group" aria-label="Layout">
-          <button type="button" data-view="grid" title="Thumbnail grid">▦ Grid</button>
-          <button type="button" data-view="list" title="Compact list">☰ List</button>
+          <button type="button" data-view="grid" title="Thumbnail grid">Grid</button>
+          <button type="button" data-view="list" title="Compact list">List</button>
         </div>
       </div>
       <div class="filters" id="filters"></div>

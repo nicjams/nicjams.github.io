@@ -4,7 +4,7 @@
 // 1. Braid algebra: relations, Garside normal form, Burau, Alexander.
 // 2. The solver is intersection-free through a braid, and the braid read
 //    back from the simulated strands equals the applied word.
-// 3. A strand yanked through its neighbour tunnels with the CCD filter off
+// 3. A strand yanked through its neighbor tunnels with the CCD filter off
 //    and never with it on.
 // 4. Every knot preset starts with clearance and tightens without stalling.
 import assert from 'node:assert/strict';

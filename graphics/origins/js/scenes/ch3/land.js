@@ -96,7 +96,7 @@ function makeTree(rng, kind) {
   return { segs, leaves };
 }
 
-// seasonal colour of leaves and ground: spring, summer, autumn, winter
+// seasonal color of leaves and ground: spring, summer, autumn, winter
 const LEAF = [[0.55, 0.85, 0.35], [0.24, 0.55, 0.2], [0.95, 0.5, 0.15], [0.9, 0.9, 0.95]];
 const GROUND = [[0.25, 0.42, 0.18], [0.2, 0.33, 0.12], [0.45, 0.33, 0.12], [0.85, 0.88, 0.95]];
 function seasonal(table, s) {

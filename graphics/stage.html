@@ -50,37 +50,28 @@
     #dock .count { font-size: 0.74rem; color: var(--ink-dim); font-family: var(--mono); white-space: nowrap; }
     .divider { width: 1px; height: 26px; background: var(--stroke); }
 
-    /* ── on-stage control panel: a floating Poincaré-style glass card ── */
+    /* ── on-stage control panel: the Poincaré workbench card ──
+       Floats at the top right and is only as tall as the page showing (pager.js fitHeight). */
     #panel {
-      position: fixed; top: var(--panel-gap); right: var(--panel-gap); bottom: var(--panel-gap); z-index: 45;
-      width: var(--panel-w); display: flex; flex-direction: column; overflow: hidden;
+      position: fixed; top: var(--panel-gap); right: var(--panel-gap); z-index: 45;
+      width: var(--panel-w); max-height: calc(100vh - var(--panel-gap) * 2);
+      display: flex; flex-direction: column; overflow: hidden;
       border-radius: var(--r-xl);
       transform: translateX(calc(100% + var(--panel-gap) * 2)); opacity: 0;
       transition: transform 0.4s var(--ease-out), opacity 0.25s ease;
     }
     #panel.open { transform: none; opacity: 1; }
-    .panel-head { flex: none; display: flex; align-items: center; gap: 10px; padding: 12px 12px 10px 14px; }
-    .panel-head .g {
-      width: 40px; height: 40px; flex: none; display: grid; place-items: center; font-size: 21px; border-radius: 12px;
-      background: linear-gradient(160deg, rgba(129, 140, 248, 0.22), rgba(34, 211, 238, 0.08));
-      border: 1px solid var(--accent-line); box-shadow: 0 0 16px var(--accent-glow);
-    }
-    .panel-head .meta { flex: 1; min-width: 0; }
-    .panel-head .name { font-size: 15px; font-weight: 650; letter-spacing: -0.01em; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
-    .panel-head .sub { font-size: 11.5px; color: var(--ink-dim); margin-top: 2px; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
-    .panel-transport { display: flex; align-items: center; gap: 4px; flex: none; }
-    .panel-transport .icon-btn svg { width: 16px; height: 16px; }
-    .panel-transport .play { color: #fff; border-color: rgba(255, 255, 255, 0.2); background: linear-gradient(180deg, #8b93fa, #5d63e6); box-shadow: 0 0 14px var(--accent-glow); }
-    .panel-transport .play:hover { color: #fff; filter: brightness(1.08); background: linear-gradient(180deg, #8b93fa, #5d63e6); }
-    #panel .seg-tabs { border-top: 1px solid var(--stroke); }
-    #panel .pager > .page { padding: 14px 14px 22px; }
+    #panel .pager { flex: none; align-items: flex-start; transition: height 0.32s var(--ease-out); }
+    #panel .pager > .page { height: auto; max-height: calc(100vh - var(--panel-gap) * 2 - 52px); padding: 16px 14px 18px; gap: 14px; }
+    .page-head { display: flex; flex-direction: column; gap: 4px; margin: 0 2px -4px; }
+    .page-head .pc-label { color: var(--ink-faint); }
     .studio-note { margin: 0; font-size: 12px; line-height: 1.7; color: var(--ink-dim); }
     .studio-note kbd { height: 20px; min-width: 22px; font-size: 10.5px; margin: 0 1px; }
 
     #hint { position: fixed; top: 14px; left: 50%; transform: translateX(-50%); z-index: 40; font-size: 0.78rem; color: var(--ink-dim); padding: 0.4rem 0.8rem; transition: opacity 0.4s; }
     #hint.hide { opacity: 0; }
     body.sidebar-open #viz { width: calc(100% - var(--panel-w) - var(--panel-gap) * 2); }
-    /* beside the open panel the dock and hint centre in the remaining space and shrink to fit it */
+    /* beside the open panel the dock and hint center in the remaining space and shrink to fit it */
     body.sidebar-open #dock, body.sidebar-open #hint { left: calc((100% - var(--panel-w) - var(--panel-gap) * 2) / 2); }
     body.sidebar-open #dock { max-width: calc(100% - var(--panel-w) - var(--panel-gap) * 4); }
     body.sidebar-open #hint { max-width: calc(100% - var(--panel-w) - var(--panel-gap) * 4); white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
@@ -106,10 +97,12 @@
     @media (max-width: 640px) {
       :root { --panel-w: 100vw; }
       #panel {
-        top: auto; left: 0; right: 0; bottom: 0; width: 100%; height: 56%;
+        top: auto; left: 0; right: 0; bottom: 0; width: 100%; height: 56%; max-height: none;
         border-radius: var(--r-xl) var(--r-xl) 0 0; transform: translateY(100%);
       }
-      #panel .pager > .page { padding-bottom: calc(22px + env(safe-area-inset-bottom)); }
+      /* a fixed-height sheet: pages fill it and scroll, instead of sizing the card */
+      #panel .pager { height: auto !important; flex: 1; align-items: stretch; }
+      #panel .pager > .page { height: 100%; max-height: none; padding-bottom: calc(22px + env(safe-area-inset-bottom)); }
       body.sidebar-open #viz { width: 100%; height: 44%; }
       body.sidebar-open #dock, body.sidebar-open #hint { display: none; }
     }
@@ -131,7 +124,7 @@
   <div id="hint" class="glass">← → switch · Space play/pause · <b>C</b> controls · <b>F</b> fullscreen</div>
 
   <div id="dock" class="pc-glass">
-    <button class="btn ghost icon" id="exitBtn" title="Back to library">↩</button>
+    <button class="btn ghost icon" id="exitBtn" type="button" title="Back to library" aria-label="Back to library" data-icon="back"></button>
     <div class="divider"></div>
     <div class="now">
       <span class="name" id="dockTitle">—</span>
@@ -139,53 +132,62 @@
     </div>
     <div class="divider"></div>
     <div class="transport">
-      <button class="btn icon" id="prevBtn" title="Previous (←)">⏮</button>
-      <button class="btn primary icon" id="playBtn" title="Play / pause (Space)">▶</button>
-      <button class="btn icon" id="nextBtn" title="Next (→)">⏭</button>
+      <button class="btn icon" id="prevBtn" type="button" title="Previous (←)" aria-label="Previous visualization" data-icon="prev"></button>
+      <button class="btn primary icon" id="playBtn" type="button" title="Play / pause (Space)" aria-label="Play"></button>
+      <button class="btn icon" id="nextBtn" type="button" title="Next (→)" aria-label="Next visualization" data-icon="next"></button>
     </div>
     <div class="progress" title="Auto-advance progress"><i id="progressFill"></i></div>
     <span class="count" id="count">0 / 0</span>
     <div class="divider"></div>
-    <button class="btn icon" id="panelBtn" title="Controls (C)">🎛</button>
-    <button class="btn icon" id="remoteBtn" title="Open remote in a new window">🕹</button>
-    <button class="btn icon" id="fsBtn" title="Fullscreen (F)">⛶</button>
+    <button class="btn icon" id="panelBtn" type="button" title="Controls (C)" aria-label="Controls" data-icon="sliders"></button>
+    <button class="btn icon" id="remoteBtn" type="button" title="Open remote in a new window" aria-label="Open remote" data-icon="remote"></button>
+    <button class="btn icon" id="fsBtn" type="button" title="Fullscreen (F)" aria-label="Fullscreen" data-icon="fullscreen"></button>
   </div>
 
   <aside id="panel" class="pc-glass" aria-label="Controls">
-    <header class="panel-head">
-      <span class="g" id="panelGlyph" aria-hidden="true">✦</span>
-      <div class="meta">
-        <div class="name" id="panelTitle">—</div>
-        <div class="sub" id="panelSub">on-stage remote</div>
+    <header class="panel-bar">
+      <nav class="seg-tabs" role="tablist" aria-label="Control pages" id="panelTabs">
+        <button class="seg-tab" role="tab" type="button">Simple</button>
+        <button class="seg-tab" role="tab" type="button">Advanced <span class="count" id="advCount" hidden></span></button>
+        <button class="seg-tab" role="tab" type="button">Studio</button>
+      </nav>
+      <div class="panel-transport" id="panelTransport" role="group" aria-label="Playback" hidden>
+        <button class="icon-btn" id="panelPrev" type="button" title="Previous (←)" aria-label="Previous visualization" data-icon="prev"></button>
+        <button class="icon-btn" id="panelPlay" type="button" title="Play / pause (Space)" aria-label="Play (auto-advance)"></button>
+        <button class="icon-btn" id="panelNext" type="button" title="Next (→)" aria-label="Next visualization" data-icon="next"></button>
       </div>
-      <div class="panel-transport" role="group" aria-label="Playback">
-        <button class="icon-btn" id="panelPrev" type="button" title="Previous (←)" aria-label="Previous visualization"><svg viewBox="0 0 24 24" fill="currentColor" aria-hidden="true"><rect x="5" y="5" width="2.4" height="14" rx="1"/><path d="M19 5.8v12.4a.9.9 0 0 1-1.4.75L9.2 12.75a.9.9 0 0 1 0-1.5l8.4-6.2a.9.9 0 0 1 1.4.75z"/></svg></button>
-        <button class="icon-btn play" id="panelPlay" type="button" title="Play / pause (Space)" aria-label="Play (auto-advance)"></button>
-        <button class="icon-btn" id="panelNext" type="button" title="Next (→)" aria-label="Next visualization"><svg viewBox="0 0 24 24" fill="currentColor" aria-hidden="true"><rect x="16.6" y="5" width="2.4" height="14" rx="1"/><path d="M5 5.8v12.4a.9.9 0 0 0 1.4.75l8.4-6.2a.9.9 0 0 0 0-1.5L6.4 5.05A.9.9 0 0 0 5 5.8z"/></svg></button>
-      </div>
-      <button class="icon-btn" id="panelClose" type="button" title="Hide controls (C)" aria-label="Hide controls">×</button>
+      <button class="icon-btn spin-hover" id="panelReload" type="button" title="Reload this visualization" aria-label="Reload this visualization" data-icon="reload"></button>
+      <button class="icon-btn" id="panelClose" type="button" title="Hide controls (C)" aria-label="Hide controls"><span class="collapse-icon" aria-hidden="true">×</span></button>
     </header>
-    <nav class="seg-tabs" role="tablist" aria-label="Control pages" id="panelTabs">
-      <button class="seg-tab" role="tab" type="button">Simple</button>
-      <button class="seg-tab" role="tab" type="button">Advanced <span class="count" id="advCount" hidden></span></button>
-      <button class="seg-tab" role="tab" type="button">Studio</button>
-    </nav>
     <div class="pager" id="panelPager">
-      <section class="page" id="panel-simple"><div id="simpleControls"></div></section>
-      <section class="page" id="panel-advanced"><div id="controls"><!-- auto-generated controls injected here --></div></section>
+      <section class="page" id="panel-simple">
+        <div class="page-head">
+          <div class="pc-label" id="panelSub" hidden></div>
+          <h2 class="pc-title" id="panelTitle">—</h2>
+        </div>
+        <div id="simpleControls"></div>
+      </section>
+      <section class="page" id="panel-advanced">
+        <div class="page-head"><h2 class="pc-title">All Controls</h2></div>
+        <div id="controls"><!-- auto-generated controls injected here --></div>
+      </section>
       <section class="page" id="panel-studio">
+        <div class="page-head">
+          <h2 class="pc-title">Studio</h2>
+          <p class="pc-sub">Presentation, playlists and remote control for this display.</p>
+        </div>
         <div class="pc-card">
           <div class="pc-label">Display</div>
           <div class="tiles">
             <button class="tile key" id="uPanel" type="button" title="Hide controls and fill the display">Present</button>
             <button class="tile key" id="uFullscreen" type="button">Fullscreen</button>
-            <button class="tile key" id="uReload" type="button" title="Reload this visualization">↻ Reload</button>
+            <button class="tile key" id="uReload" type="button" title="Reload this visualization">Reload</button>
             <button class="tile key" id="uLibrary" type="button">Library &amp; playlists</button>
           </div>
         </div>
         <div class="pc-card">
           <div class="pc-label">Remote control</div>
-          <button class="btn alt" id="uRemote" type="button" style="min-height:44px" title="Open the full remote in a new window">🕹 Pop out the remote</button>
+          <button class="btn alt" id="uRemote" type="button" style="min-height:44px" title="Open the full remote in a new window">Pop out the remote</button>
           <details class="phone-pairing" open><summary class="pc-sub">Pair a phone</summary><div id="phonePairing" class="pairing-fields"></div></details>
         </div>
         <p class="studio-note"><kbd>←</kbd><kbd>→</kbd> switch · <kbd>Space</kbd> play/pause · <kbd>C</kbd> controls · <kbd>F</kbd> fullscreen</p>

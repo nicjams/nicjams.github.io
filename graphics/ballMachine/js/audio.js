@@ -701,7 +701,7 @@ class RollVoice {
       lfoHz = o; lfoD = 0.35;
     } else if (b.surface === 'wood') {
       rumble = 0.0095 * Math.pow(sn, 0.9); fc = 110 + 650 * sn; sing = 0; lfoHz = rot; lfoD = 0.25;
-    } else if (b.surface === 'water') {                  // ploughing down the flume's stream: a babbling hiss
+    } else if (b.surface === 'water') {                  // plowing down the flume's stream: a babbling hiss
       rumble = 0.0075 * Math.pow(sn, 0.8); fc = 900 + 2600 * sn; sing = 0;
       lfoHz = (7 + 16 * sn) * (0.6 + 0.8 * Math.random()); lfoD = 0.6;
     } else if (b.surface === 'brush') {                  // pushing through the brush brake: a dry bristly hiss

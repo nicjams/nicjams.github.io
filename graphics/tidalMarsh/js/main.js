@@ -33,7 +33,7 @@ new ResizeObserver(resize).observe(stage);
 
 function blit() {
     sim.render(offCtx);
-    // Fit the SIM_RES square inside the canvas, centred, preserving aspect.
+    // Fit the SIM_RES square inside the canvas, centered, preserving aspect.
     const cw = canvas.width, ch = canvas.height;
     const side = Math.min(cw, ch);
     const ox = (cw - side) * 0.5, oy = (ch - side) * 0.5;

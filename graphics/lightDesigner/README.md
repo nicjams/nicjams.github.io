@@ -39,7 +39,7 @@ Extras device. Click a thumbnail, press <kbd>1</kbd>–<kbd>0</kbd> for the firs
 pick from **Launch scene** (the Studio remote sees this), play MIDI notes on channel
 16 from C2 up (one pad per scene), or link with `?scene=<id>`.
 
-Every launch moves; nothing cuts. Colour and intensity crossfade over **Move time**,
+Every launch moves; nothing cuts. Color and intensity crossfade over **Move time**,
 the heads pan and tilt there at motor speed, and the sticks fly and flip at hoist
 speed. Devices the new scene adds or drops travel too:
 
@@ -54,7 +54,7 @@ speed. Devices the new scene adds or drops travel too:
 - **The projection screen** flies in from above, and the liquid light show starts
   once it's in place.
 
-While anything is still travelling, the live thumbnail pulses and the status says
+While anything is still traveling, the live thumbnail pulses and the status says
 *Moving to …*. **Auto-trigger** launches a scene every 4–64 bars, in order or at
 random. The programmer, live FX and masters still apply on top of a scene; pick a
 show to go back to timed playback.
@@ -80,7 +80,7 @@ link, and the page remembers the tab.
   opera boxes, a balcony, crystal chandeliers and wall sconces.
 - **Stadium**: an open-air bowl under a starry sky, with a stage roof on truss
   towers, a field with yard lines, two decks of seats, a ribbon board showing the
-  rig's colours, and four floodlight towers.
+  rig's colors, and four floodlight towers.
 
 In the club and theater, walls, ceilings and the curtain stop beams, lasers and
 mirror-ball rays, and the moving heads leave pools of light on them. Camera
@@ -91,7 +91,7 @@ the stadium).
 pendants in the club, chandeliers and sconces in the theater, floodlight towers at
 the stadium. *Showtime* fades them out over 8 s, *Walk-in* brings them to half,
 and *House up* brings them full. They also have a level and fade time; white with
-a warmth control from candle to daylight, one colour, or the rig's colour; and
+a warmth control from candle to daylight, one color, or the rig's color; and
 effects: steady, breathing, old-tungsten flicker, a chase around the room, pulse on
 the beat, twinkle or rainbow. While they're up they fill the room and wash the
 beams out a little. Blackout takes them out; the grand master doesn't.
@@ -99,23 +99,23 @@ beams out a little. Blackout takes them out; the grand master doesn't.
 **Fairy lights** hang as swags or drops: a canopy over the crowd, spokes from a hub,
 swags between the truss sticks (they ride the kinetics), or a starcloth curtain
 upstage. Each venue has its own anchor points. Strands are catenaries that sway in
-a **breeze**, and bulbs switch on running along each string. Colours are warm or
-cool white, classic C9 multicolour, pastel, rainbow along the string, the rig's
-colour, or one colour. Effects are steady, twinkle, chase, wave, breathing,
+a **breeze**, and bulbs switch on running along each string. Colors are warm or
+cool white, classic C9 multicolor, pastel, rainbow along the string, the rig's
+color, or one color. Effects are steady, twinkle, chase, wave, breathing,
 sparkle, pulse on the beat, or rain. You can also set level, speed, bulbs per
-metre, sag and bulb size.
+meter, sag and bulb size.
 
 **Camera**: the page opens *In the audience*, at eye height (1.7 m) on the floor,
-centred, 15 ft (4.6 m) back from the front of the stage, with a wider lens because
+centered, 15 ft (4.6 m) back from the front of the stage, with a wider lens because
 the rig fills the sky from that close. The other presets are still under View.
 
 ## Lasers (optional)
 
 The **Extras** tab adds an optional laser package. It's in the spirit of
-the Disco Biscuits, whose lighting designer Johnny R. Goode runs full-colour,
+the Disco Biscuits, whose lighting designer Johnny R. Goode runs full-color,
 audience-scanning Lightwave International lasers alongside the moving heads
 ([Lightwave](https://lasershows.com/portfolio/disco-biscuits/)). There are six
-projectors: the two upstage corners, upstage centre, the two wings and front of house.
+projectors: the two upstage corners, upstage center, the two wings and front of house.
 Beams are razor-thin (drawn a fixed number of pixels wide), stop on the deck or the
 floor, and otherwise run out into the haze.
 
@@ -123,8 +123,8 @@ floor, and otherwise run out into the haze.
   crowd), tunnel (a spinning cone), starburst, beam chase (jumps on the beat),
   crossfire (the wings plus front of house), and *follow the show*, which changes
   look by section and scales with how bright the show is.
-- **Colour**: full-colour rotating, rainbow across each fan, classic green, the
-  rig's dominant colour, or one colour.
+- **Color**: full-color rotating, rainbow across each fan, classic green, the
+  rig's dominant color, or one color.
 - **Controls**: level, beams per fan, spread, scan period in beats, height over the
   crowd, and chop on the beat. The grand master, blackout, flash and haze level
   all apply to the lasers.
@@ -147,7 +147,7 @@ them up in one step: arena, trance-fusion, psychedelic ’60s, everything, or no
   with anti-aliased edges and seams, so they stay crisp at any distance.
 - **Mirror balls**: one over the stage, or three with two over the crowd. Pin spots
   from the grid, faceted glints, rays through the haze, and spots sweeping the
-  floor. Set spin, reflections, colour and level. *Drop the ball* flies them out
+  floor. Set spin, reflections, color and level. *Drop the ball* flies them out
   and back in again; *Fly out* takes them away.
 - **Blinders & strobes**: six 4-lite tungsten audience blinders (fast attack, slow,
   warming decay) and eight strobe bars. Hits can come on the drops (sections that
@@ -163,7 +163,7 @@ them up in one step: arena, trance-fusion, psychedelic ’60s, everything, or no
 
 ## Files
 
-- `layout.js`: the moving-sticks rig (30 posed rigid bodies with height, roll and flip), fixtures, groups and aiming maths.
+- `layout.js`: the moving-sticks rig (30 posed rigid bodies with height, roll and flip), fixtures, groups and aiming math.
 - `engine.js`: the console. Each frame runs the show section (cross-faded with
   the one before it), then programmer overrides, live FX, the snapshot fade used by
   jumps and GO, highlight, masters, and finally physics (motor response, hoist and
@@ -195,8 +195,8 @@ them up in one step: arena, trance-fusion, psychedelic ’60s, everything, or no
 `dim`, `col`/`alt`, `pan`, `tilt`, `aim` + `spread`, `fan`, `zoom`, `frost`,
 `strobe`, `hueSpread`), `fx` (`a` attribute, `w` waveform, `rate` beats/cycle,
 `size`, `spread` degrees of phase, `by` order, `wings`, `off`), `kin` (pod shape)
-and `cyc` (a backdrop colour: still accepted, but not drawn now there is no backdrop). Any value can be a function of `c = { p, t, T, beat }`. Use `up`,
-`steps`, `blend`, `journey` and `every` for builds and colour journeys. Wrap
+and `cyc` (a backdrop color: still accepted, but not drawn now there is no backdrop). Any value can be a function of `c = { p, t, T, beat }`. Use `up`,
+`steps`, `blend`, `journey` and `every` for builds and color journeys. Wrap
 scaled function values with `mul(v, k)`, not `v * k`.
 
 ## Console
@@ -204,7 +204,7 @@ scaled function values with `mul(v, k)`, not `v * k`.
 - **Show**: playback, section list, scrubbing, set/loop/hold, crossfade scale,
   masters (grand, pods, floor, haze), flash/strobe, blackout, tap tempo.
 - **Program**: group chips or the fixture map (shift = range, ⌘/ctrl = toggle),
-  intensity, colour, pan/tilt, position palettes (tracked aim points), zoom,
+  intensity, color, pan/tilt, position palettes (tracked aim points), zoom,
   frost, shutter. Double-click an attribute's label to release it.
 - **FX**: stack live effects on any group: waveform, rate, size, phase spread
   and order, duty, wings, reverse.
@@ -220,7 +220,7 @@ scaled function values with `mul(v, k)`, not `v * k`.
 
 Turn on **Notes fire lights** (any incoming note turns it on), or just connect a
 keyboard and play. Notes are laid over the show just before the masters: the
-brighter of the show and the note wins, and the note's colour wins in proportion
+brighter of the show and the note wins, and the note's color wins in proportion
 to its level. **Under the notes** sets how much of the show stays up (blackout,
 12%, 35% or the full show).
 
@@ -228,8 +228,8 @@ to its level. **Under the notes** sets how much of the show stays up (blackout,
   position between the lowest and highest key), *octave → pod, note → head*
   (C1 octave = floor units, each higher octave one pod further downstage),
   *scatter* (each pitch class lights a spread of heads), or *whole rig*.
-- **Colour**: pitch → hue (C red, 30° per semitone), velocity → heat, the show's
-  own colour, or one fixed colour.
+- **Color**: pitch → hue (C red, 30° per semitone), velocity → heat, the show's
+  own color, or one fixed color.
 - Velocity → brightness. Sustain pedal (CC64) holds notes. The mod wheel (CC1)
   makes the tilt kicks bigger, and pitch bend rotates the hue ±60°. CC120/123 is
   all notes off. Response sets the held level, release, column width, tilt kick
@@ -251,7 +251,7 @@ monitor synth, a now-playing readout, a coverage count and a message log.
 Automated test: serve the repo on port 8124, then run
 `node graphics/tests/lightDesigner-midi.mjs`. It mocks a Web MIDI keyboard in
 headless Chrome over the DevTools protocol (no npm packages needed) and checks
-connecting, mapping, colour, velocity, release, sustain, pitch bend, the drum map,
+connecting, mapping, color, velocity, release, sustain, pitch bend, the drum map,
 the channel filter, MIDI learn priority, the computer and on-screen keyboards,
 the sweep reaching all 72 fixtures, the test groove, handing the rig back to
 the show, stick flips (portal legs stand vertical and travel back smoothly), all eight laser looks (projectors rising, and firing them with notes), the extras (kits, and a crash cymbal firing blinders, strobes and CO₂), venues (the empty default with the audience camera, the club ceiling and theater curtain stopping beams, stadium floodlights, the Showtime fade, fairy lights riding the truss), and scenes (every launch moves, truss bars grow in, the tube wall rises from the deck only after the bars leave, the ball flies in, keys, pads, auto-trigger).

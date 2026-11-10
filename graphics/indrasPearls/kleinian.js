@@ -85,7 +85,7 @@ export function grandma(ta, tb, root = -1) {
  * the extreme left, middle and extreme right continuations. With `fine` we
  * also split by the next letter j ∈ {k+1, k, k−1}, taking for each its
  * leftmost Fix(j j+1 j+2 j+3), middle Fix(j), rightmost Fix(j j−1 j−2 j−3);
- * neighbouring extremes coincide, leaving seven points. Sphere-filling limit
+ * neighboring extremes coincide, leaving seven points. Sphere-filling limit
  * sets need this: three close points can still bound a large loop.
  */
 function repetendFixedPoints(gens, fine) {
@@ -311,7 +311,7 @@ function circumcircle(p, q, r) {
 /**
  * The circle chain of a cusp word W: the ordinary-set disks tangent at the
  * fixed points of W's cyclic permutations σᵢ. Two disks meet at each Fix(σᵢ);
- * each is stabilised by a thrice-punctured-sphere group ⟨σᵢ, Q⟩ with Q a
+ * each is stabilized by a thrice-punctured-sphere group ⟨σᵢ, Q⟩ with Q a
  * conjugate g σⱼ g⁻¹ and σᵢQ^±1 parabolic, so its boundary is the circle
  * through Fix(σᵢ), Fix(Q), Fix(σᵢQ^±1). Accidental Fuchsian subgroups also
  * pass that test, so a circle is kept only if one side is empty of the
@@ -374,7 +374,7 @@ export function imageDisk(M, [cx, cy, r]) {
   const pole = scale(div(d, c), -1);
   const dx = pole[0] - cx, dy = pole[1] - cy, d2 = dx * dx + dy * dy;
   if (d2 <= r * r * (1 + 1e-9)) return null;
-  // The pole's reflection in the circle is mapped to the image's centre.
+  // The pole's reflection in the circle is mapped to the image's center.
   const s = (r * r) / d2;
   const C = apply(M, [cx + dx * s, cy + dy * s]);
   const P = apply(M, [cx + r, cy]);
@@ -384,7 +384,7 @@ export function imageDisk(M, [cx, cy, r]) {
 /**
  * The orbit of some ordinary-set disks under the group, breadth-first:
  * every disk's images under a, b, A, B, kept while their radius is ≥ minR
- * and their centre lies within `bound` of `center`. For a double cusp group
+ * and their center lies within `bound` of `center`. For a double cusp group
  * the orbit of the cusp chains' disks is every component of the ordinary set.
  */
 export function orbitDisks(gens, seeds, { minR, center = [0, 0], bound = 6, max = 400000 }) {

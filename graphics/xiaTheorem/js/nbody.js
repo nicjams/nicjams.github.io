@@ -160,14 +160,14 @@ export class NBody {
     row.set(v, 1 + N3);
   }
 
-  /** Scaled error of the extrapolation difference (positions relative to nearest-neighbour distance). */
+  /** Scaled error of the extrapolation difference (positions relative to nearest-neighbor distance). */
   errorNorm(diff, y) {
     const { N } = this;
     let e = 0;
     const dtStep = Math.abs(y[0]) + 1e-300;
     e = Math.max(e, Math.abs(diff[0]) / dtStep);
     for (let i = 0; i < N; i++) {
-      // nearest-neighbour distance² for body i in the candidate state
+      // nearest-neighbor distance² for body i in the candidate state
       let d2 = Infinity;
       for (let j = 0; j < N; j++) if (j !== i) {
         const dx = y[1 + 3 * j] - y[1 + 3 * i], dy = y[2 + 3 * j] - y[2 + 3 * i], dz = y[3 + 3 * j] - y[3 + 3 * i];
@@ -252,7 +252,7 @@ export class NBody {
     return 0;
   }
 
-  /** Centre of mass position and velocity. */
+  /** Center of mass position and velocity. */
   com() {
     const { N, m, x, v } = this;
     let M = 0; const c = [0, 0, 0], w = [0, 0, 0];

@@ -1,6 +1,6 @@
 // Track — a ball path sampled uniformly by arc length, with a moving frame
 // (tangent T, banked "up" U, side S = T x U) and curvature vector K = dT/ds.
-// The stored curve is the path of the BALL CENTRE; rails are placed relative
+// The stored curve is the path of the BALL CENTER; rails are placed relative
 // to it at render time.
 
 import { G, clamp } from './math.js';
@@ -84,7 +84,7 @@ export class Track {
   // Water-slide channel: a round-bottomed flume of radius Rc with a pumped
   // stream running down it. The stream flows at its normal depth for the
   // local slope (Manning's formula for turbulent open-channel flow), easing
-  // between depths over ~half a metre; in bends its surface banks until it is
+  // between depths over ~half a meter; in bends its surface banks until it is
   // level to g - u²K, just as the ball does.
   _flume(o) {
     const { n, ds, T, K, U } = this;
@@ -94,7 +94,7 @@ export class Track {
       rim: o.rim ?? 1.75,            // open channel: walls reach ±100° from the bottom
       tube: !!o.tube,                // closed glass tube: no rim to fly over
       cwk: 0.5 * 1000 * (o.cd ?? 0.6) / BALL.m, // water drag per unit mass per m² of ball under water
-      muWet: o.muWet ?? 0.01,        // extra rolling loss while ploughing through the stream
+      muWet: o.muWet ?? 0.01,        // extra rolling loss while plowing through the stream
       damp: o.damp ?? 0.6,           // wall hysteresis on the swing (1/s)
       u: new Float32Array(n), h: new Float32Array(n), beta: new Float32Array(n), tau: new Float32Array(n),
     };

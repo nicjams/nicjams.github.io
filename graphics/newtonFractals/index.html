@@ -532,7 +532,7 @@
       <br><br>
       <b>Nova.</b> Adding a constant, z ↦ z − a·p/p′ + c, breaks the roots' fixed points
       and produces the Nova fractals; the c-plane (seeded at z₀ = 1) is the Nova
-      analogue of the Mandelbrot set.
+      analog of the Mandelbrot set.
     </div>
 
   </div>
@@ -541,7 +541,7 @@
 <script>
 'use strict';
 
-// ---------- polynomial catalogue (coefficients: highest degree first) ----------
+// ---------- polynomial catalog (coefficients: highest degree first) ----------
 // Pisot/Salem entries verified numerically: Pisot = one real root > 1, all
 // conjugates strictly inside the unit circle; Salem = one root tau > 1, one root
 // 1/tau, remaining conjugates on the unit circle.
@@ -568,7 +568,7 @@ const SALEM = [
 ];
 
 // Taylor partial sum of e^{nw} (rescaled so the roots sit near the Szegő curve
-// |w·e^{1−w}| = 1), normalised to be monic so float32 Horner stays accurate.
+// |w·e^{1−w}| = 1), normalized to be monic so float32 Horner stays accurate.
 function szegoCoeffs(n) {
   const c = [];
   let term = 1;   // n^k / k!
@@ -796,9 +796,9 @@ uniform vec2  u_relax;      // a in z -> z - a*step + c
 uniform vec2  u_nova;       // c
 uniform int   u_view;       // 0 dynamical, 1 cubic lambda-plane, 2 Nova c-plane
 uniform vec2  u_seed;       // starting point for the Nova c-plane
-uniform int   u_useArg;     // colour by arg of the limit instead of nearest root
-uniform float u_shift;      // hue rotation (colour cycling)
-uniform float u_phase;      // spectrum phase (colour cycling)
+uniform int   u_useArg;     // color by arg of the limit instead of nearest root
+uniform float u_shift;      // hue rotation (color cycling)
+uniform float u_phase;      // spectrum phase (color cycling)
 
 vec2 cmul(vec2 a, vec2 b) { return vec2(a.x*b.x - a.y*b.y, a.x*b.y + a.y*b.x); }
 vec2 cdiv(vec2 a, vec2 b) {
@@ -1080,7 +1080,7 @@ function hslToRgb255(h, s, l) {
   };
   return [f(0), f(8), f(4)];
 }
-// the same root hue the shader uses, for basin-coloured mesh points
+// the same root hue the shader uses, for basin-colored mesh points
 function rootRgb(k) {
   const h = ((k * 0.618034 + 0.15 + colorClock.shift) % 1 + 1) % 1;
   const pal = [[h, 0.75, 0.6], [h, 0.5, 0.75], [(0.96 + 0.17 * h) % 1, 0.85, 0.6], [0.47 + 0.22 * h, 0.7, 0.62]][state.palette];
@@ -1526,7 +1526,7 @@ function buildMesh() {
       idx++;
     }
   }
-  // basin colouring: where each seed ends up (computed once, up front)
+  // basin coloring: where each seed ends up (computed once, up front)
   const basin = new Int16Array(count);
   const step = makeStepper();
   for (let k = 0; k < count; k++) {
@@ -2157,7 +2157,7 @@ $('methodSelect').addEventListener('change', e => {
 });
 
 const VIEW_HINTS = [
-  'Each pixel z₀ is iterated; colour = which root it reaches and how fast.',
+  'Each pixel z₀ is iterated; color = which root it reaches and how fast.',
   'Each pixel is a parameter λ for p(z) = z³ + (λ−1)z − λ, iterated from the free critical point 0. Black = Mandelbrot copies. Click to open.',
   'Each pixel is a Nova constant c, iterated from z₀ = 1 using the current polynomial, method and a. Click to open.',
 ];
@@ -2386,15 +2386,15 @@ const SCENES = [
     family: 'classic', preset: 0, mode: 2, bands: 14, cam: [0, 0, 3.2] },
   { name: 'Attracting 2-cycle: z³ − 2z + 2', note: 'The free critical point 0 falls into the cycle 0 → 1 → 0. Black regions never converge; red is the critical orbit.',
     family: 'classic', preset: 4, mode: 3, bands: 16, iters: 200, critOrbits: true, crit: true, cam: [0, 0, 3.6] },
-  { name: 'Cubic λ-plane (Curry–Garnett–Sullivan)', note: 'Every cubic at once. Pixel = λ; colour = the root that the free critical point 0 finds. Black = Mandelbrot copies — click one.',
+  { name: 'Cubic λ-plane (Curry–Garnett–Sullivan)', note: 'Every cubic at once. Pixel = λ; color = the root that the free critical point 0 finds. Black = Mandelbrot copies — click one.',
     view: 1, mode: 2, bands: 24, iters: 250, cam: [0.25, 0, 4.4] },
-  { name: 'A baby Mandelbrot in the λ-plane', note: 'Centre λ ≈ 0.3196 + 1.6332i, where 0 is superattracting of period 2: (λ−1)³ + 2λ² = 0.',
+  { name: 'A baby Mandelbrot in the λ-plane', note: 'Center λ ≈ 0.3196 + 1.6332i, where 0 is superattracting of period 2: (λ−1)³ + 2λ² = 0.',
     view: 1, mode: 3, bands: 30, iters: 300, cam: [0.3196, 1.6332, 0.24] },
   { name: 'Douady’s rabbit inside Newton’s method', note: 'λ ≈ 0.3212 + 1.6723i sits in a period-3 bulb of that baby Mandelbrot, so the cubic’s Newton map hides tiny filled rabbits (black) where 0 has a period-6 cycle.',
     family: 'custom', custom: '1, 0, -0.6788+1.6723i, -0.3212-1.6723i', mode: 3, palette: 1, bands: 26, iters: 400, crit: true, cam: [0, 0, 0.42] },
   { name: 'Spiral arms (complex relaxation)', note: 'z ↦ z − a·p/p′ with a = 0.75 + 0.55i: the roots become attracting spirals and the basins twist.',
     family: 'classic', preset: 2, relax: [0.75, 0.55], mode: 2, bands: 70, iters: 300, cam: [0, 0, 3.2] },
-  { name: 'Nova Mandelbrot', note: 'z ↦ z − p/p′ + c for p = z³ − 1, seeded at z₀ = 1. The Nova analogue of the Mandelbrot set.',
+  { name: 'Nova Mandelbrot', note: 'z ↦ z − p/p′ + c for p = z³ − 1, seeded at z₀ = 1. The Nova analog of the Mandelbrot set.',
     family: 'classic', preset: 0, view: 2, mode: 0, bands: 34, iters: 250, cam: [-0.25, 0, 1.15] },
   { name: 'Nova Julia set', note: 'A single Nova map, z ↦ z − p/p′ + c with c = −0.3 + 0.25i: the roots are no longer fixed points, and the basin boundary turns into lace.',
     family: 'classic', preset: 0, nova: [-0.3, 0.25], mode: 0, bands: 60, iters: 300, cam: [0.3, 0, 3] },
@@ -2414,7 +2414,7 @@ const SCENES = [
     family: 'classic', preset: 2, anim: 'relax', animSpeed: 0.5, animAmp: 0.6, mode: 3, bands: 20, iters: 200, cam: [0, 0, 3.2] },
   { name: 'Nova drift', note: 'The Nova constant c orbits a small circle, the Julia set boiling as it goes.',
     family: 'classic', preset: 0, nova: [-0.3, 0.22], anim: 'nova', animSpeed: 0.4, animAmp: 0.2, mode: 0, bands: 60, iters: 300, cam: [0.3, 0, 3] },
-  { name: 'Point-mesh flow into Pisot conjugates', note: 'A 70×70 grid of seeds, each coloured by the basin it will reach, all stepping in lock-step.',
+  { name: 'Point-mesh flow into Pisot conjugates', note: 'A 70×70 grid of seeds, each colored by the basin it will reach, all stepping in lock-step.',
     family: 'pisot', preset: 1, mesh: true, meshN: 70, meshColor: 'basin', meshLoop: true, mode: 3, bands: 14, cam: [0.25, 0, 2.8] },
 ];
 let sceneIndex = -1;

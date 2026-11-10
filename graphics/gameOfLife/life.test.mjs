@@ -33,7 +33,7 @@ test('spaceships and the Gosper gun behave as in Conway’s Life', () => {
     const moved = new Life({ width: 60, height: 60, boundary: 'wrap' });
     place(moved, name, 30 + dx, 30 + dy, B);
     assert.equal(shadow(life), shadow(moved), name);
-    assert.equal(life.census()[B], alive(life), `${name} keeps its colour`);
+    assert.equal(life.census()[B], alive(life), `${name} keeps its color`);
     assert.notEqual(before, shadow(life));
   }
   const gun = new Life({ width: 120, height: 80 });
@@ -43,7 +43,7 @@ test('spaceships and the Gosper gun behave as in Conway’s Life', () => {
   for (let k = 1; k < pops.length; k++) assert.equal(pops[k] - pops[k - 1], 5, 'one glider per period');
 });
 
-test('one-colour patterns are identical under every law', () => {
+test('one-color patterns are identical under every law', () => {
   for (const law of ['heredity', 'alchemy', 'predation', 'tribes']) {
     const life = new Life({ width: 80, height: 80, law, seed: 3 });
     const ref = new Life({ width: 80, height: 80, law: 'heredity' });
@@ -70,7 +70,7 @@ test('heredity: newborns are the sum of their parents, and triads cancel', () =>
   assert.ok(noCancel.get(4, 4), 'without cancellation the triad is born');
 });
 
-test('alchemy: a survivor absorbs the sum of its neighbours', () => {
+test('alchemy: a survivor absorbs the sum of its neighbors', () => {
   const life = new Life({ width: 10, height: 10, law: 'alchemy' });
   // A block with one b: that cell sees a+a+a = a and becomes b + a = c.
   life.set(4, 4, A); life.set(5, 4, A); life.set(4, 5, A); life.set(5, 5, B);

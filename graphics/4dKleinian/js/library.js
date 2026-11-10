@@ -3,7 +3,7 @@
  *
  * Two kinds of preset:
  *   mirrors:   an explicit list of spheres/planes in R^3
- *   relations: a symmetric table of Coxeter relations, realised in R^{4,1}
+ *   relations: a symmetric table of Coxeter relations, realized in R^{4,1}
  *
  * Everything here has been checked to satisfy the Poincare angle condition
  * (every pair of mirrors meets at pi/m or not at all), so each preset really
@@ -407,7 +407,7 @@ export const presets = [
         name: 'Octahedral packing',
         subtitle: '6 spheres, tangent along octahedron edges',
         description:
-            'Unit spheres at the vertices of an octahedron of circumradius √2. Neighbouring mirrors are tangent, antipodal ones are a distance arccosh 3 apart.',
+            'Unit spheres at the vertices of an octahedron of circumradius √2. Neighboring mirrors are tangent, antipodal ones are a distance arccosh 3 apart.',
         mirrors: [
             sphere(SQRT2, 0, 0), sphere(-SQRT2, 0, 0),
             sphere(0, SQRT2, 0), sphere(0, -SQRT2, 0),
@@ -422,7 +422,7 @@ export const presets = [
         name: 'Cubic packing',
         subtitle: '8 spheres, tangent along cube edges',
         description:
-            'Unit spheres at the corners of a cube of side 2. Edge-neighbours are tangent; face and body diagonals give disjoint mirrors.',
+            'Unit spheres at the corners of a cube of side 2. Edge-neighbors are tangent; face and body diagonals give disjoint mirrors.',
         mirrors: signedVariants([1, 1, 1]).map(([x, y, z]) => sphere(x, y, z)),
         palette: 'nocturne',
         scheme: 'depthNormalized'
@@ -491,7 +491,7 @@ export const presets = [
         name: 'Necklace of six',
         subtitle: 'ring of tangent spheres',
         description:
-            'Six spheres on a circle, each tangent to its two neighbours. Every mirror is orthogonal to the plane of the ring, so this group preserves a circle: the Gram matrix has rank 3 and the limit set is one-dimensional.',
+            'Six spheres on a circle, each tangent to its two neighbors. Every mirror is orthogonal to the plane of the ring, so this group preserves a circle: the Gram matrix has rank 3 and the limit set is one-dimensional.',
         mirrors: ring(6, 1, 0, Math.sin(Math.PI / 6)),
         palette: 'solar',
         scheme: 'generator',
@@ -637,7 +637,7 @@ export const presets = [
         name: 'Pentagonal star',
         subtitle: '5-fold ring plus an apex',
         description:
-            'Five spheres in a ring meeting their neighbours at π/3, with a sixth sphere lifted onto the axis meeting all five at π/3.',
+            'Five spheres in a ring meeting their neighbors at π/3, with a sixth sphere lifted onto the axis meeting all five at π/3.',
         mirrors: [
             ...ring(5, pentagonRadius),
             sphere(0, 0, pentagonLift)
@@ -652,7 +652,7 @@ export const presets = [
         name: 'Twisted ring',
         subtitle: 'screw-symmetric hexagon',
         description:
-            'Six spheres on a hexagonal ring with alternating vertical offsets, chosen so that neighbours meet at π/3.',
+            'Six spheres on a hexagonal ring with alternating vertical offsets, chosen so that neighbors meet at π/3.',
         mirrors: Array.from({ length: 6 }, (_, k) =>
             sphere(
                 twistRadius * Math.cos((k * Math.PI) / 3),

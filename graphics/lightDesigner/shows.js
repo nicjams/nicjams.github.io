@@ -3,9 +3,9 @@
 // A show is a list of sections { n: name, d: seconds, f: fade-in seconds, L: look }.
 // A look has `layers` (attribute assignments to groups, applied in order), `fx`
 // (effects: rate in beats per cycle, spread in degrees of phase across the
-// group), `kin` (pod shape) and `cyc` (backdrop colour). Any value may be a
+// group), `kin` (pod shape) and `cyc` (backdrop color). Any value may be a
 // function of the section context c = { p: 0→1 progress, t, T, beat }, which is
-// how builds, drifts and colour journeys unfold across many minutes.
+// how builds, drifts and color journeys unfold across many minutes.
 
 export const K = {
   red: '#ff1030', crimson: '#d0002a', orange: '#ff5200', amber: '#ff8a00', gold: '#ffbb3a', warm: '#ffd6a0',
@@ -23,9 +23,9 @@ export const up = (a, b, p0 = 0, p1 = 1) => (c) => a + (b - a) * ease(cl((c.p - 
 export const every = (beats, list) => (c) => list[Math.floor(c.beat / beats) % list.length];
 /** Pick from a list by progress through the section. */
 export const steps = (list) => (c) => list[Math.min(list.length - 1, Math.floor(c.p * list.length))];
-/** Blend between two hex colours across the section. */
+/** Blend between two hex colors across the section. */
 export const blend = (a, b, p0 = 0, p1 = 1) => (c) => mixHex(a, b, ease(cl((c.p - p0) / (p1 - p0))));
-/** Continuous colour journey through a list over the section. */
+/** Continuous color journey through a list over the section. */
 export const journey = (list) => (c) => {
   const x = cl(c.p) * (list.length - 1), i = Math.min(list.length - 2, Math.floor(x));
   return mixHex(list[i], list[i + 1], ease(x - i));
@@ -102,7 +102,7 @@ export const L = {
     cyc: cyc(cycCol, K.black, 0.2),
   }),
 
-  /** Organic, wandering beams (ballyhoo) with a colour spread. */
+  /** Organic, wandering beams (ballyhoo) with a color spread. */
   ballyhoo: ({ col = K.magenta, alt, dim = 0.8, size = 30, rate = 8, zoom = 4, hueSpread = 0, tilt = 40, g = 'pods', strobe = 0, kin, cycCol = col } = {}) => ({
     layers: [{ g, col, alt, dim, pan: 0, tilt, zoom, frost: 0.1, hueSpread, strobe }],
     fx: [{ g, a: 'ballyhoo', rate, size, spread: 0, by: 'rand' }],
@@ -240,7 +240,7 @@ export const SHOWS = [
   },
   {
     id: 'typeII', name: 'Type II Jam', bpm: 124,
-    blurb: 'Twelve-plus minutes of open improvisation: liquid colour, tunnels, mirrors and a rainbow peak.',
+    blurb: 'Twelve-plus minutes of open improvisation: liquid color, tunnels, mirrors and a rainbow peak.',
     sections: [
       sec('Drift in', 60, 4, merge(L.rain({ col: K.lav, dim: up(0.1, 0.5), rate: 1, cycCol: K.uv }), L.wash({ col: K.uv, dim: 0.25 }))),
       sec('Liquid', 110, 8, L.ballyhoo({ col: K.magenta, dim: 0.65, size: 22, rate: 16, zoom: 4, hueSpread: up(40, 140), tilt: 38, cycCol: K.violet })),

@@ -54,19 +54,19 @@ export const STORIES = [
         run: t => t.mutation(0) },
       { at: 520, chapter: 'IV', title: 'The second spark', text: 'The first fire is dying down. An acorn of kind b, seven cells, lands in the ash. Left alone, an acorn burns for five thousand generations. This one will run into the ash.',
         run: t => t.place('acorn', 0.62, 0.62, { color: B }) },
-      { at: 950, chapter: 'V', title: 'Visitors', text: 'A fleet of c-coloured spaceships arrives from the east, and a-gliders drift in from the north-west.',
+      { at: 950, chapter: 'V', title: 'Visitors', text: 'A fleet of c-colored spaceships arrives from the east, and a-gliders drift in from the north-west.',
         run: t => {
           for (let k = 0; k < 5; k++) t.place(['lwss', 'mwss', 'hwss'][k % 3], 0.97, 0.18 + k * 0.16, { color: C });
           for (let k = 0; k < 4; k++) t.place('glider', 0.03 + k * 0.07, 0.04, { color: A });
         } },
-      { at: 1350, chapter: 'VI', title: 'Alchemy', text: 'A new law: every survivor x absorbs the sum s of its neighbours and becomes x + s. One-colour ash stays still. Mixed ash starts to shimmer.',
+      { at: 1350, chapter: 'VI', title: 'Alchemy', text: 'A new law: every survivor x absorbs the sum s of its neighbors and becomes x + s. One-color ash stays still. Mixed ash starts to shimmer.',
         run: t => t.law('alchemy') },
-      { at: 1650, chapter: 'VII', title: 'Ash', text: 'The fires burn out. What remains is a still, many-coloured ash of blocks, hives and blinkers.' },
+      { at: 1650, chapter: 'VII', title: 'Ash', text: 'The fires burn out. What remains is a still, many-colored ash of blocks, hives and blinkers.' },
     ],
   },
   {
     id: 'forges', title: 'Three Forges', cells: 300, boundary: 'open', rule: 'B3/S23', law: 'heredity', end: 1950,
-    blurb: 'Three glider guns, one per colour, and their crossfire.',
+    blurb: 'Three glider guns, one per color, and their crossfire.',
     beats: [
       { at: 0, chapter: 'I', title: 'Three forges', text: 'Three Gosper guns, one for each of a, b and c. Each fires a glider every thirty generations.',
         run: t => {
@@ -74,10 +74,10 @@ export const STORIES = [
           t.place('gosperGun', 0.97 - 36 / t.W, 0.05, { color: B, flip: true, anchor: 'corner' });
           t.place('gosperGun', 0.5, 0.93, { color: C, rot: 2 });
         } },
-      { at: 330, chapter: 'II', title: 'Crossfire', text: 'The streams cross. Where gliders of different colours collide, the sum rule decides the colour of the wreckage.' },
-      { at: 650, chapter: 'III', title: 'Fever', text: 'The guns begin to misfire colours. The streams run rainbow, and when a glider’s newborn cell has parents a, b and c, the triad cancels and the glider breaks up.',
+      { at: 330, chapter: 'II', title: 'Crossfire', text: 'The streams cross. Where gliders of different colors collide, the sum rule decides the color of the wreckage.' },
+      { at: 650, chapter: 'III', title: 'Fever', text: 'The guns begin to misfire colors. The streams run rainbow, and when a glider’s newborn cell has parents a, b and c, the triad cancels and the glider breaks up.',
         run: t => t.mutation(0.03) },
-      { at: 900, chapter: 'IV', title: 'The forges fall', text: 'Triads cancelled inside the guns themselves, and all three forges have gone silent. The fever breaks, and colours are inherited faithfully again.',
+      { at: 900, chapter: 'IV', title: 'The forges fall', text: 'Triads canceled inside the guns themselves, and all three forges have gone silent. The fever breaks, and colors are inherited faithfully again.',
         run: t => t.mutation(0) },
       { at: 1150, chapter: 'V', title: 'Reforging', text: 'Three fresh guns are lit in the middle of the field, under Heredity again.',
         run: t => {
@@ -103,14 +103,14 @@ export const STORIES = [
         run: t => t.rule('B3/S45678') },
       { at: 760, chapter: 'V', title: 'Thaw', text: 'Conway’s rule returns. The reefs are too crowded for it and collapse, and a spring rain of new cells brings the chaos back.',
         run: t => { t.rule('B3/S23'); t.soup(0, 0, 1, 1, 0.12, [A, B, C]); } },
-      { at: 1100, chapter: 'VI', title: 'Spring again', text: 'Everything settles once more, but the colours have been reshuffled by a year of arithmetic.' },
+      { at: 1100, chapter: 'VI', title: 'Spring again', text: 'Everything settles once more, but the colors have been reshuffled by a year of arithmetic.' },
     ],
   },
   {
     id: 'kingdoms', title: 'Three Kingdoms', cells: 360, boundary: 'wrap', rule: 'B3/S23', law: 'predation', end: 1900,
-    blurb: 'Rock–paper–scissors among three single-colour realms.',
+    blurb: 'Rock–paper–scissors among three single-color realms.',
     beats: [
-      { at: 0, chapter: 'I', title: 'Three kingdoms', text: 'Three soups, each of a single colour, separated by empty wilderness. Under Conway’s rule each one burns down to ash of its own colour.',
+      { at: 0, chapter: 'I', title: 'Three kingdoms', text: 'Three soups, each of a single color, separated by empty wilderness. Under Conway’s rule each one burns down to ash of its own color.',
         run: t => {
           const cols = [A, B, C];
           for (let k = 0; k < 3; k++) t.soup(k / 3 + 0.03, 0.08, 1 / 3 - 0.06, 0.84, 0.38, [cols[k]]);
@@ -120,19 +120,19 @@ export const STORIES = [
           t.rule('B3678/S34678');
           t.soup(0, 0, 1, 1, 0.5, fx => fx < 1 / 3 ? A : fx < 2 / 3 ? B : C);
         } },
-      { at: 300, chapter: 'III', title: 'Predation', text: 'The automorphism σ : a → b → c → a gives every colour a predator: b eats a, c eats b, a eats c. Conversion fronts sweep across the continents.' },
-      { at: 700, chapter: 'IV', title: 'Fronts', text: 'Around the cycle the fronts go. A colour thrives only while its prey lasts, and whoever it spares feeds its own predator. No border holds for long.' },
-      { at: 900, chapter: 'V', title: 'Uprising', text: 'Rare mutations reappear. σ fixes no colour, so every empire has a predator, and each new rebel sets off a wave of conquest. Bites are gentler now, so the waves spread out into bands and spirals.',
+      { at: 300, chapter: 'III', title: 'Predation', text: 'The automorphism σ : a → b → c → a gives every color a predator: b eats a, c eats b, a eats c. Conversion fronts sweep across the continents.' },
+      { at: 700, chapter: 'IV', title: 'Fronts', text: 'Around the cycle the fronts go. A color thrives only while its prey lasts, and whoever it spares feeds its own predator. No border holds for long.' },
+      { at: 900, chapter: 'V', title: 'Uprising', text: 'Rare mutations reappear. σ fixes no color, so every empire has a predator, and each new rebel sets off a wave of conquest. Bites are gentler now, so the waves spread out into bands and spirals.',
         run: t => { t.mutation(0.0004); t.bite(0.05); } },
-      { at: 1450, chapter: 'VI', title: 'Tribes', text: 'Loyalty replaces predation. A cell joins whichever colour surrounds it, the spirals freeze into territories, and the borders slowly straighten.',
+      { at: 1450, chapter: 'VI', title: 'Tribes', text: 'Loyalty replaces predation. A cell joins whichever color surrounds it, the spirals freeze into territories, and the borders slowly straighten.',
         run: t => { t.mutation(0); t.law('tribes'); } },
     ],
   },
   {
     id: 'garden', title: 'The Garden', cells: 260, boundary: 'open', rule: 'B3/S23', law: 'heredity', end: 1800,
-    blurb: 'A quiet garden of oscillators, then a storm of three-coloured gliders.',
+    blurb: 'A quiet garden of oscillators, then a storm of three-colored gliders.',
     beats: [
-      { at: 0, chapter: 'I', title: 'The garden', text: 'Pulsars and pentadecathlons tick in a single colour, a perfectly periodic world.',
+      { at: 0, chapter: 'I', title: 'The garden', text: 'Pulsars and pentadecathlons tick in a single color, a perfectly periodic world.',
         run: t => {
           const cols = 5, rows = 3;
           for (let j = 0; j < rows; j++) for (let i = 0; i < cols; i++) {
@@ -147,13 +147,13 @@ export const STORIES = [
             t.place('glider', 0.97 - k * 0.09, 0.975 - (k % 3) * 0.02, { color: C, rot: 2 });
           }
         } },
-      { at: 700, chapter: 'III', title: 'Wreckage', text: 'The storm has passed. Some oscillators survived and some are ruins. Every ruin carries its own sum of colours.' },
-      { at: 900, chapter: 'IV', title: 'Replanting', text: 'Diehards in all three colours are planted in the gaps. A diehard vanishes completely after 130 generations, if left alone.',
+      { at: 700, chapter: 'III', title: 'Wreckage', text: 'The storm has passed. Some oscillators survived and some are ruins. Every ruin carries its own sum of colors.' },
+      { at: 900, chapter: 'IV', title: 'Replanting', text: 'Diehards in all three colors are planted in the gaps. A diehard vanishes completely after 130 generations, if left alone.',
         run: t => {
           const cols = [A, B, C];
           for (let k = 0; k < 6; k++) t.place('diehard', 0.1 + k * 0.16, k % 2 ? 0.32 : 0.68, { color: cols[k % 3] });
         } },
-      { at: 1200, chapter: 'V', title: 'Alchemy', text: 'Under Alchemy, the multicoloured wreckage glitters while the one-colour survivors keep ticking.',
+      { at: 1200, chapter: 'V', title: 'Alchemy', text: 'Under Alchemy, the multicolored wreckage glitters while the one-color survivors keep ticking.',
         run: t => t.law('alchemy') },
     ],
   },

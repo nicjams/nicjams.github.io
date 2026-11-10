@@ -13,7 +13,7 @@ const view = new View(canvas);
 const ABOUT = {
   braid: 'Weighted beads hang on rails below a bar. Each generator <b>σᵢ</b> is a half-twist of the bottom pins at positions i and i+1; the left one passes in front. The solver never lets two strands cross, so the braid read back from the geometry must equal the word you typed.',
   knot: 'A loose knot in one rope is pulled tight by its ends. With every step CCD-filtered, no strand can slip through another. The knot type is preserved all the way to a tight knot.',
-  rope: 'Strands between two clamps with the bottom clamp spinning, after ppf’s <b>twist</b> scene. One turn of the clamp is the full twist Δ², the generator of the centre of Bₙ.',
+  rope: 'Strands between two clamps with the bottom clamp spinning, after ppf’s <b>twist</b> scene. One turn of the clamp is the full twist Δ², the generator of the center of Bₙ.',
   noodles: 'Long strands dropped into a bowl, after ppf’s <b>noodle</b> scene. Hundreds of contacts settle into a pile without a single intersection.',
 };
 

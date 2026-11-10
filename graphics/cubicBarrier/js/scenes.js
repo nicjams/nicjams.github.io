@@ -281,7 +281,7 @@ export class KnotScene {
     const tailA = tail(body[0], body[1], -1).reverse();
     const tailB = tail(body[body.length - 1], body[body.length - 2], 1);
     let rope = tailA.concat(body, tailB);
-    // centre the knot
+    // center the knot
     const cy = rope.reduce((s, q) => s + q[1], 0) / rope.length;
     rope = rope.map((q) => [q[0], q[1] - cy + 1.0, q[2]]);
     const s = sim.addStrand(rope, { radius: o.radius, density: 0.03, stretch: 500, bend: 1.5e-4, strainLimit: 0.03 });
@@ -319,7 +319,7 @@ export class KnotScene {
     S.pinGoal.set([mid[0] + h, mid[1], mid[2]], 3 * this.endB);
   }
 
-  /** Centre and size of the knotted part: curvature-weighted, so the
+  /** Center and size of the knotted part: curvature-weighted, so the
    *  straightened tails drop out as the knot tightens. */
   focus() {
     const x = this.sim.x, s = this.sim.strands[0];

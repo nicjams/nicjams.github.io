@@ -20,11 +20,11 @@ three.js r170 loads from jsDelivr via the import map in `index.html`.
 - `src/shaders/` holds all GLSL:
   - `common.js`: shared uniforms, noise, thin-tissue lighting (wrapped diffuse and translucency), ACES tone map.
   - `tepal.js`: flat planes bent into cupped, curling tepals in the vertex shader, normals by finite differences; veins, midrib, green backs and fake filament shadows in the fragment shader.
-  - `filament.js`: instanced tubes whose centreline, crinkle and breeze are computed per vertex; purple, white and violet banding by length.
+  - `filament.js`: instanced tubes whose centerline, crinkle and breeze are computed per vertex; purple, white and violet banding by length.
   - `leaf.js`: polar grid shaped into palmate lobes with V-folds.
   - `organ.js`: speckled solid parts.
   - `disc.js`, `background.js`: nectar ring and the out-of-focus fence and foliage.
 
 ## Tuning
 
-Filament rows are set in `createFlower` via `row(count, r0, length, elevation, droop, thickness, kind, offset)`. Sun direction and colour live in `shared` in `main.js`. `window.passiflora` exposes the scene, camera and controls for console tinkering.
+Filament rows are set in `createFlower` via `row(count, r0, length, elevation, droop, thickness, kind, offset)`. Sun direction and color live in `shared` in `main.js`. `window.passiflora` exposes the scene, camera and controls for console tinkering.

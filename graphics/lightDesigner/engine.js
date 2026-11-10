@@ -5,7 +5,7 @@
 //   → programmer overrides (LTP) → live effects → snapshot fade (for jumps / GO)
 //   → highlight → masters (grand, sub-masters, flash, strobe, blackout)
 //   → physics (motor response for pan/tilt/zoom, hoist speed for the pods)
-// and publishes per-fixture render data: lens position, beam direction, colour,
+// and publishes per-fixture render data: lens position, beam direction, color,
 // beam angle and frost. Looks are declarative (see shows.js); any value in a
 // look may be a function of the section context `c = { p, t, T, beat }`.
 
@@ -26,7 +26,7 @@ const clamp01 = (x) => (x < 0 ? 0 : x > 1 ? 1 : x);
 const lerp = (a, b, t) => a + (b - a) * t;
 const smooth = (t) => t * t * (3 - 2 * t);
 
-// ——— colour helpers ———
+// ——— color helpers ———
 const hsCache = new Map();
 export function hexHS(hex) {
   if (Array.isArray(hex)) return hex;
@@ -121,7 +121,7 @@ export const FLIP_MODES = {
   lattice: 'Alternate, rows opposed (lattice)',
   outer: 'Outer legs (portal frames)',
   inner: 'Inner three',
-  fan: 'Fan out from centre',
+  fan: 'Fan out from center',
 };
 const FLIP_PATTERN = {
   all: [1, 1, 1, 1, 1], alt: [1, -1, 1, -1, 1], lattice: [1, -1, 1, -1, 1],
@@ -184,7 +184,7 @@ export class Engine {
 
   /**
    * Hold one look until the next launch: a scene. Moving to it is the usual
-   * snapshot fade for colour and intensity, while pan/tilt and the sticks travel at
+   * snapshot fade for color and intensity, while pan/tilt and the sticks travel at
    * motor and hoist speed. Call settle() to land everything instantly instead.
    */
   playScene(scene, fade = 3) {
@@ -299,7 +299,7 @@ export class Engine {
     }
   }
 
-  /** Apply one effect. `rgb` = operate on resolved colour (live FX) rather than hue. */
+  /** Apply one effect. `rgb` = operate on resolved color (live FX) rather than hue. */
   applyFx(e, c, S, rgb) {
     if (e.on === false) return;
     const ids = this.group(e.g || 'all'), n = ids.length, F = this.fixtures;
@@ -453,7 +453,7 @@ export class Engine {
       this.cycPre.bot = this.cycSnap.bot.map((v, k) => lerp(v, this.cycPre.bot[k], t));
     }
 
-    // 5. MIDI play mode: notes fire over the show (HTP intensity, note colour by level)
+    // 5. MIDI play mode: notes fire over the show (HTP intensity, note color by level)
     const NL = this.noteLayer;
     if (NL && NL.on) {
       for (let i = 0; i < N; i++) {

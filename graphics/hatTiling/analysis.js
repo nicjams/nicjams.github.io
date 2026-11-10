@@ -33,8 +33,8 @@ const HAT_AVEC = [], HAT_BVEC = [];
     }
 })();
 
-// The 8 kites of the canonical hat: [hex centre x, y, direction k].
-// Hex centres of the kite grid sit on the lattice spanned by (3, √3), (0, 2√3).
+// The 8 kites of the canonical hat: [hex center x, y, direction k].
+// Hex centers of the kite grid sit on the lattice spanned by (3, √3), (0, 2√3).
 const HAT_KITES = [[0, 0, 0], [0, 0, 1], [0, 0, 4], [0, 0, 5],
                    [3, -2 * hr3, 1], [3, -2 * hr3, 2], [3, 2 * hr3, 3], [3, 2 * hr3, 4]];
 function kitePoly(cx, cy, k) {
@@ -86,7 +86,7 @@ function relKey(T) {
     return (o * 4096 + Math.round(2 * T[2]) + 2048) * 4096 + Math.round(T[5] / hr3) + 2048;
 }
 
-// ── Build and analyse a patch ─────────────────────────────────
+// ── Build and analyze a patch ─────────────────────────────────
 function analyzePatch(level) {
     const tiles = buildTiling(level);
     const root = tiles[0];
@@ -183,7 +183,7 @@ function analyzePatch(level) {
     }
     const pairs = [...pairMap.values()].sort((a, b) => b.count - a.count);
 
-    // Distinct first coronas (every hat touching the centre hat).
+    // Distinct first coronas (every hat touching the center hat).
     const coronaMap = new Map();
     const coronaType = new Int32Array(n).fill(-1);
     const coronaKeys = new Array(n);
@@ -204,7 +204,7 @@ function analyzePatch(level) {
 
     // A chain of nested H supertiles, root → level 1: of all such chains, the one
     // whose innermost H lies nearest the middle of the patch. It is the zoom of the
-    // Fibonacci chapter, and its innermost hat is the centre of the whole tour.
+    // Fibonacci chapter, and its innermost hat is the center of the whole tour.
     for (let k = 1; k < level; k++) for (const s of levels[k]) {
         s.parent = hats[s.hats[0]].anc[k + 1];
         (levels[k + 1][s.parent].kids ||= []).push(levels[k].indexOf(s));
@@ -221,7 +221,7 @@ function analyzePatch(level) {
         for (const id of levels[k + 1][path[path.length - 1]].kids || [])
             if (levels[k][id].kind === 'H') descend(k - 1, [...path, id]);
     })(level - 1, [0]);
-    // The innermost chain hat (Fibonacci zoom target), and the tour's centre:
+    // The innermost chain hat (Fibonacci zoom target), and the tour's center:
     // the unreflected hat farthest from the patch boundary, so views stay covered.
     let chainHat = -1, best = Infinity;
     const inner = levels[1][chain[chain.length - 1]];
@@ -239,7 +239,7 @@ function analyzePatch(level) {
     const dist = new Float64Array(n);
     for (let i = 0; i < n; i++) dist[i] = mag(cx[i] - cx[center], cy[i] - cy[center]);
 
-    // Hats in edge-graph BFS order from the centre (for growth).
+    // Hats in edge-graph BFS order from the center (for growth).
     const hop = new Int32Array(n).fill(-1);
     hop[center] = 0;
     frontier = [center];
@@ -251,7 +251,7 @@ function analyzePatch(level) {
     }
 
     // Tile(a, b) morph: split each hat's anchor into unit-edge and √3-edge parts
-    // by walking shared vertices outward from the centre.
+    // by walking shared vertices outward from the center.
     const A = new Float64Array(2 * n), B = new Float64Array(2 * n);
     const known = new Uint8Array(n);
     const vertAB = new Map();

@@ -1,6 +1,6 @@
 // mind.js — Chapter 4's higher layers: memories that surface as
 // constellations of earlier chapters, a river of words that collapses into
-// "I", a self at the centre, and the reach toward another mind.
+// "I", a self at the center, and the reach toward another mind.
 
 import { HEADER, NOISE } from '../../gfx/glsl.js';
 import { SHAPE } from '../../gfx/renderer.js';
@@ -153,7 +153,7 @@ export class Mind {
     S.flush('add');
   }
 
-  /** Words flow in a river, then fall into the centre and become "I". */
+  /** Words flow in a river, then fall into the center and become "I". */
   drawWords(R, T, W, H) {
     if (T < 67 || T > 92) return;
     const g = R.begin2D();
@@ -194,7 +194,7 @@ export class Mind {
     R.flush2D(1.6);
   }
 
-  /** The self: a bright point at the centre that pulses with the shared beat. */
+  /** The self: a bright point at the center that pulses with the shared beat. */
   drawSelf(R, x, y, T, pulse, alpha, scale = 1) {
     if (alpha <= 0.001) return;
     const S = R.sprites;
@@ -233,7 +233,7 @@ export class Mind {
         L.add(px, py, qx, qy, 6, [1, 0.7, 0.4], 0.12, [1, 0.7, 0.4], 0.12, 1);
         px = qx; py = qy;
       }
-      // light pulses travelling across once connected
+      // light pulses traveling across once connected
       if (grow >= 1) {
         for (let j = 0; j < 2; j++) {
           const u = ((T * 0.45 + j * 0.5 + hash(o.seed, 9)) % 1), v = 1 - u;

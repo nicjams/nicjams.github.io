@@ -20,7 +20,7 @@ import { mergeGeometries } from 'three/addons/utils/BufferGeometryUtils.js';
 import { MAX_BEAMS, PROJECTORS } from './lasers.js';
 
 // The default is where a person would stand: eye height (1.7 m) on the floor, 15 ft
-// (4.6 m) back from the front edge of the stage, centred. Up that close the rig fills
+// (4.6 m) back from the front edge of the stage, centered. Up that close the rig fills
 // the sky, so this view uses a wider lens. Venues can move presets (a real balcony).
 export const CAMERAS = {
   audience: { label: 'In the audience (15 ft back)', pos: [0, 1.7, DECK_FRONT + 4.6], target: [0, 5.8, -4], fov: 62 },
@@ -317,7 +317,7 @@ export class Rig {
     this.scene.add(g);
   }
 
-  /** Restyle the house floor for a venue: albedo, gloss, size (m) and centre z. */
+  /** Restyle the house floor for a venue: albedo, gloss, size (m) and center z. */
   setFloor({ albedo = [0.11, 0.11, 0.12], spec = 0.25, size = 90, z = 10 } = {}) {
     const u = this.floorMesh.material.uniforms;
     u.uAlbedo.value.setRGB(...albedo);

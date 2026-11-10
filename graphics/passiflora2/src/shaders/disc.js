@@ -1,4 +1,4 @@
-// The flat floral disc under the corona: pale centre, deep purple nectar ring.
+// The flat floral disc under the corona: pale center, deep purple nectar ring.
 import { common } from './common.js';
 
 export const discVertex = /* glsl */ `

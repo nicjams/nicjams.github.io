@@ -25,7 +25,7 @@ void main() {
   float vessel = smoothstep(0.93, 1.0, vnoise(vec3(p * 6.0, 1.0)) * (0.6 + 0.4 * sin(ang * 12.0))) * smoothstep(1.2, 2.4, r);
   vec3 sclera = mix(vec3(0.34, 0.25, 0.2), vec3(0.78, 0.66, 0.56), ball * ball) * (0.55 + 0.45 * fire.r) + vec3(0.5, 0.05, 0.05) * vessel * 0.25;
   sclera = mix(sclera, vec3(0.6, 0.3, 0.28), smoothstep(2.1, 2.8, abs(p.x + 0.1)) * 0.6);   // pink corners
-  // iris: radial fibres, crypts, collarette, limbal ring
+  // iris: radial fibers, crypts, collarette, limbal ring
   float fib = 0.5 + 0.5 * sin(ang * 110.0 + vnoise(vec3(ang * 9.0, r * 5.0, 3.0)) * 7.0);
   float fib2 = vnoise(vec3(cos(ang) * 14.0, sin(ang) * 14.0, r * 9.0));
   vec2 w = worley(vec2(ang * 7.0, r * 5.0));

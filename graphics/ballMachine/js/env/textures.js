@@ -5,7 +5,7 @@ import {
   clamp, lerp, TAU, DEG,
 } from './util.js';
 
-// ------------------------------------------------------------ colour utils ---
+// ------------------------------------------------------------ color utils ---
 function hexToRgb(hex) {
   const n = parseInt(hex.slice(1), 16);
   return [(n >> 16) & 255, (n >> 8) & 255, n & 255];
@@ -142,7 +142,7 @@ function tileTextures(aniso) {
     }
     for (let i = 0; i < 16; i++) tile(rect(i * 64, Y(116, 12), 64, 12), 'ochre', 0.36);
   }
-  // wear: subtle mottling + scuffs along the centre line
+  // wear: subtle mottling + scuffs along the center line
   overlayNoise(ctx, S, { seed: 5, cells: 4, octaves: 6, strength: 0.09 });
   ctx.save();
   for (let k = 0; k < 90; k++) {
@@ -243,7 +243,7 @@ function plinthTopTexture(aniso) {
       line(x, yOf(r0), x, yOf(r1));
     }
   }
-  // outer kerb band slightly warmer / darker
+  // outer curb band slightly warmer / darker
   ctx.fillStyle = 'rgba(150,130,100,0.10)';
   ctx.fillRect(0, 0, S, yOf(5.35));
   return canvasTexture(c, { anisotropy: aniso });
@@ -528,7 +528,7 @@ function pinnateFrond(aniso) {
   return finishLeaf(L, aniso);
 }
 
-/** Fan palm leaf: segments radiating from the hastula at bottom centre. */
+/** Fan palm leaf: segments radiating from the hastula at bottom center. */
 function fanLeaf(aniso) {
   const S = 512, ox = S / 2, oy = S * 0.62;     // hastula at uv (0.5, 0.38)
   const L = leafCanvases(S, S, '#476f33');
@@ -820,7 +820,7 @@ function shrubCard(aniso, type, seed) {
   return finishLeaf(L, aniso);
 }
 
-/** Ground clump (aspidistra / peace lily): strap leaves from bottom centre. */
+/** Ground clump (aspidistra / peace lily): strap leaves from bottom center. */
 function clumpCard(aniso) {
   const S = 512, ox = S / 2, oy = S - 6;
   const L = leafCanvases(S, S, '#2f5a29');

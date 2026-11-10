@@ -8,7 +8,7 @@ Pick the figure in the panel, or open `index.html?fig=10.10` (or `12.1`).
   group-element enumeration, Farey words, cusp circle chains and disk orbits.
 - `limitWorker.js`: Figs 10.10 and 10.13, rendered progressively by a pool of
   workers.
-- `palette.js`: colour themes (OKLab-mixed) and colouring schemes.
+- `palette.js`: color themes (OKLab-mixed) and coloring schemes.
 
 ## Performance
 
@@ -22,10 +22,10 @@ stays continuous and the result is identical to a single walk. Measured in
 Node on an M4 Pro, the 1-px pass of Fig 10.13 takes 18 s on one thread and
 3.1 s on 8. Scaling is flat or worse beyond 8 threads (10 performance cores).
 
-## Colouring
+## Coloring
 
 Workers label each leaf word with a class. The palette is applied to the
-labels on the main thread, so changing it recolours instantly. The schemes:
+labels on the main thread, so changing it recolors instantly. The schemes:
 - first to fourth letter, or the last letter of the leaf;
 - consecutive letter pairs (12 classes: hue from the first letter, shade from
   the turn left, straight or right to the next);
@@ -35,37 +35,37 @@ labels on the main thread, so changing it recolours instantly. The schemes:
   24 letters;
 - word length.
 
-Themes give one anchor colour per generator; derived classes are mixed in
+Themes give one anchor color per generator; derived classes are mixed in
 OKLab. Fig 12.1 uses the same theme as a cyclic ramp around arg f. The book's
-colours remain as the "Book (original)" theme.
+colors remain as the "Book (original)" theme.
 - `fig121.js`: Fig 12.1, a WebGL2 Poincaré-series shader.
 
 ## Fig 10.10 — A big double cusp
 
 This uses the traces of the central pair (w₂₁/₃₄, w₁₃/₂₁) of the 987/1597 double
 cusp group given on p. 332, fed into Grandma's recipe with the other root for
-t_ab than Fig 10.13 (root +1). The frame is centre 0, half-width 1.5, which
+t_ab than Fig 10.13 (root +1). The frame is center 0, half-width 1.5, which
 matches the book's pixels about 95%. With these generators, the 21/34 Farey
 words in (a, B) and in (b, a) are parabolic: they are the 21/34 and −34/21
 cusps.
 
 Each cusp's circle chain has two disks meeting at the fixed point of every
-cyclic permutation σᵢ of its word. A disk is stabilised by a thrice-punctured
+cyclic permutation σᵢ of its word. A disk is stabilized by a thrice-punctured
 sphere group ⟨σᵢ, gσⱼg⁻¹⟩ whose product is also parabolic. Its circle passes
 through the three parabolic fixed points, and is kept only if one side is empty
 of sampled limit points (this rejects accidental Fuchsian subgroups). One disk
 of the −34/21 chain is the component containing ∞ and is not drawn. Every other
 ordinary-set component is an image of a chain disk. They are drawn exactly, as
 the breadth-first orbit of the chain disks under a, b, A, B down to half a
-pixel. The limit set underneath is coloured pale by its *first* letter.
+pixel. The limit set underneath is colored pale by its *first* letter.
 
 ## Fig 10.13 — Partition of the world
 
 This is Jørgensen's doubly-degenerate group (the figure-eight knot's fiber
 group). In the book's notation (a, B), t_a = (3−√3i)/2 and t_B = t_aB = conj(t_a).
 In Grandma's (a, b) this means t_a = x, t_b = x̄, t_ab = x, where x = (3−√3i)/2.
-Limit points are coloured by the third letter of their word: a red, b blue,
-A green, B yellow. The default frame (centre 0.1, half-width 1.5) matches the
+Limit points are colored by the third letter of their word: a red, b blue,
+A green, B yellow. The default frame (center 0.1, half-width 1.5) matches the
 book's pixels about 96%.
 
 The limit set is the whole sphere, but the book's termination test (consecutive
@@ -74,7 +74,7 @@ With that test alone, coverage stays at about 15% however deep you go. The
 walker's `minNorm` option also requires ‖w‖² ≥ N before a leaf may terminate.
 At N = 10⁴ this fills the picture for about 10% more leaves; much larger N
 explodes near the cusps. After each pass, the remaining gaps are flood-filled
-at the pass's resolution. The white disks that remain are cusp neighbourhoods
+at the pass's resolution. The white disks that remain are cusp neighborhoods
 cut off at `maxLevel`.
 
 ## Fig 12.1 — fonction kleinéenne

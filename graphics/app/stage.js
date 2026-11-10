@@ -1,6 +1,7 @@
 import { mountPairing, activatePairing } from './pairing.js';
 import { normalizePayload, normalizeItem } from './payload.js';
 import { prepareVisualization } from './presentation.js';
+import { ICONS, iconize } from './icons.js';
 // stage.js — the fullscreen player ("the display").
 //
 // The stage owns the iframe and is the single source of truth: it loads the
@@ -292,20 +293,21 @@ function syncUI() {
   qs('#dockTitle').textContent = v?.title || '—';
   qs('#dockPlaylist').textContent = `${playlist.name}`;
   qs('#count').textContent = `${rt.index + 1} / ${order.length}`;
-  qs('#playBtn').textContent = rt.playing ? '⏸' : '▶';
-  const panelPlay = qs('#panelPlay');
-  if (panelPlay.dataset.playing !== String(rt.playing)) {
-    panelPlay.dataset.playing = String(rt.playing);
-    panelPlay.innerHTML = rt.playing
-      ? '<svg viewBox="0 0 24 24" fill="currentColor" aria-hidden="true"><rect x="6.5" y="5" width="4" height="14" rx="1.2"/><rect x="13.5" y="5" width="4" height="14" rx="1.2"/></svg>'
-      : '<svg viewBox="0 0 24 24" fill="currentColor" aria-hidden="true"><path d="M8 5.6v12.8a1 1 0 0 0 1.5.86l10.2-6.4a1 1 0 0 0 0-1.72L9.5 4.74A1 1 0 0 0 8 5.6z"/></svg>';
-    panelPlay.setAttribute('aria-label', rt.playing ? 'Pause auto-advance' : 'Play (auto-advance)');
+  for (const btn of [qs('#playBtn'), qs('#panelPlay')]) {
+    if (btn.dataset.playing === String(rt.playing)) continue;
+    btn.dataset.playing = String(rt.playing);
+    btn.innerHTML = rt.playing ? ICONS.pause : ICONS.play;
+    btn.setAttribute('aria-label', rt.playing ? 'Pause auto-advance' : 'Play (auto-advance)');
   }
   qs('#prevBtn').disabled = order.length < 2 && !playlist.loop;
   qs('#nextBtn').disabled = order.length < 2 && !playlist.loop;
-  qs('#panelGlyph').textContent = v?.glyph || '✦';
   qs('#panelTitle').textContent = v?.title || '—';
-  qs('#panelSub').textContent = order.length > 1 ? `${playlist.name} · ${rt.index + 1} / ${order.length}` : 'Live controls';
+  // A playlist shows where it is and gets prev / play / next in the panel's top bar.
+  const queued = order.length > 1;
+  qs('#panelSub').hidden = !queued;
+  qs('#panelSub').textContent = queued ? `${playlist.name} · ${rt.index + 1} / ${order.length}` : '';
+  qs('#panelTransport').hidden = !queued;
+  qs('#panelReload').hidden = queued; // room for the tabs; Reload stays on the Studio page
   if (!rt.playing) updateProgress(0, durationFor(rt.index));
 }
 
@@ -322,7 +324,7 @@ function showTransition(v) {
 function hideTransition() { qs('#transition').classList.remove('show'); }
 
 // Simple / Advanced / Studio pages in the panel; Simple is the default.
-const panelPager = mountPager({ tabs: qs('#panelTabs'), pager: qs('#panelPager'), initial: 0 });
+const panelPager = mountPager({ tabs: qs('#panelTabs'), pager: qs('#panelPager'), initial: 0, fitHeight: true });
 const controlsView = createControlsView({
   simple: qs('#simpleControls'),
   advanced: qs('#controls'),
@@ -363,7 +365,7 @@ qs('#remoteBtn').onclick = qs('#uRemote').onclick = () => openRemoteWindow();
 qs('#uPanel').onclick = () => handle(CMD.TOGGLE_VIZ_PANEL);
 qs('#uLibrary').onclick = () => { location.href = 'index.html'; };
 qs('#uFullscreen').onclick = toggleFullscreen;
-qs('#uReload').onclick = () => handle(CMD.RELOAD);
+qs('#uReload').onclick = qs('#panelReload').onclick = () => handle(CMD.RELOAD);
 
 function openRemoteWindow() {
   setPresentation(true);
@@ -391,6 +393,7 @@ window.addEventListener('keydown', (e) => {
 window.addEventListener('beforeunload', () => transport.send(EVT.GOODBYE));
 
 // ── boot ─────────────────────────────────────────────────────────────────────
+iconize();
 mountPairing(qs('#phonePairing'), transport);
 setPresentation(presentation);
 transport.start();

@@ -1,6 +1,6 @@
 // stage.js — Chapter 5: the room the dancers are in. Moving-head spotlights
 // cut volumetric cones through haze, pool on the floor, and swing and change
-// colour on the beat.
+// color on the beat.
 
 import { HEADER, NOISE } from '../../gfx/glsl.js';
 import { TAU, hash } from '../../lib/math.js';
@@ -12,7 +12,7 @@ const BEAMS_FS = `${HEADER}
 uniform vec2 u_view;
 uniform float u_t, u_floor, u_haze, u_bright;
 uniform vec4 u_beam[NB];     // origin x, origin y (px), angle (rad, 0 = straight down), half-width
-uniform vec3 u_col[NB];      // colour × intensity
+uniform vec3 u_col[NB];      // color × intensity
 in vec2 v_px; out vec4 o;
 ${NOISE}
 void main() {
@@ -88,7 +88,7 @@ export class Stage {
     R.lowres(() => R.pass(this.prog, { u_t: t, u_floor: floor, u_haze: 0.8, u_bright: bright, u_beam: this.beamData, u_col: this.colData }), 'add');
   }
 
-  /** Light falling on a point (for colouring the dancers). */
+  /** Light falling on a point (for coloring the dancers). */
   lightAt(beams, x, y, H) {
     const out = [0.04, 0.03, 0.06];
     for (const b of beams) {

@@ -10,7 +10,7 @@ const errors = [];
 for (const page of [stage, remote]) page.on('pageerror', e => errors.push(e.message));
 const base = process.env.GRAPHICS_TEST_URL || 'http://localhost:8124/graphics/';
 try {
-  await stage.goto(`${base}donutSpiral/index.html`);
+  await stage.goto(`${base}donutSpiral/?stage=1`);
   await stage.waitForURL('**/stage.html?**');
   await stage.locator('#simpleControls [data-sel]').first().waitFor();
   assert(await stage.locator('body').evaluate(n => n.classList.contains('sidebar-open')));

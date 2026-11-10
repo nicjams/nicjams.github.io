@@ -1,7 +1,7 @@
 // scenarios.js — the configurations the simulator can run.
 //
 // Each scenario returns initial data {masses, pos, vel} from its current
-// parameter values, plus presentation hints: body labels/colours, camera,
+// parameter values, plus presentation hints: body labels/colors, camera,
 // chart, tempo. G = 1 throughout.
 
 import { CASCADE } from './cascade.js';
@@ -46,7 +46,7 @@ export function rng(seed) {
 // ─── Xia's configuration ──────────────────────────────────────────────────
 
 /**
- * Two equal-mass binaries centred on the z-axis at ±Z, rotating in opposite
+ * Two equal-mass binaries centered on the z-axis at ±Z, rotating in opposite
  * senses, and a fifth body on the axis. The 180° rotation about the z-axis is
  * a symmetry, so the axis stays invariant for Q₅.
  */
@@ -111,13 +111,13 @@ function periodic(id, name, p1, p2, T, about) {
   };
 }
 
-// ─── the catalogue ────────────────────────────────────────────────────────
+// ─── the catalog ────────────────────────────────────────────────────────
 
 export const SCENARIOS = [
   {
     id: 'xia', name: "Xia's cascade", group: 'Non-collision singularities',
     about: `<p><b>Painlevé (1895)</b> asked whether Newton's equations can break down in finite time <i>without</i> a collision. <b>Zhihong Xia (1992)</b> showed that they can, with five bodies. Two highly eccentric binaries sit in parallel planes and rotate in opposite senses. A lighter fifth body, Q₅, shuttles along the axis between them.</p>
-<p>Each time Q₅ arrives as a binary passes pericentre, the three bodies nearly collide and Q₅ is flung back faster. The binary recoils outward and hardens. With initial data taken from a Cantor set, the bounces accelerate geometrically and all five bodies reach infinity at a finite time t*.</p>
+<p>Each time Q₅ arrives as a binary passes pericenter, the three bodies nearly collide and Q₅ is flung back faster. The binary recoils outward and hardens. With initial data taken from a Cantor set, the bounces accelerate geometrically and all five bodies reach infinity at a finite time t*.</p>
 <p class="fine">Exact Newtonian gravity (no softening), integrated with a regularized Bulirsch–Stoer scheme. Binary A's starting phase is tuned to 16 digits, which by itself gives the first bounces. After that, at each mid-flight checkpoint, the approaching binary's Kepler phase is trimmed by the tiny amount listed in the HUD. This shadowing pseudo-orbit stands in for initial data that would need many more digits than a double can hold.</p>`,
     bodies: XIA_BODIES,
     pairs: XIA_PAIRS,
@@ -158,7 +158,7 @@ export const SCENARIOS = [
       { id: 'z0', label: 'Launch height z₀', min: 0.2, max: 3.2, step: 0.01, value: 1.76, fmt: v => v.toFixed(2) },
     ],
     init: (q) => {
-      const K = keplerState(1, q.e, Math.PI, 1);   // start at apocentre
+      const K = keplerState(1, q.e, Math.PI, 1);   // start at apocenter
       const masses = [0.5, 0.5, 0];
       const pos = [[K.r[0] / 2, K.r[1] / 2, 0], [-K.r[0] / 2, -K.r[1] / 2, 0], [0, 0, q.z0]];
       const vel = [[K.v[0] / 2, K.v[1] / 2, 0], [-K.v[0] / 2, -K.v[1] / 2, 0], [0, 0, 0]];
@@ -171,7 +171,7 @@ export const SCENARIOS = [
   periodic('figure8', 'Figure-eight', 0.347111, 0.532728, 6.324449,
     `<p>Three equal masses chase each other around a single figure-eight curve. <b>Moore (1993)</b> found it numerically, and <b>Chenciner and Montgomery (2000)</b> proved it exists. Unlike most periodic three-body orbits it is linearly stable, so small perturbations stay small.</p>`),
   periodic('butterfly', 'Butterfly I', 0.306893, 0.125507, 6.235641,
-    `<p>One of the orbit families found by <b>Šuvakov and Dmitrašinović (2013)</b> in a numerical search of zero-angular-momentum three-body orbits. Two bodies start mirror-symmetric, the third at the centre, and together they trace a pair of butterfly wings.</p><p class="fine">Most of these orbits are unstable. Round-off eventually pulls them apart. Turn on the shadow twin to watch the divergence.</p>`),
+    `<p>One of the orbit families found by <b>Šuvakov and Dmitrašinović (2013)</b> in a numerical search of zero-angular-momentum three-body orbits. Two bodies start mirror-symmetric, the third at the center, and together they trace a pair of butterfly wings.</p><p class="fine">Most of these orbits are unstable. Round-off eventually pulls them apart. Turn on the shadow twin to watch the divergence.</p>`),
   periodic('moth', 'Moth I', 0.464445, 0.396060, 14.893911,
     `<p>Another Šuvakov–Dmitrašinović orbit (2013). Its topology is a braid on the sphere of shapes, the space of triangles up to size and rotation.</p>`),
   periodic('dragonfly', 'Dragonfly', 0.080584, 0.588836, 21.270975,
@@ -257,7 +257,7 @@ export const SCENARIOS = [
 
 export const byId = Object.fromEntries(SCENARIOS.map(s => [s.id, s]));
 
-/** Colours for generated bodies (cluster). */
+/** Colors for generated bodies (cluster). */
 export function clusterBodies(n) {
   const out = [];
   for (let i = 0; i < n; i++) {

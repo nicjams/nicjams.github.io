@@ -1,4 +1,4 @@
-// Shared GLSL: uniforms, colour helpers, noise, and a thin-tissue lighting model.
+// Shared GLSL: uniforms, color helpers, noise, and a thin-tissue lighting model.
 export const common = /* glsl */ `
 uniform float uTime;
 uniform vec3  uSunDir;

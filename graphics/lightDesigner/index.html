@@ -58,7 +58,7 @@
             <option value="4">4 bars</option><option value="8" selected>8 bars</option><option value="16">16 bars</option><option value="32">32 bars</option><option value="64">64 bars</option>
           </select></div>
         </div>
-        <p class="hint">Every launch moves smoothly: colours crossfade, heads swing and the truss sticks fly and flip into the new formation. Devices a scene adds or drops travel too: tubes rise out of the deck or grow out of the truss, balls and the projection screen fly in. Keys <kbd>1</kbd>–<kbd>0</kbd> launch the first ten; MIDI notes on channel 16 from C2 launch them in order.</p>
+        <p class="hint">Every launch moves smoothly: colors crossfade, heads swing and the truss sticks fly and flip into the new formation. Devices a scene adds or drops travel too: tubes rise out of the deck or grow out of the truss, balls and the projection screen fly in. Keys <kbd>1</kbd>–<kbd>0</kbd> launch the first ten; MIDI notes on channel 16 from C2 launch them in order.</p>
       </fieldset>
       <fieldset data-control-group="Show">
         <legend>Playback</legend>
@@ -143,8 +143,8 @@
           <option value="">—</option>
           <option value="down">Straight down / up</option>
           <option value="fan">Fan out</option>
-          <option value="band">Low, centre</option>
-          <option value="deck">The floor, centre</option>
+          <option value="band">Low, center</option>
+          <option value="deck">The floor, center</option>
           <option value="air">Crossing point in the air</option>
           <option value="crowd">Out front, low</option>
           <option value="deep">Far out front</option>
@@ -188,7 +188,7 @@
             </select></div>
             <div><label for="fxBy">Phase order</label><select id="fxBy">
               <option value="i">Group order</option><option value="x">Left → right</option><option value="pod">Front → back</option>
-              <option value="diag">Diagonal</option><option value="center">Centre → out</option><option value="slot">Along each pod</option><option value="rand">Random</option>
+              <option value="diag">Diagonal</option><option value="center">Center → out</option><option value="slot">Along each pod</option><option value="rand">Random</option>
             </select></div>
           </div>
           <label for="fxRate">Rate (beats/cycle) <output></output></label>
@@ -283,12 +283,12 @@
       <fieldset data-control-group="Lasers">
         <legend>Lasers</legend>
         <label class="toggle" for="laserOn">Add lasers to the rig <input id="laserOn" type="checkbox"></label>
-        <p class="hint">Full-colour, audience-scanning lasers alongside the moving heads, in the spirit of the Disco Biscuits' shows: two upstage corners, upstage centre, two wings and one at front of house. They work with every rig.</p>
+        <p class="hint">Full-color, audience-scanning lasers alongside the moving heads, in the spirit of the Disco Biscuits' shows: two upstage corners, upstage center, two wings and one at front of house. They work with every rig.</p>
         <label for="laserPattern">Look</label>
         <select id="laserPattern"></select>
-        <label for="laserColor">Colour</label>
+        <label for="laserColor">Color</label>
         <select id="laserColor"></select>
-        <label for="laserFixed">One colour <input id="laserFixed" type="color" value="#00ff40"></label>
+        <label for="laserFixed">One color <input id="laserFixed" type="color" value="#00ff40"></label>
         <label for="laserLevel">Laser level <output></output></label>
         <input id="laserLevel" type="range" min="0" max="1.5" step="0.01" value="0.8">
         <label for="laserCount">Beams per fan <output></output></label>
@@ -310,9 +310,9 @@
         <select id="tubeLayout"></select>
         <label for="tubeLook">Look</label>
         <select id="tubeLook"></select>
-        <label for="tubeColor">Colour</label>
+        <label for="tubeColor">Color</label>
         <select id="tubeColor"></select>
-        <label for="tubeFixed">One colour <input id="tubeFixed" type="color" value="#ff3cc8"></label>
+        <label for="tubeFixed">One color <input id="tubeFixed" type="color" value="#ff3cc8"></label>
         <label for="tubeLevel">Level <output></output></label>
         <input id="tubeLevel" type="range" min="0" max="1.5" step="0.01" value="0.9">
         <label for="tubeSpeed">Speed <output></output></label>
@@ -322,9 +322,9 @@
         <legend>Mirror balls</legend>
         <label for="ballCount">Mirror balls</label>
         <select id="ballCount"><option value="0">None</option><option value="1">One, over the stage</option><option value="2">Two</option><option value="3">Three (stage + over the crowd)</option></select>
-        <label for="ballColor">Pin-spot colour</label>
+        <label for="ballColor">Pin-spot color</label>
         <select id="ballColor"></select>
-        <label for="ballFixed">One colour <input id="ballFixed" type="color" value="#ffffff"></label>
+        <label for="ballFixed">One color <input id="ballFixed" type="color" value="#ffffff"></label>
         <label for="ballLevel">Level <output></output></label>
         <input id="ballLevel" type="range" min="0" max="1.5" step="0.01" value="0.8">
         <label for="ballSpin">Spin (rpm) <output></output></label>
@@ -397,11 +397,11 @@
         <input id="houseLevel" type="range" min="0" max="1" step="0.01" value="0">
         <label for="houseFade">Fade time (s) <output></output></label>
         <input id="houseFade" type="range" min="0" max="20" step="0.5" value="3">
-        <label for="houseColor">Colour</label>
+        <label for="houseColor">Color</label>
         <select id="houseColor"></select>
         <label for="houseWarmth">Warmth: candle … daylight <output></output></label>
         <input id="houseWarmth" type="range" min="0" max="1" step="0.01" value="0.25">
-        <label for="houseFixed">One colour <input id="houseFixed" type="color" value="#ffcf8a"></label>
+        <label for="houseFixed">One color <input id="houseFixed" type="color" value="#ffcf8a"></label>
         <label for="houseEffect">Effect</label>
         <select id="houseEffect"></select>
         <label for="houseSpeed">Effect speed <output></output></label>
@@ -415,14 +415,14 @@
         <select id="fairyLayout"></select>
         <label for="fairyColor">Bulbs</label>
         <select id="fairyColor"></select>
-        <label for="fairyFixed">One colour <input id="fairyFixed" type="color" value="#ff7ad9"></label>
+        <label for="fairyFixed">One color <input id="fairyFixed" type="color" value="#ff7ad9"></label>
         <label for="fairyEffect">Effect</label>
         <select id="fairyEffect"></select>
         <label for="fairyLevel">Level <output></output></label>
         <input id="fairyLevel" type="range" min="0" max="1.5" step="0.01" value="0.8">
         <label for="fairySpeed">Speed <output></output></label>
         <input id="fairySpeed" type="range" min="0.1" max="3" step="0.05" value="1">
-        <label for="fairyDensity">Bulbs per metre <output></output></label>
+        <label for="fairyDensity">Bulbs per meter <output></output></label>
         <input id="fairyDensity" type="range" min="1" max="8" step="0.5" value="3">
         <label for="fairySag">Sag <output></output></label>
         <input id="fairySag" type="range" min="0" max="3" step="0.05" value="1">
@@ -447,9 +447,9 @@
         <select id="midiChannel"></select>
         <label for="midiMapping">Keys map to</label>
         <select id="midiMapping"></select>
-        <label for="midiColor">Colour</label>
+        <label for="midiColor">Color</label>
         <select id="midiColor"></select>
-        <label for="midiFixed">One colour <input id="midiFixed" type="color" value="#ffffff"></label>
+        <label for="midiFixed">One color <input id="midiFixed" type="color" value="#ffffff"></label>
         <label for="midiBase">Under the notes</label>
         <select id="midiBase">
           <option value="0">Blackout: only notes light</option>

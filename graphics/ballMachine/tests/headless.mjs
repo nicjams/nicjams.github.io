@@ -1,5 +1,5 @@
 // Headless run of the machine: build it, report track diagnostics, simulate
-// for a while and summarise what happened.  node tests/headless.mjs [seconds] [balls]
+// for a while and summarize what happened.  node tests/headless.mjs [seconds] [balls]
 import { buildMachine } from '../js/sim/layout.js';
 
 const secs = +(process.argv[2] ?? 300);

@@ -221,7 +221,7 @@ export function buildFlipFlops(flipflops, M) {
 }
 
 // ---------------------------------------------------------------------------
-// Funnel skin: the ball-centre surface offset by R along its normal.
+// Funnel skin: the ball-center surface offset by R along its normal.
 export function buildFunnel(fn, M, mat, legs = 3, floorAt, keepOut) {
   const g = new THREE.Group();
   const pts = [];

@@ -281,7 +281,7 @@ export class World {
   }
 
   // ---- water-slide flume ---------------------------------------------------
-  // The flume is a round-bottomed channel of radius Rc; the ball's centre rides
+  // The flume is a round-bottomed channel of radius Rc; the ball's center rides
   // on a circle of radius rho = Rc - R around the channel's axis, at angle phi
   // from the bottom. Along the flume it rolls like on any track, but the water
   // film drags it toward the water's own speed. Around the flume it is a
@@ -530,7 +530,7 @@ export class World {
       vel.x += -(1 + e) * vn * f.ux - 0.6 * vl * f.sx;
       vel.y += -(1 + e) * vn * f.uy - 0.6 * vl * f.sy;
       vel.z += -(1 + e) * vn * f.uz - 0.6 * vl * f.sz;
-      // settle onto the track centre-line height
+      // settle onto the track center-line height
       p.x -= dn * f.ux + dl * 0.5 * f.sx; p.y -= dn * f.uy + dl * 0.5 * f.sy; p.z -= dn * f.uz + dl * 0.5 * f.sz;
       this.stats.bounces++;
       this.sound(cap.sound || (bt.kind === 'trough' ? 'thud' : 'clunk'), velCurve(-vn, 2.5) * 0.8, p);
@@ -559,7 +559,7 @@ export class World {
   }
 
   // A sphere rolling without slipping on a surface of revolution y = Y(r)
-  // (Routh's problem). With meridian m, parallel t and normal n, the centre's
+  // (Routh's problem). With meridian m, parallel t and normal n, the center's
   // tangential acceleration is
   //   a_t = (F_t/m - mu_r N v^) / K + (k_r / K) R w_n (n x dn/dt),  K = k_t + k_r,
   // where k_r = 2/5 is the ball's rotational inertia factor and k_t is 1 (plus

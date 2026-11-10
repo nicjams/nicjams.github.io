@@ -1,5 +1,5 @@
 // star.js — Chapter 1, ~81–87 s: a star's surface fills the frame.
-// Granulation (convection cells, bright centres and dark lanes), limb
+// Granulation (convection cells, bright centers and dark lanes), limb
 // darkening, sunspots, a chromosphere rim, prominences and the corona.
 
 import { HEADER, NOISE, PALETTES } from '../../gfx/glsl.js';

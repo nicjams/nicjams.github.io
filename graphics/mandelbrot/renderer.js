@@ -1458,7 +1458,7 @@
         paused: false,
         done: false,
         preset: null,
-        x: 0,           // decades travelled
+        x: 0,           // decades traveled
         D: 0,           // decades in total
         z0: HOME_ZOOM,
         off0: [0, 0],   // starting view center relative to the target

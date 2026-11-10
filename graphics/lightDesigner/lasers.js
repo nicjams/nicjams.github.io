@@ -1,9 +1,9 @@
 // lasers.js — optional laser package, in the spirit of the Disco Biscuits' audience-scanning
-// full-colour lasers run alongside the moving heads.
+// full-color lasers run alongside the moving heads.
 //
-// Six projectors: two upstage corners, one upstage centre, two downstage wings and
+// Six projectors: two upstage corners, one upstage center, two downstage wings and
 // one at front of house. Each frame the chosen pattern writes a list of beams
-// (origin, direction, colour × intensity). Beams are razor-thin, don't spread, stop
+// (origin, direction, color × intensity). Beams are razor-thin, don't spread, stop
 // on the deck or the floor, and otherwise run out into the haze. Pure: no DOM or three.js.
 
 import { DECK_Y, landing, hash } from './layout.js';
@@ -33,11 +33,11 @@ export const PATTERNS = {
   auto: 'Follow the show (changes by section)',
 };
 export const LASER_COLORS = {
-  rgb: 'Full-colour, rotating',
+  rgb: 'Full-color, rotating',
   rainbow: 'Rainbow across each fan',
   green: 'Classic green',
-  follow: 'Follow the rig’s colour',
-  fixed: 'One colour',
+  follow: 'Follow the rig’s color',
+  fixed: 'One color',
 };
 const AUTO = ['fan', 'sky', 'sweep', 'tunnel', 'chase', 'cross', 'burst', 'sky'];
 
@@ -57,7 +57,7 @@ export class Lasers {
     this.tmp = { r: 0, g: 0, b: 0 };
   }
 
-  /** The dominant colour the rig is playing right now (for 'follow'): the brightest head's hue. */
+  /** The dominant color the rig is playing right now (for 'follow'): the brightest head's hue. */
   rigColor() {
     let best = null, bi = 0.05;
     for (const R of this.e.render) if (R.I > bi) { bi = R.I; best = R; }
@@ -148,7 +148,7 @@ export class Lasers {
         });
         break;
       }
-      case 'tunnel': { // cone from upstage centre, spinning
+      case 'tunnel': { // cone from upstage center, spinning
         const P = PROJECTORS[2], R = spread * 0.18;
         for (let j = 0; j < n * 2; j++) {
           const a = (j / (n * 2)) * TAU + t * TAU * 0.5;
@@ -156,7 +156,7 @@ export class Lasers {
         }
         break;
       }
-      case 'burst': { // radial beams in every direction from upstage centre, flickering
+      case 'burst': { // radial beams in every direction from upstage center, flickering
         const P = PROJECTORS[2];
         for (let j = 0; j < n * 2; j++) {
           const a = (j / (n * 2)) * TAU + t * TAU * 0.2;

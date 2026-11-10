@@ -568,7 +568,7 @@ window.addEventListener('keydown', (e) => {
   else if (k === 'u') { $('unroll').checked = !$('unroll').checked; R.clearTrails(); }
 });
 
-// Centre the scene in the space the side panel leaves free.
+// Center the scene in the space the side panel leaves free.
 let viewShift = null;
 function updateViewOffset() {
   const panel = $('controls'), hud = $('hud');
@@ -579,7 +579,7 @@ function updateViewOffset() {
     if (visible(panel)) sx += panel.getBoundingClientRect().right / 2;
     if (visible(hud)) sx -= hud.getBoundingClientRect().width / 4;
   } else {
-    // phone: centre the scene between the HUD (top) and the panel (bottom)
+    // phone: center the scene between the HUD (top) and the panel (bottom)
     const top = visible(hud) ? hud.getBoundingClientRect().bottom : 0;
     const bottom = visible(panel) ? panel.getBoundingClientRect().top : H;
     sy = (top + bottom) / 2 - H / 2;

@@ -56,7 +56,7 @@ const FORMAT = {
   sceneFade: (v) => `${(+v).toFixed(1)} s`,
   midiRelease: (v) => `${(+v).toFixed(2)} s`, midiKick: (v) => `${v}°`, midiLift: (v) => `${(+v).toFixed(2)} m`,
 };
-// live-effect size is normalised 0–1 in the UI and scaled per attribute
+// live-effect size is normalized 0–1 in the UI and scaled per attribute
 const SIZE_SCALE = { dim: 1, strobe: 1, frost: 1, pan: 90, tilt: 60, circle: 40, ballyhoo: 60, hue: 180, zoom: 30 };
 const SIZE_UNIT = { pan: '°', tilt: '°', circle: '°', ballyhoo: '°', hue: '°', zoom: '°' };
 function outputFor(input) {
@@ -258,14 +258,14 @@ for (const [attr, sel] of Object.entries(ATTR_INPUTS)) {
 const swatchColors = [K.red, K.orange, K.amber, K.gold, K.warm, K.white, K.ice, K.cyan, K.teal, K.green, K.lime, K.blue, K.royal, K.uv, K.violet, K.magenta, K.pink, K.lav, '#ff7a40', '#7affd8'];
 for (const c of swatchColors) {
   const b = document.createElement('button');
-  b.type = 'button'; b.style.background = c; b.title = c; b.setAttribute('aria-label', `Colour ${c}`);
+  b.type = 'button'; b.style.background = c; b.title = c; b.setAttribute('aria-label', `Color ${c}`);
   on(b, 'click', () => {
     if (!engine.selection.size) { flashHint('Select fixtures first.'); return; }
     const [h, s] = hexHS(c);
     engine.progSet('hue', h); engine.progSet('sat', s);
     syncingProg = true; $('#pHue').value = h; $('#pSat').value = s; syncingProg = false;
     refreshOutput($('#pHue')); refreshOutput($('#pSat'));
-    // colour on a dark fixture should be visible: bring unprogrammed intensity to full
+    // color on a dark fixture should be visible: bring unprogrammed intensity to full
     if (engine.prog.get([...engine.selection][0])?.dim === undefined) {
       engine.progSet('dim', 1);
       syncingProg = true; $('#pDim').value = 1; syncingProg = false; refreshOutput($('#pDim'));
@@ -806,7 +806,7 @@ canvas.dataset.rig = engine.rig.id;
 on('#stageToggle', 'change', (e) => { view.stage = e.target.checked; engine.floorOn = e.target.checked; });
 
 // ——— scenes ———
-// Every launch is a move, never a cut: colour crossfades, heads and sticks travel,
+// Every launch is a move, never a cut: color crossfades, heads and sticks travel,
 // and devices a scene adds or drops rise out of / sink into the deck (tubes, blinders,
 // strobes, CO₂, lasers), grow out of the truss, or fly in from the grid (balls, screen).
 function setCtrl(id, v) {
@@ -846,7 +846,7 @@ function launchScene(id, opts = {}) {
   engine.playScene(sc, opts.fade ?? +$('#sceneFade').value);
   markLaunched(sc, `Moving to ${sc.name}`);
 }
-/** Is anything still travelling: the crossfade, the sticks, or a device coming or going? */
+/** Is anything still traveling: the crossfade, the sticks, or a device coming or going? */
 function sceneMoving() {
   if (engine.snapT > 0) return true;
   for (let p = 0; p < POD_COUNT; p++) {

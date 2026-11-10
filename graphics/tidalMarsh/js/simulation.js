@@ -13,7 +13,7 @@
 // that positive feedback against a uniform sediment supply.
 //
 // Drainage area A is computed by D8 flow accumulation: each cell drains to its
-// lowest neighbour, areas are summed in elevation order. The boundary is held
+// lowest neighbor, areas are summed in elevation order. The boundary is held
 // at sea level so the network organizes around outlets.
 
 export class MarshSim {
@@ -42,7 +42,7 @@ export class MarshSim {
         this.steps = 0;
         this.palette = 'marsh';
 
-        // Stride of D8 neighbour offsets, prefilled per call to step().
+        // Stride of D8 neighbor offsets, prefilled per call to step().
         this._dx = [-1, 0, 1, -1, 1, -1, 0, 1];
         this._dy = [-1, -1, -1, 0, 0, 1, 1, 1];
         this._dist = this._dx.map((_, k) =>
@@ -195,7 +195,7 @@ export class MarshSim {
         this.steps++;
     }
 
-    // D8: each non-boundary cell flows to its steepest descent neighbour.
+    // D8: each non-boundary cell flows to its steepest descent neighbor.
     // Boundary cells & cells already below sea level are outlets.
     _computeFlow() {
         const W = this.W, H = this.H;
@@ -327,7 +327,7 @@ function clamp255(v) {
     return v < 0 ? 0 : v > 255 ? 255 : v;
 }
 
-// Linear interpolation between colour stops [t, [r,g,b]].
+// Linear interpolation between color stops [t, [r,g,b]].
 function lerpStops(stops, t) {
     if (t <= stops[0][0]) return stops[0][1];
     const last = stops[stops.length - 1];
@@ -348,7 +348,7 @@ function lerpStops(stops, t) {
 }
 
 // Each palette: water stops (0=deep → 1=shallow), land stops (0=wet → 1=dry),
-// channelTint = how strongly drainage area darkens the colour.
+// channelTint = how strongly drainage area darkens the color.
 const PALETTES = {
     marsh: {
         water: [

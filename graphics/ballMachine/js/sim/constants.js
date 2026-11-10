@@ -11,13 +11,13 @@ export const BALL = {
 };
 
 // Rolling on two rails the ball turns about the line through both contact
-// points, which is d = R cos(alpha) from its centre, so it spins faster than
+// points, which is d = R cos(alpha) from its center, so it spins faster than
 // on a flat floor and stores more energy in rotation:
 //   KE = 1/2 m v^2 (1 + (2/5) R^2 / d^2)
 export const railK = 1 + 0.4 / Math.cos(BALL.contactAngle) ** 2;
 export const flatK = 1.4;
 
-// Rails are offset from the ball-centre path.
+// Rails are offset from the ball-center path.
 export const RAIL = {
   lateral: (BALL.R + BALL.railRadius) * Math.sin(BALL.contactAngle),
   drop: (BALL.R + BALL.railRadius) * Math.cos(BALL.contactAngle),

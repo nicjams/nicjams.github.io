@@ -10,7 +10,7 @@
 // it, so the whole piece of cloth folds up with its pattern.
 //
 // World units are CSS pixels and the top-down camera is fitted so the plane z = 0 lands
-// pixel-for-pixel on the 2D canvas. Unlit, the cloth shows exactly its printed colours,
+// pixel-for-pixel on the 2D canvas. Unlit, the cloth shows exactly its printed colors,
 // so the hand-off between the 2D canvas and this one is seamless at both ends of the stage.
 import * as THREE from 'three';
 
@@ -66,7 +66,7 @@ function weaveTexture() {
 // in the actual plane, so the print is the exact 2D picture. The lattice is periodic in σ,
 // so donuts straddling the cut edges are printed consistently across the glued seam.
 // The coverage mask is computed in a worker (it's a few million texels) as soon as the
-// parameters are known, so it's ready long before the stage starts; only recolouring for a
+// parameters are known, so it's ready long before the stage starts; only recoloring for a
 // palette change happens on the main thread.
 function printWorkerMain() {
     self.onmessage = ({ data: p }) => {
@@ -148,7 +148,7 @@ function ready(p) {
         postNext();
     }
     if (mask?.key !== key) return false;
-    ensurePrint(p); // (re)colour ahead of the stage too, so entering it never stalls
+    ensurePrint(p); // (re)color ahead of the stage too, so entering it never stalls
     if (!warmed) {
         // Draw one hidden frame with everything on (lights, grid, print) so shader
         // compilation and the texture upload happen now, not mid-animation.
@@ -226,7 +226,7 @@ function init() {
     cloth.frustumCulled = false;
     group.add(cloth);
 
-    // Fog in the background colour hides the rest of the lattice until the camera pulls back.
+    // Fog in the background color hides the rest of the lattice until the camera pulls back.
     scene.fog = new THREE.Fog(0x000000, 1e8, 2e8);
 }
 
@@ -278,7 +278,7 @@ function makeSurface(p, roll, flutter, tau) {
     const L = lerp(L0, 2 * Math.PI * a, roll);
     const alpha = 2 * Math.PI * roll;
     const rho0 = lerp(p.rIn, R, roll);
-    const lift = a * roll; // recentre the finished torus on z = 0
+    const lift = a * roll; // recenter the finished torus on z = 0
     const ratio = p.rOut / p.rIn;
     // Cloth-like ripples while it's being folded (zero when flat and when closed).
     const ripple = 0.035 * p.rOut * flutter;
@@ -456,7 +456,7 @@ function render(p) {
     group.rotation.set(0, 0, spin);
 
     // Torus size (matches makeSurface) and lattice spacing: S side to side (so that, head-on,
-    // the neighbours start just outside the frame), SZ front to back.
+    // the neighbors start just outside the frame), SZ front to back.
     const λ = p.unit / (1 + (p.k * p.logq) / (2 * Math.PI));
     const a = (p.k * p.logq * λ) / (2 * Math.PI);
     const outerR = λ + a;
@@ -491,7 +491,7 @@ function render(p) {
     camera.lookAt(camTo);
     camera.updateProjectionMatrix();
 
-    // --- the lattice, emerging from fog in the background colour ---
+    // --- the lattice, emerging from fog in the background color ---
     ensureGrid(p);
     scene.fog.color.set(p.bg);
     const counts = [0, 0, 0];

@@ -40,7 +40,7 @@ export const TUBE_LOOKS = {
   follow: 'Follow the rig', rain: 'Rain drips', wave: 'Rainbow wave', chase: 'Bar chase on the beat',
   sparkle: 'Sparkle', meter: 'Level meter (show / MIDI)', flash: 'Flash on the beat',
 };
-export const DEVICE_COLORS = { rig: 'The rig’s colour', rainbow: 'Rainbow', white: 'White', fixed: 'One colour' };
+export const DEVICE_COLORS = { rig: 'The rig’s color', rainbow: 'Rainbow', white: 'White', fixed: 'One color' };
 export const HIT_MODES = {
   off: 'Manual only', drops: 'On the drops', phrase: 'Every 4 bars', beat: 'Every beat', show: 'With the show’s strobes',
 };
@@ -392,7 +392,7 @@ export class Devices {
     this.ballDefs.forEach((b, i) => { b.pres = i < o.balls ? 1 : 0; });
   }
 
-  /** Colour helper shared by tubes and balls. */
+  /** Color helper shared by tubes and balls. */
   colorOf(mode, fixed, k, rig, out) {
     if (mode === 'white') { out.r = out.g = out.b = 1; return out; }
     if (mode === 'fixed') return hs2rgb(...hexHS(fixed), out);
@@ -531,7 +531,7 @@ export class Devices {
     const STAGGER = 0.7;
     for (let i = 0; i < n; i++) {
       const T = list[i];
-      // each tube travels on its own slightly staggered clock: centre / front first
+      // each tube travels on its own slightly staggered clock: center / front first
       const ei = clamp01(P.tubes * (1 + STAGGER) - STAGGER * T.key), e = smooth(ei);
       let a, bb;
       if (T.mode === 'grow') {

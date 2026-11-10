@@ -34,7 +34,7 @@ export const VISUALIZATIONS = [
 
   // — Tilings & Lattices —
   { id: 'hatTiling', title: 'Hat Monotile', cat: 'tilings', glyph: '⬡',
-    blurb: 'A looping tour of the aperiodic hat: growth, legal neighbours, mirror images, supertiles, Fibonacci squares and the Tile(a,b) family.', keys: [' ', 'n', 'p', 't', 'o', 'h'] },
+    blurb: 'A looping tour of the aperiodic hat: growth, legal neighbors, mirror images, supertiles, Fibonacci squares and the Tile(a,b) family.', keys: [' ', 'n', 'p', 't', 'o', 'h'] },
   { id: 'penrose', title: 'Penrose Tiling', cat: 'tilings', glyph: '✶',
     blurb: 'Penrose tilings by cut and project from ℝ⁵: phason flips, waves and ripples, an endless deflation zoom, and colorings that show the hidden structure.', keys: [' ', 'm', 'k', 'p', 'r'] },
   { id: 'picardOrbit', title: 'Picard Orbit', cat: 'tilings', glyph: '◉',
@@ -49,7 +49,7 @@ export const VISUALIZATIONS = [
     blurb: 'An endless cloudscape sampled into orange-framed blocks, with breathing grid density.', keys: [' ', 'r'] },
   { id: 'cyclicCellularAutomaton', title: 'Cyclic automaton', cat: 'fields', glyph: '◌',
     blurb: 'Griffeath waves with finite-group rules and palette controls.', keys: [' ', 'r', 'h', 'n'] },
-  { id: 'gameOfLife', title: 'Game of Life in (ℤ/2)²', cat: 'fields', glyph: '▚',
+  { id: 'gameOfLife', title: 'Game of Life', cat: 'fields', glyph: '▚',
     blurb: 'Conway’s Life told in chapters, with live cells split into the three nonzero elements of (ℤ/2)².', keys: [' ', 'n', 'r', 's', 'h'] },
   { id: 'fire', title: 'Combustion Engine', cat: 'fields', glyph: '🔥',
     blurb: 'Navier–Stokes flame solver. Drag to add fuel.', keys: [] },
@@ -111,6 +111,16 @@ export function vizById(id) {
 /** Relative path (from the graphics root) to a visualization's entry page. */
 export function vizPath(id) {
   return `${id}/index.html`;
+}
+
+/** Public link (from the graphics root) to a visualization's own page, e.g. `gameOfLife/`. */
+export function vizPage(id) {
+  return `${id}/`;
+}
+
+/** Link (from the graphics root) that opens a visualization inside the studio stage. */
+export function vizStage(id) {
+  return `stage.html?viz=${encodeURIComponent(id)}`;
 }
 
 /** Relative path (from the graphics root) to a visualization's preview image. */

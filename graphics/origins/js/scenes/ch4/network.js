@@ -1,7 +1,7 @@
 // network.js — Chapter 4: a network of neurons in 3D.
 //
 // Somata sit mostly in a thin outer shell (a cortex) around a sparser core.
-// Each neuron sends an axon to three near neighbours. Spikes are scheduled
+// Each neuron sends an axon to three near neighbors. Spikes are scheduled
 // once at start with a branching process tuned near criticality — each
 // spike makes its target fire with probability p, three targets each, so
 // σ = 3p ≈ 1 — which gives the "neuronal avalanches" seen in real cortex:
@@ -53,7 +53,7 @@ export class Network {
       for (let k = 0; k < n; k++) grow([0, 0, 0], rng.dir3(), i === 0 ? 0.09 : 0.035, 0, i === 0 ? 3 : 1);
       return segs;
     });
-    // axons: three of the ten nearest neighbours, curved
+    // axons: three of the ten nearest neighbors, curved
     this.edges = [];
     this.out = this.pos.map(() => []);
     for (let i = 0; i < N; i++) {

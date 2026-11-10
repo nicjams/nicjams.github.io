@@ -37,8 +37,8 @@ The Graphics Studio remote sees a chapter select, play/pause, captions toggle, a
 | --- | --- |
 | 0 | The void. One quivering point; virtual particle pairs pop in and annihilate around it. |
 | 6.2 | **The Big Bang** — white-out, expanding shell, lens aberration. |
-| 8 | Quark–gluon plasma cooling from blue-white to red. Quarks drawn with their colour charge (red, green, blue sparks). |
-| 11.5 | Quarks bind in threes into protons and neutrons — the three colours add to white. Pairs fuse into the first nuclei. |
+| 8 | Quark–gluon plasma cooling from blue-white to red. Quarks drawn with their color charge (red, green, blue sparks). |
+| 11.5 | Quarks bind in threes into protons and neutrons — the three colors add to white. Pairs fuse into the first nuclei. |
 | 22 | Recombination: electrons settle, the fog clears into the cosmic microwave background, which pulls back into the familiar Planck ellipse. |
 | 28 | Dark ages → the **cosmic web** grows (Zel'dovich approximation, 885k particles, periodic box). |
 | 44 | First stars ignite in the densest knots. |
@@ -46,8 +46,8 @@ The Graphics Studio remote sees a chapter select, play/pause, captions toggle, a
 | 70 | Dive through an arm into one star; its surface fills the frame (granulation, sunspots, prominences). |
 | 84 | Inside the core: a proton–proton chain simulation (p+p→²H+e⁺+ν, ²H+p→³He+γ, ³He+³He→⁴He+2p). Random at first; from ~92 s reactions **lock to the beat** and the core pulses like a heart. |
 | 99 | The forge: triple-alpha (3 ⁴He→¹²C) and ¹²C+⁴He→¹⁶O. |
-| 105 | Pull back: the massive star's onion of shells (H, He, C, O, Ne, Si, Fe), labelled. |
-| 112.5 | Core collapse → neutrino burst → bounce → **supernova**. The remnant expands as a limb-brightened shell of element-coloured debris. |
+| 105 | Pull back: the massive star's onion of shells (H, He, C, O, Ne, Si, Fe), labeled. |
+| 112.5 | Core collapse → neutrino burst → bounce → **supernova**. The remnant expands as a limb-brightened shell of element-colored debris. |
 
 **Audio notes (unchanged from the original plan).** Sub-bass drone throughout, swelling. Percussive fusion hits coalesce into a steady pulse — the fusion events land on the shared tempo. **Layer introduced: rhythm.**
 
@@ -55,7 +55,7 @@ The Graphics Studio remote sees a chapter select, play/pause, captions toggle, a
 
 | t (s) | Beat |
 | --- | --- |
-| 0 | The debris cools into atoms (CPK colours shared with the supernova). A periodic table fades in, each cell tinted by where that element was made (Big Bang / stars & supernovae / neutron-star collisions); the elements just scattered light up. |
+| 0 | The debris cools into atoms (CPK colors shared with the supernova). A periodic table fades in, each cell tinted by where that element was made (Big Bang / stars & supernovae / neutron-star collisions); the elements just scattered light up. |
 | 12 | Molecular cloud: atoms bond in a 3D simulation with real valence geometry — H₂, H₂O (104.5°), CH₄ (tetrahedral), NH₃ (pyramidal), CO. Helium and neon never bond. |
 | 34 | The cloud collapses into a young Sun with a jet and a ringed, gapped disk (after ALMA's HL Tauri). |
 | 40 | A planet gathers in one ring: the early Earth, molten with glowing cracks → cratered crust → oceans, clouds, an atmosphere. |
@@ -95,8 +95,8 @@ The Graphics Studio remote sees a chapter select, play/pause, captions toggle, a
 | 10 | Pull back: 260 neurons in 3D wake up. Spikes race down axons; cascades are a branching process tuned near criticality (neuronal avalanches). |
 | 36 | Emotion: a golden wave of joy, a blue fall of sadness, red flickers of fear. |
 | 56 | Memory: the network lights up in constellations of the story so far — a galaxy, a double helix, a fish, a fire, an eye, a face. |
-| 67 | Language: a river of words … that falls into the centre and becomes **"I"**. |
-| 88 | A self: the network gathers into rings around a bright point and pulses in synchrony with the tempo; it dreams (colour drift). |
+| 67 | Language: a river of words … that falls into the center and becomes **"I"**. |
+| 88 | A self: the network gathers into rings around a bright point and pulses in synchrony with the tempo; it dreams (color drift). |
 | 104 | It reaches out; another mind answers; then more. |
 
 **Audio.** The melody blooms into a theme; harmonic pads; rhythm softened. **Layer introduced: voice / theme.**
@@ -111,7 +111,7 @@ The Graphics Studio remote sees a chapter select, play/pause, captions toggle, a
 | 34 | Dive into one city → a dark room: a lone dancer in a single spotlight. |
 | 45 | Others join row by row; moving-head beams come up, all on the beat. |
 | 62 | The whole room at full energy (mild accent flashes on each downbeat). |
-| 100 | The dancers glitter in the colours of the elements they are made of (by atom count: H, O, C, N, P, S). |
+| 100 | The dancers glitter in the colors of the elements they are made of (by atom count: H, O, C, N, P, S). |
 | 111.5 | The beat drops out: one dancer, one light, arms raised. Their particles rise like stars; the title **Origins**; everything fades to a single point — the point from the start of Chapter 1 — and then black. |
 
 **Audio.** All four prior layers together as a full track — "music people actually dance to." End: beat drops out, one figure holds a pose, fade to black on a held chord.
@@ -143,7 +143,7 @@ origins/
     tempo.js         the shared pulse (BPM, tap tempo, heartbeat envelope)
     captions.js      title cards, beat captions, cosmic timeline
     input.js, hud.js
-    lib/math.js      easing, envelopes, seeded RNG, noise, colour, mat4
+    lib/math.js      easing, envelopes, seeded RNG, noise, color, mat4
     gfx/             gl.js (programs, targets, point clouds), glsl.js (noise, palettes), renderer.js
     scenes/
       scene.js

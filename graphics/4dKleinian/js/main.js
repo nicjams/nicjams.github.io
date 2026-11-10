@@ -116,7 +116,7 @@ function rebuild() {
 }
 
 /**
- * Scaling every mirror about its own centre commutes with the similarity
+ * Scaling every mirror about its own center commutes with the similarity
  * used to frame the configuration, so the breathing animation can rescale
  * the radii in place instead of rebuilding (and re-framing) the group on
  * every frame.  Only the clip sphere and the trap's clearance depend on

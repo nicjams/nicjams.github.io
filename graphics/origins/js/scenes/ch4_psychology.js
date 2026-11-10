@@ -5,7 +5,7 @@
 //  36  emotion: a golden wave of joy, a blue fall of sadness, red flickers of fear
 //  56  memory: the network lights up in shapes from the story so far —
 //      a galaxy, a molecule, a fish, a fire, an eye, a face
-//  67  language: a river of words … that falls into the centre and becomes "I"
+//  67  language: a river of words … that falls into the center and becomes "I"
 //  88  a self: the network gathers into rings around a bright point and
 //      pulses in synchrony with the beat; it dreams
 // 104  it reaches out; another mind answers; then more → Chapter 5
@@ -31,7 +31,7 @@ export class Ch4Psychology extends Scene {
     this.cues = [
       { t: 7.8, d: 5.5, title: 'A neuron fires', sub: 'An electrical pulse races down a single cell' },
       { t: 17.5, d: 7, title: 'A brain', sub: '86 billion neurons; each spike can set off a cascade' },
-      { t: 37, d: 7, title: 'Emotion', sub: 'Joy, grief, fear — ancient signals that colour every thought' },
+      { t: 37, d: 7, title: 'Emotion', sub: 'Joy, grief, fear — ancient signals that color every thought' },
       { t: 57.2, d: 8, title: 'Memory', sub: 'The past, rebuilt from patterns of firing' },
       { t: 73.5, d: 7.5, title: 'Language', sub: 'Sounds become symbols; symbols become thoughts' },
       { t: 91.5, d: 7, title: 'A self', sub: 'A brain that models the world — and itself inside it' },
@@ -94,7 +94,7 @@ export class Ch4Psychology extends Scene {
     return { cam, fromCam, f, D };
   }
 
-  // ── per-neuron colour and layout ─────────────────────────────────────────
+  // ── per-neuron color and layout ─────────────────────────────────────────
 
   tint(i, T) {
     const p = this.net.pos[i];

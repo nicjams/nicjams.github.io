@@ -80,7 +80,7 @@ export class CameraRig {
     };
   }
 
-  // fly to look at a point from `dist` metres, keeping the current bearing
+  // fly to look at a point from `dist` meters, keeping the current bearing
   flyToPoint(target, dist = 2.2) {
     if (this.mode !== 'orbit') this.setMode('orbit');
     const t1 = new THREE.Vector3(target.x, target.y, target.z);

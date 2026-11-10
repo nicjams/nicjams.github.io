@@ -1,10 +1,10 @@
-// Glasshouse environment — shared dimensions (metres, y up, origin = centre of floor).
+// Glasshouse environment — shared dimensions (meters, y up, origin = center of floor).
 import { bezier2 } from './util.js';
 
 export const N_SIDES = 16;
 export const APOTHEM = 14.0;                               // glass line (inner face of the glazing)
 export const HALF_ANGLE = Math.PI / N_SIDES;
-export const CIRCUM = APOTHEM / Math.cos(HALF_ANGLE);      // column centres (polygon vertices)
+export const CIRCUM = APOTHEM / Math.cos(HALF_ANGLE);      // column centers (polygon vertices)
 export const SIDE_LEN = 2 * APOTHEM * Math.tan(HALF_ANGLE);
 
 export const PLINTH_R = 6.0;
@@ -30,14 +30,14 @@ export const DOOR_FACES = [4, 12];
 export const DOOR_HALF = 1.121;
 export const DOOR_TOP = 2.9;
 
-// face k is centred at angle k*2π/N ; vertex k sits at (k-0.5)*2π/N
+// face k is centered at angle k*2π/N ; vertex k sits at (k-0.5)*2π/N
 export const faceAngle = (k) => (k * 2 * Math.PI) / N_SIDES;
 export const vertexAngle = (k) => ((k - 0.5) * 2 * Math.PI) / N_SIDES;
 
 /** Radius of the polygon of given apothem along direction phi. */
 export function polyRadius(apothem, phi) {
   const seg = (2 * Math.PI) / N_SIDES;
-  let a = ((phi % seg) + seg) % seg;       // 0..seg, face centres at 0
+  let a = ((phi % seg) + seg) % seg;       // 0..seg, face centers at 0
   if (a > seg / 2) a -= seg;
   return apothem / Math.cos(a);
 }
@@ -58,7 +58,7 @@ const _prof = (() => {
   return { pts, L, total: L[L.length - 1] };
 })();
 
-/** Dome profile by normalised arc length s ∈ [0,1] → [R, y]. */
+/** Dome profile by normalized arc length s ∈ [0,1] → [R, y]. */
 export function domeAt(s) {
   const { pts, L, total } = _prof;
   const target = Math.min(1, Math.max(0, s)) * total;

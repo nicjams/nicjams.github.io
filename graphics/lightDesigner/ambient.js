@@ -10,7 +10,7 @@
 // Fairy lights are strings of bulbs hanging in swags (a canopy over the crowd, spokes
 // from a hub, or swags between the truss sticks that ride the kinetics) or in drops
 // (a curtain upstage). Every strand is a live catenary that sways in a breeze; bulbs
-// switch on running along each string, and there are classic C9 colours, twinkle,
+// switch on running along each string, and there are classic C9 colors, twinkle,
 // chase, waves, sparkle, beat pulses and rain.
 
 import * as THREE from 'three';
@@ -27,12 +27,12 @@ export const HOUSE_EFFECTS = {
   steady: 'Steady', breathe: 'Breathing', flicker: 'Old tungsten flicker', chase: 'Chase around the room',
   pulse: 'Pulse on the beat', twinkle: 'Twinkle', rainbow: 'Rainbow',
 };
-export const HOUSE_COLORS = { tungsten: 'White (set the warmth)', color: 'One colour', rig: 'The rig’s colour' };
+export const HOUSE_COLORS = { tungsten: 'White (set the warmth)', color: 'One color', rig: 'The rig’s color' };
 export const FAIRY_LAYOUTS = {
   canopy: 'Canopy over the crowd', radial: 'Spokes from a hub', rig: 'Swags between the truss sticks', curtain: 'Starcloth drops upstage',
 };
 export const FAIRY_COLORS = {
-  warm: 'Warm white', cool: 'Cool white', classic: 'Classic multicolour (C9)', pastel: 'Pastel', rainbow: 'Rainbow along the string', rig: 'The rig’s colour', fixed: 'One colour',
+  warm: 'Warm white', cool: 'Cool white', classic: 'Classic multicolor (C9)', pastel: 'Pastel', rainbow: 'Rainbow along the string', rig: 'The rig’s color', fixed: 'One color',
 };
 export const FAIRY_EFFECTS = {
   steady: 'Steady', twinkle: 'Twinkle', chase: 'Chase along the strings', wave: 'Wave across the strings',
@@ -41,7 +41,7 @@ export const FAIRY_EFFECTS = {
 const C9 = [[1, 0.12, 0.05], [0.1, 0.9, 0.2], [0.15, 0.3, 1], [1, 0.55, 0.05], [0.95, 0.2, 0.75]];
 const PASTEL = [[1, 0.6, 0.65], [0.6, 1, 0.75], [0.6, 0.75, 1], [1, 0.9, 0.55], [0.85, 0.65, 1]];
 
-/** Colour temperature (0 = 2200 K candle … 1 = 6500 K daylight) → linear RGB, roughly. */
+/** Color temperature (0 = 2200 K candle … 1 = 6500 K daylight) → linear RGB, roughly. */
 function warmth(w, out) {
   const stops = [[1, 0.5, 0.16], [1, 0.72, 0.42], [1, 0.9, 0.78], [0.82, 0.88, 1]];
   const x = clamp01(w) * (stops.length - 1), i = Math.min(stops.length - 2, Math.floor(x)), f = x - i;
@@ -194,7 +194,7 @@ export class Ambience {
         P.pos[gi * 3] = p[0]; P.pos[gi * 3 + 1] = p[1]; P.pos[gi * 3 + 2] = p[2];
         if (j > 0) { W.set([prevX, prevY, prevZ, p[0], p[1], p[2]], w * 6); w++; }
         prevX = p[0]; prevY = p[1]; prevZ = p[2];
-        // colour
+        // color
         let r = 1, g = 1, b = 1;
         switch (o.color) {
           case 'warm': r = 1; g = 0.62; b = 0.26; break;

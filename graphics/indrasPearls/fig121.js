@@ -1,12 +1,12 @@
 // fig121.js — Figure 12.1 of Indra's Pearls: "a picture Klein and Poincaré
 // would have envied". For the quasifuchsian group given by Grandma's recipe
-// (Tr a = Tr b = 2.2 in the book) the plane is coloured by the argument of the
+// (Tr a = Tr b = 2.2 in the book) the plane is colored by the argument of the
 // automorphic function
 //
 //     f(z) = Σ (az+b)/(cz+d)⁵  /  Σ 1/(cz+d)⁴  =  Σ γ(z)·γ'(z)²  /  Σ γ'(z)² ,
 //
 // summed over the group. Both sums are weight-4 Poincaré series (γ'(z) =
-// (cz+d)⁻²), so their ratio is invariant: f(γz) = f(z), and the colours repeat
+// (cz+d)⁻²), so their ratio is invariant: f(γz) = f(z), and the colors repeat
 // on every tile of the ordinary set. The book prints the numerator exponent
 // as 3, but Σ (az+b)/(cz+d)³ = Σ γ(z)·γ'(z) has weight 2 — the ratio would then
 // pick up a factor (cz+d)⁻² under the group, and for Tr = 2.2 (critical
@@ -32,11 +32,11 @@ uniform highp sampler2D uM;
 uniform int uN;
 uniform vec2 uCenter;
 uniform vec2 uHalf;      // half-extent of the view in world units
-uniform float uCycles;   // colour cycles per turn of arg f
+uniform float uCycles;   // color cycles per turn of arg f
 uniform float uPhase;
 uniform float uBands;    // strength of |f| contour shading
 uniform int uPow;        // numerator exponent: 5 (invariant) or 3 (as printed)
-uniform sampler2D uLut;  // cyclic colour ramp, 256×1
+uniform sampler2D uLut;  // cyclic color ramp, 256×1
 vec2 cmul(vec2 p, vec2 q) { return vec2(p.x*q.x - p.y*q.y, p.x*q.y + p.y*q.x); }
 vec2 cinv(vec2 p) { return vec2(p.x, -p.y) / dot(p, p); }
 vec3 hue(float h) { return texture(uLut, vec2(fract(h), 0.5)).rgb; }
@@ -102,7 +102,7 @@ export function createFig121(glCanvas, overlay) {
   gl.texParameteri(gl.TEXTURE_2D, gl.TEXTURE_WRAP_S, gl.REPEAT);
   gl.activeTexture(gl.TEXTURE0);
   gl.uniform1i(U.uLut, 1);
-  /** Upload the colour ramp: an array of [r, g, b] (0–255), length 256. */
+  /** Upload the color ramp: an array of [r, g, b] (0–255), length 256. */
   function setLut(ramp) {
     const data = new Uint8Array(ramp.length * 4);
     ramp.forEach((c, i) => data.set([c[0], c[1], c[2], 255], i * 4));

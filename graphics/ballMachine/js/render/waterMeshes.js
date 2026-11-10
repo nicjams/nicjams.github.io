@@ -98,7 +98,7 @@ export function buildWaterSlide(machine, M, color, floorAt, keepOut) {
   g.name = 'waterSlide';
   const updates = [];
 
-  // glossy painted fibreglass outside, satin white gelcoat inside (as water slides are)
+  // glossy painted fiberglass outside, satin white gelcoat inside (as water slides are)
   const paint = new THREE.MeshPhysicalMaterial({ color: new THREE.Color(color), roughness: 0.34, metalness: 0.05, clearcoat: 0.5, clearcoatRoughness: 0.2 });
   const gel = new THREE.MeshStandardMaterial({ color: 0xf1f7f4, roughness: 0.42, metalness: 0 });
   const tubeGlass = new THREE.MeshPhysicalMaterial({
@@ -301,7 +301,7 @@ export function buildWaterSlide(machine, M, color, floorAt, keepOut) {
   keepOut.cyl(pumpP.x, pumpP.z, 0.18, 0, 0.6);
 
   // the water: a disc with a dimple over the drain; ripples that swirl
-  // faster toward the centre are drawn in the shader, plus splash rings
+  // faster toward the center are drawn in the shader, plus splash rings
   const ringsN = 18, segN = 72, dip = 0.03, dipR = 0.065;
   const wp = [], wu = [], wi = [];
   for (let j = 0; j <= ringsN; j++) {

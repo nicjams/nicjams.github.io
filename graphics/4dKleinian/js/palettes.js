@@ -1,5 +1,5 @@
 /**
- * Colour ramps and orbit-colouring schemes.  Both are compiled into GLSL
+ * Color ramps and orbit-coloring schemes.  Both are compiled into GLSL
  * at load time so the shader can switch between them without branching on
  * texture lookups.
  */
@@ -105,7 +105,7 @@ export const palettes = {
     },
     copper: {
         name: 'Copper',
-        description: 'Oxidised metal: teal patina into hot bronze.',
+        description: 'Oxidized metal: teal patina into hot bronze.',
         stops: [
             [0.0, [0.02, 0.06, 0.07]],
             [0.3, [0.05, 0.27, 0.26]],
@@ -116,7 +116,7 @@ export const palettes = {
     },
     spectral: {
         name: 'Spectral',
-        description: 'Full hue sweep — best for generator colouring.',
+        description: 'Full hue sweep — best for generator coloring.',
         type: 'hsv',
         formula: 'hsv2rgb(vec3(fract(0.92 * t + 0.03), 0.82, 1.0))'
     },
@@ -135,7 +135,7 @@ export const schemes = {
         formula: 'fract(gDepth * 0.11)'
     },
     depthNormalized: {
-        name: 'Normalised depth',
+        name: 'Normalized depth',
         description: 'Orbit depth measured against the iteration budget.',
         formula: 'clamp(gDepth / max(float(uMaxFold), 1.0), 0.0, 1.0)'
     },
@@ -162,7 +162,7 @@ export const schemes = {
     },
     marchDepth: {
         name: 'View depth',
-        description: 'Distance travelled by the ray before it hit.',
+        description: 'Distance traveled by the ray before it hit.',
         formula: 'clamp((marchDepth - 1.2) * 0.55, 0.0, 1.0)'
     },
     angular: {
@@ -177,7 +177,7 @@ export const schemes = {
     },
     normal: {
         name: 'Surface normal',
-        description: 'Colours by orientation — reads the geometry rather than the group.',
+        description: 'Colors by orientation — reads the geometry rather than the group.',
         formula: '0.5 + 0.5 * dot(n, normalize(vec3(0.35, 0.78, 0.52)))'
     }
 };

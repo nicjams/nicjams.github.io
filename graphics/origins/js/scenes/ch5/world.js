@@ -38,7 +38,7 @@ void main() {
   o = vec4(col * u_bright, 1.0);
 }`;
 
-/** The seven minds Chapter 4 ended on (fractions of W, H from centre). */
+/** The seven minds Chapter 4 ended on (fractions of W, H from center). */
 export const FIRST_MINDS = [
   [-0.2, 0], [0.28, -0.06], [0.1, -0.32], [0.16, 0.3], [0.42, 0.2], [-0.02, -0.12], [-0.36, -0.28],
 ];

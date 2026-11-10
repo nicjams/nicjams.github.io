@@ -26,7 +26,7 @@ function line(x0, y0, x1, y1, col, w = 1) {
 function circle(cx, cy, r, col) { for (let a = 0; a < 360; a += 2) px(cx + r * Math.cos(a * Math.PI / 180), cy + r * Math.sin(a * Math.PI / 180), col); }
 
 // three panels: plan (x,z) ; south elevation (x,y) ; east elevation (z,y)
-const S = 95; // px per metre
+const S = 95; // px per meter
 const panels = [
   { ox: 20 + 5.8 * S, oy: 20 + 5.8 * S, map: (p) => [p.x, p.z], name: 'plan' },
   { ox: 1150 + 0, oy: 20 + 6.6 * S, map: (p) => [p.x * 0.55, -p.y * 0.95], name: 'south' },

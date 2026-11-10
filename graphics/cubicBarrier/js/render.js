@@ -211,7 +211,7 @@ export class View {
     const w = c.clientWidth || window.innerWidth, h = c.clientHeight || window.innerHeight;
     this.renderer.setSize(w, h, false);
     if (w < 760) {
-      // phones: panels are bottom sheets, so centre the scene in the upper
+      // phones: panels are bottom sheets, so center the scene in the upper
       // part of the screen (a taller virtual frustum, lower window of it)
       const extra = 0.3 * h;
       this.camera.aspect = w / (h + extra);

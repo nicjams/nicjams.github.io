@@ -5,9 +5,9 @@
 //   a = (1,0) = 1,   b = (0,1) = 2,   c = (1,1) = 3,   a + b = c.
 // Whether a cell is alive next generation is decided by the ordinary
 // outer-totalistic rule (B3/S23 by default) applied to the *count* of live
-// neighbours, so the black-and-white shadow of the field is plain Life. The
+// neighbors, so the black-and-white shadow of the field is plain Life. The
 // only exception is triad cancellation: a birth whose three parents are a, b
-// and c sums to 0 in V and, if enabled, is stillborn. Colours are decided by
+// and c sums to 0 in V and, if enabled, is stillborn. Colors are decided by
 // the birth and survival laws below.
 
 export const A = 1, B = 2, C = 3;
@@ -27,13 +27,13 @@ export const RULES = {
 
 export const LAWS = {
   heredity: { birth: 'sum', survive: 'keep', cancel: true,
-    label: 'Heredity', help: 'A newborn is the sum of its three parents in (ℤ/2)²: two a’s and a b make b. a + b + c = 0, so a triad of all three colours is stillborn. Survivors keep their colour.' },
+    label: 'Heredity', help: 'A newborn is the sum of its three parents in (ℤ/2)²: two a’s and a b make b. a + b + c = 0, so a triad of all three colors is stillborn. Survivors keep their color.' },
   alchemy: { birth: 'sum', survive: 'mix', cancel: true,
-    label: 'Alchemy', help: 'Births as in Heredity. A survivor x also absorbs the sum s of its neighbours, becoming x + s (unless that is 0). One-colour patterns are untouched, but mixed still lifes shimmer.' },
+    label: 'Alchemy', help: 'Births as in Heredity. A survivor x also absorbs the sum s of its neighbors, becoming x + s (unless that is 0). One-color patterns are untouched, but mixed still lifes shimmer.' },
   predation: { birth: 'predation', survive: 'predation', cancel: false,
-    label: 'Predation', help: 'The automorphism σ : a → b → c → a names a predator σ(x) for each colour x. When a birth’s parents are x’s and σ(x)’s, the predator wins, and each σ(x) neighbour of a survivor x may convert it (see Bite). Triads are born with a random colour.' },
+    label: 'Predation', help: 'The automorphism σ : a → b → c → a names a predator σ(x) for each color x. When a birth’s parents are x’s and σ(x)’s, the predator wins, and each σ(x) neighbor of a survivor x may convert it (see Bite). Triads are born with a random color.' },
   tribes: { birth: 'majority', survive: 'conform', cancel: false,
-    label: 'Tribes', help: 'Newborns take the majority colour; survivors defect to any colour that outnumbers their own among their neighbours (with at least two). Borders harden into territories.' },
+    label: 'Tribes', help: 'Newborns take the majority color; survivors defect to any color that outnumbers their own among their neighbors (with at least two). Borders harden into territories.' },
 };
 
 export function parseRule(text) {
@@ -89,7 +89,7 @@ export class Life {
     return true;
   }
 
-  /** Probability that one predator neighbour converts a survivor under Predation. */
+  /** Probability that one predator neighbor converts a survivor under Predation. */
   setBite(p) {
     this.bite = p;
     for (let k = 0; k <= 8; k++) BITE[k] = 1 - (1 - p) ** k;
@@ -152,7 +152,7 @@ export class Life {
             const t = self ^ n0 ^ n1 ^ n2 ^ n3 ^ n4 ^ n5 ^ n6 ^ n7;
             if (t) out = t;
           } else if (surviveLaw === 'predation') {
-            // Each predator neighbour independently converts with probability `bite`.
+            // Each predator neighbor independently converts with probability `bite`.
             const k = count[SIGMA[self]];
             if (k && rng() < BITE[k]) out = SIGMA[self];
           } else if (surviveLaw === 'conform') {
@@ -190,7 +190,7 @@ export class Life {
   }
 }
 
-// With only two colours present, the one that preys on the other; else the only one.
+// With only two colors present, the one that preys on the other; else the only one.
 function predator(count) {
   for (let k = 1; k <= 3; k++) if (count[k] && !count[SIGMA[SIGMA[k]]]) return count[SIGMA[k]] ? SIGMA[k] : k;
   return 0;

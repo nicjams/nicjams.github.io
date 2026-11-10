@@ -2,7 +2,7 @@
 //  Ice Wall — WebGL2 pipeline
 //
 //  flow (¼ res) → height (MRT: exact R32F + mipmapped RGBA16F info)
-//  → shade (MRT: HDR colour + bloom/star buffer, both mipmapped)
+//  → shade (MRT: HDR color + bloom/star buffer, both mipmapped)
 //  → composite (canvas). Render targets are sized to canvas × scale;
 //  the composite upsamples.
 // ═══════════════════════════════════════════════════════════════════

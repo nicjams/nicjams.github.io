@@ -1,6 +1,6 @@
 // solver.js — a CPU port of the core loop of ZOZO's contact solver
 // (github.com/st-tech/ppf-contact-solver; R. Ando, "A Cubic Barrier with
-// Elasticity-Inclusive Dynamic Stiffness", ACM TOG 43(6), 2024), specialised
+// Elasticity-Inclusive Dynamic Stiffness", ACM TOG 43(6), 2024), specialized
 // to rods: strands of vertices joined by stretch and bending energies, with
 // rod–rod, bead–rod and rod–collider contact.
 //

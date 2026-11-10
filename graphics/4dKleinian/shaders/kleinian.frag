@@ -28,7 +28,7 @@ uniform vec3  uUp;
 uniform float uFov;
 
 uniform int   uNumMirrors;
-uniform vec4  uMirror[MAX_MIRRORS];      // sphere: (centre, signed radius) | plane: (normal, offset)
+uniform vec4  uMirror[MAX_MIRRORS];      // sphere: (center, signed radius) | plane: (normal, offset)
 uniform float uMirrorKind[MAX_MIRRORS];  // 0 = sphere, 1 = plane
 
 uniform int   uMaxFold;
@@ -342,7 +342,7 @@ void main() {
             vec3 p = uEye + direction * t;
             vec3 n = calcNormal(p, max(eps, 1e-5) * 1.6, -direction);
             // Normal probes also call sceneDE and overwrite its globals.
-            // Restore the hit's orbit data before selecting its colour.
+            // Restore the hit's orbit data before selecting its color.
             mapScene(p);
             float marchDepth = t;
 

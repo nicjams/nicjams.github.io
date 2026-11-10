@@ -14,7 +14,7 @@ function runTo(s, T) {
   return hermite(a, b, T, new Float64Array(s.x.length));
 }
 
-// 1. Kepler, e = 0.999: the regularized integrator keeps energy through 100 pericentre passes.
+// 1. Kepler, e = 0.999: the regularized integrator keeps energy through 100 pericenter passes.
 {
   const e = 0.999, ra = 1 + e, va = Math.sqrt(2 * (1 - e) / (1 + e));
   const s = new NBody([1, 1], [[ra / 2, 0, 0], [-ra / 2, 0, 0]], [[0, va / 2, 0], [0, -va / 2, 0]], BROWSER);

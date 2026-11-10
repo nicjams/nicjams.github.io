@@ -15,7 +15,7 @@ export function pairA(s, i, j) {
 
 /**
  * Integrate a Xia configuration and classify Q₅'s encounters with the
- * binaries. A *good* encounter: Q₅ enters a binary's neighbourhood, leaves on
+ * binaries. A *good* encounter: Q₅ enters a binary's neighborhood, leaves on
  * the side it came from (a bounce), at least `gMin` times faster relative to
  * the binary, and the binary stays bound and hardens. Stops at the first
  * encounter that is not good. `score` = number of consecutive good ones.
@@ -88,7 +88,7 @@ export function keplerShift(r0v, v0v, GM, dt) {
   return { r, v: r0v.map((x, k) => fd * x + gd * v0v[k]) };
 }
 
-/** Shift the internal Kepler phase of binary (i, j) by dt; its centre of mass is untouched. */
+/** Shift the internal Kepler phase of binary (i, j) by dt; its center of mass is untouched. */
 export function shiftBinary(x, v, m, i, j, dt) {
   const M = m[i] + m[j];
   const rr = [0, 1, 2].map(k => x[3 * i + k] - x[3 * j + k]), vv = [0, 1, 2].map(k => v[3 * i + k] - v[3 * j + k]);

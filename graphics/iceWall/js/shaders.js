@@ -8,12 +8,12 @@
 //                       frost; meltwater melts its channel clear
 //    shade      render  lit relief: soft cast shadows marched through the
 //                       height mips, cavity AO, twinkling glints, glassy
-//                       meltwater; writes HDR colour + a bloom/star buffer
+//                       meltwater; writes HDR color + a bloom/star buffer
 //    composite  canvas  bloom, star glints, LED-panel mode, tone, grain
 //
 //  With EXT_color_buffer_float the height is kept in R32F (normals need
 //  the precision) and everything else in RGBA16F. Without it the NO_FLOAT
-//  variant packs the height into two bytes and stores colour sqrt-encoded.
+//  variant packs the height into two bytes and stores color sqrt-encoded.
 // ═══════════════════════════════════════════════════════════════════
 
 (function () {
@@ -96,7 +96,7 @@ float coarseH(float stored) { return (stored - HBIAS) / HSCALE; }
 
   // ─── Meltwater channel geometry (height + shade passes) ───
   const WATER = `
-uniform vec4 uWaterA;        // x centre (0..1 of width), y half-width (of width), z amount, w meander
+uniform vec4 uWaterA;        // x center (0..1 of width), y half-width (of width), z amount, w meander
 uniform vec2 uWaterB;        // x fall phase, y width-wobble phase
 // Screen units (height 1). Returns (|dx|, dx, half-width) with dx in half-widths.
 vec3 channel(vec2 s, float aspect) {
@@ -111,7 +111,7 @@ vec3 channel(vec2 s, float aspect) {
   // ─── Pass 1: flow field (¼ resolution) ───
   const FLOW = `
 uniform vec2 uRes;
-uniform vec4 uView;      // xy: world centre, zw: world span of the view
+uniform vec4 uView;      // xy: world center, zw: world span of the view
 uniform vec4 uPhaseA;    // bounded time offsets (circles in noise space)
 uniform vec4 uPhaseB;
 out vec4 fragOut;
@@ -395,7 +395,7 @@ Ice shadeIce(vec2 uv, float submerged) {
       float lod = clamp(log2(t / texel) - 1.0, 0.0, 7.0);
       float rise = h0 + t * tanE - sampleH(suv, lod) * uBump;
 #ifdef NO_FLOAT
-      rise += 0.004 * uBump;                         // step over 8-bit height quantisation
+      rise += 0.004 * uBump;                         // step over 8-bit height quantization
 #endif
       sh = min(sh, 7.0 * rise / t);
       t *= uShadowGrow;

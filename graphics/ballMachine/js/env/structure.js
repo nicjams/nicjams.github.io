@@ -354,7 +354,7 @@ function buildBeds(B) {
       const cx = sx * (LY.PATH_HALF + LY.CURB_W / 2), cz = sz * (z0 + len / 2);
       const g = new THREE.BoxGeometry(LY.CURB_W, h, len);
       const uvA = g.attributes.uv;
-      // metre-based uvs for the ashlar texture
+      // meter-based uvs for the ashlar texture
       const pos = g.attributes.position, nor = g.attributes.normal;
       for (let i = 0; i < uvA.count; i++) {
         const x = pos.getX(i), y = pos.getY(i), z = pos.getZ(i);
@@ -546,7 +546,7 @@ function buildColumns(B) {
     boxAt(B.iron, 0.46, 0.72, 0.46, pos.clone().setY(0.12 + 0.36), rot);
     boxAt(B.iron, 0.52, 0.05, 0.52, pos.clone().setY(0.865), rot);
     boxAt(B.iron, 0.56, 0.05, 0.56, pos.clone().setY(0.915), rot);
-    // attic base mouldings
+    // attic base moldings
     lathe(B.iron, [[0.0, 1.17, false], [0.17, 1.17, false], [0.19, 1.15, true], [0.2, 1.125, true], [0.18, 1.105, false], [0.168, 1.09, true],
       [0.18, 1.07, false], [0.215, 1.05, true], [0.23, 1.01, true], [0.215, 0.975, false], [0.2, 0.94, false]],
     { segs: 24, cx, cz });

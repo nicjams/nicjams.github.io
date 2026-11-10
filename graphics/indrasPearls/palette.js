@@ -1,10 +1,10 @@
-// palette.js — colour themes and colouring schemes shared by the figures.
+// palette.js — color themes and coloring schemes shared by the figures.
 //
 // A limit-set render produces one label per pixel (0 = nothing, 1…255 = the
 // class of the word that reached it); a scheme says what the labels mean and a
-// theme turns them into colours. Themes are four anchor colours — one per
+// theme turns them into colors. Themes are four anchor colors — one per
 // generator a, b, A, B — plus a background and two accents for circle chains.
-// Derived colours are mixed in OKLab so blends and gradients stay even.
+// Derived colors are mixed in OKLab so blends and gradients stay even.
 
 // ---- OKLab <-> sRGB ------------------------------------------------------------
 const toLin = (c) => (c <= 0.04045 ? c / 12.92 : ((c + 0.055) / 1.055) ** 2.4);
@@ -74,7 +74,7 @@ export function rainbowRamp(n = 256) {
   return out;
 }
 
-// ---- colouring schemes ---------------------------------------------------------------
+// ---- coloring schemes ---------------------------------------------------------------
 // `id` is sent to the worker, which computes labels (see limitWorker.js).
 export const SCHEMES = [
   { id: 'l1', label: '1st letter', kind: 'letter' },

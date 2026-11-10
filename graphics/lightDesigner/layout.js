@@ -1,6 +1,6 @@
 // layout.js — the physical rig, shared by the engine (aiming, groups) and the renderer.
 //
-// Units are metres. x runs across the stage (house left → right), y is up, and
+// Units are meters. x runs across the stage (house left → right), y is up, and
 // +z points from the stage toward the audience. The stage deck is 1.2 m high.
 //
 // The rig is "moving sticks", after Phish's 2019–23 design: 30 separate sticks of
@@ -25,7 +25,7 @@ export const POD_Z = [0.7, -1.1, -2.9, -4.7, -6.5, -8.3];
 export const POD_COUNT = 6;
 export const PER_POD = 10;
 export const FLOOR_COUNT = 12;
-export const HANG = 0.55; // lens below the truss centreline
+export const HANG = 0.55; // lens below the truss centerline
 export const GRID_Y = 24; // where hoist chains go up to
 
 const DEG = Math.PI / 180;
@@ -138,7 +138,7 @@ export function landing(E, px, py, pz, dx, dy, dz, maxL, out) {
     const t = Math.min(tx, ty, tz);
     if (t > 0 && t < L) { L = t; hit = true; }
   }
-  const c = E.curtain; // a house curtain closing from both sides toward the centre
+  const c = E.curtain; // a house curtain closing from both sides toward the center
   if (c && c.cover > 0.001 && Math.abs(dz) > 1e-4) {
     const t = (c.z - pz) / dz;
     if (t > 0 && t < L) {

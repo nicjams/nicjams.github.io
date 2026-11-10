@@ -18,7 +18,7 @@ import { mergeGeometries } from 'three/addons/utils/BufferGeometryUtils.js';
 import { DECK_Y, DECK_FRONT, DECK_BACK } from './layout.js';
 
 const TAU = Math.PI * 2;
-const FESTOON_X = [-28, -20, -12, -4, 4, 12, 20, 28]; // stadium festoon poles, clear of the centre line
+const FESTOON_X = [-28, -20, -12, -4, 4, 12, 20, 28]; // stadium festoon poles, clear of the center line
 
 // ——— textures ———
 function canvasTex(w, h, draw, repeat = true) {
@@ -67,7 +67,7 @@ function trussGeo(len, size) {
   for (let k = 0; k < uv.count; k++) uv.setX(k, uv.getX(k) * (len / 0.6));
   return box;
 }
-/** An inward-facing wall: a plane of size w×h centred at `pos`, facing `face` (+x, -x, +z, -z, down). */
+/** An inward-facing wall: a plane of size w×h centered at `pos`, facing `face` (+x, -x, +z, -z, down). */
 function wall(w, h, pos, face, mat) {
   const m = new THREE.Mesh(new THREE.PlaneGeometry(w, h), mat);
   m.position.set(...pos);
@@ -77,7 +77,7 @@ function wall(w, h, pos, face, mat) {
   else if (face === 'down') m.rotation.x = Math.PI / 2;
   return m;
 }
-/** A folded curtain panel, w×h, with folds every `fold` metres; origin at one edge (`from`: 'left' or 'right'). */
+/** A folded curtain panel, w×h, with folds every `fold` meters; origin at one edge (`from`: 'left' or 'right'). */
 function curtainGeo(w, h, fold = 0.55, depth = 0.14, from = 'center') {
   const g = new THREE.PlaneGeometry(w, h, Math.max(8, Math.round((w / fold) * 6)), 1);
   const p = g.getAttribute('position');
@@ -235,7 +235,7 @@ export const VENUES = {
         box(2 * W - 0.2, 0.45, 1.6, 0, hr - 0.2, z, riserMat);
         for (let x = -14.4; x <= 14.41; x += 0.9) seats.push([x, hr + 0.45, z]);
       }
-      // a seat: velvet back plus cushion, with a gap between neighbours
+      // a seat: velvet back plus cushion, with a gap between neighbors
       const back = new THREE.BoxGeometry(0.66, 0.9, 0.12).translate(0, 0.05, 0.22), cushion = new THREE.BoxGeometry(0.66, 0.14, 0.5).translate(0, -0.28, -0.02);
       const seatMesh = new THREE.InstancedMesh(mergeGeometries([back, cushion]), lit({ albedo: [0.55, 0.07, 0.08], spec: 0.35 }), seats.length);
       const m4 = new THREE.Matrix4();
@@ -333,7 +333,7 @@ export const VENUES = {
       deck(62, 80, 1.5, 14, 18, a0, a1, 72, seatMat);
       deck(84, 108, 19, 40, 22, a0, a1, 80, seatMat);
       deck(62, 62.01, 0, 1.5, 1, a0, a1, 72, black);
-      // the ribbon board on the upper deck's fascia shows the rig's colours
+      // the ribbon board on the upper deck's fascia shows the rig's colors
       const ribbonMat = new THREE.ShaderMaterial({
         side: THREE.DoubleSide,
         uniforms: { uTime: { value: 0 }, uColor: { value: new THREE.Color(0.2, 0.3, 1) }, uBeat: { value: 0 } },

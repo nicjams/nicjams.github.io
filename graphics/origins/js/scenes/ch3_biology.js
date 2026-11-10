@@ -198,7 +198,7 @@ export class Ch3Biology extends Scene {
     // 89–110 s: night, fire, people; one stands and looks up
     const fireA = smoothstep(89.5, 93.5, T) * (1 - smoothstep(108.3, 109.6, T));
     if (fireA > 0.001) {
-      // push in on the one who stands, bringing their face to the centre
+      // push in on the one who stands, bringing their face to the center
       const u = ease.inOutCubic(seg(T, 104.5, 109.5));
       const zoom = 1 + 2.6 * u;
       const fx = W * 0.765, fy = H * 0.555;

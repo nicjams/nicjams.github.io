@@ -403,7 +403,7 @@ export class Renderer {
     } else this.ghosts.visible = false;
   }
 
-  /** Osculating Kepler ellipse of a pair (i, j) around its centre of mass, or hide. */
+  /** Osculating Kepler ellipse of a pair (i, j) around its center of mass, or hide. */
   setOrbit(k, data, color) {
     const line = this.orbitLines[k];
     if (!data) { line.visible = false; return; }

@@ -3,8 +3,8 @@
 //
 // Both groups are (nearly) doubly degenerate, with (nearly) sphere-filling
 // limit sets, so the DFS is expensive. The main thread splits the word tree by
-// prefix into many subtrees; each task here walks one subtree and rasterises
-// its leaves into a label buffer (0 = nothing, 1…255 = the colouring class of
+// prefix into many subtrees; each task here walks one subtree and rasterizes
+// its leaves into a label buffer (0 = nothing, 1…255 = the coloring class of
 // the leaf's word, see palette.js). The lit pixels are sent back to be merged.
 // Work is very uneven — subtrees spiralling into cusps can hold most of it —
 // so when other workers are idle the main thread asks a busy one to donate
@@ -35,7 +35,7 @@ function runChains({ job, ta, tb, root, chains }) {
   self.postMessage({ type: 'chains', job, disks });
 }
 
-// ---- colouring: the class of a word (tags[1..lev], generator indices) ----------------
+// ---- coloring: the class of a word (tags[1..lev], generator indices) ----------------
 // turn(i) is 0, 1, 2 for left (k+1), straight (k), right (k−1) at letter i.
 function labeller(scheme, maxLevel) {
   const turn = (t, i) => [1, 0, 3].indexOf((t[i] - t[i - 1] + 4) % 4);

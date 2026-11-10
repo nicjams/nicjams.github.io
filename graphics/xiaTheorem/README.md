@@ -1,12 +1,12 @@
 # Xia's Theorem
 
-Exact few-body gravity with no softening, centred on Xia's five-body
+Exact few-body gravity with no softening, centered on Xia's five-body
 non-collision singularity and a small library of other configurations.
 
 | file | role |
 | --- | --- |
 | `js/nbody.js` | Regularized integrator: logarithmic-Hamiltonian leapfrog (Mikkola–Tanikawa, Preto–Tremaine) with Gragg–Bulirsch–Stoer extrapolation, plus quintic Hermite interpolation for display. Node-safe. |
-| `js/scenarios.js` | Scenario catalogue: initial data, bodies, camera, chart and tempo hints. |
+| `js/scenarios.js` | Scenario catalog: initial data, bodies, camera, chart and tempo hints. |
 | `js/cascade.js` | **Generated**: the tuned Xia cascade (initial state, trimmed and sync checkpoints, bounce list, t* estimate). |
 | `js/render.js` | three.js scene: sky, glowing bodies, GPU ribbon trails fed from a ring-buffer texture (with optional "unroll time" drift), guides, osculating orbits, bloom. |
 | `js/chart.js` | World-line chart; for Xia also blow-up coordinates, z / (z_A − z_B) against −log₁₀(t* − t). |

@@ -1,5 +1,5 @@
 // Static collision shapes for balls in free flight. Each test(p, ct) fills the
-// contact normal (pointing toward the ball centre) and penetration depth.
+// contact normal (pointing toward the ball center) and penetration depth.
 
 import { BALL } from './constants.js';
 
@@ -54,7 +54,7 @@ export class BoxCollider extends Collider {
       ct.pen = R - d;
       return true;
     }
-    // centre inside the box: push out through the nearest face
+    // center inside the box: push out through the nearest face
     const fu = h[0] - Math.abs(lu), fv = h[1] - Math.abs(lv), fw = h[2] - Math.abs(lw);
     let ax = u, s = Math.sign(lu) || 1, m = fu;
     if (fv < m) { m = fv; ax = v; s = Math.sign(lv) || 1; }

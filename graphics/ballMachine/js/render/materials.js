@@ -92,7 +92,7 @@ function spiralTexture(aniso) {
   }, aniso, true);
 }
 
-// For a lathe the texture's v runs along the profile (centre -> rim), so the
+// For a lathe the texture's v runs along the profile (center -> rim), so the
 // concentric rings of a hammered gong are horizontal bands.
 function gongTexture(aniso) {
   return canvasTex(64, 512, (g, w, h) => {

@@ -4,20 +4,23 @@ Serve the repository over HTTP(S) and open `graphics/index.html`.
 
 The gallery lists every catalog visualization with a preview thumbnail, search,
 and category filters (grid or compact list). Each title and thumbnail links to
-the visualization's own `<id>/index.html`; ↗ opens it with `?standalone=1`, ⧉
-copies the link, and **+ Add** appends it to the playlist being edited.
+the visualization's own page (`<id>/`). **Page** opens that page, **Shell**
+opens it in the studio shell, the copy icon copies the page link, and **+ Add** appends it
+to the playlist being edited.
 
-Each catalog visualization opens in a shared stage with a floating controls
-panel and a dock. Direct links such as `donutSpiral/index.html` enter the same
-shell. Use `?standalone=1` to open the original tool without the shell.
+Every visualization is its own web page, e.g. `graphics/gameOfLife/`. The studio
+shell (`stage.html?viz=<id>`) wraps it with a floating controls panel, a dock,
+the remote and phone pairing. A direct link with `?stage=1`, such as
+`donutSpiral/?stage=1`, redirects into the shell.
 
 ## Simple and Advanced controls
 
 Every control surface (the stage panel and the remote) opens on a **Simple**
-page: the handful of controls that matter most for that visualization, drawn
-big enough for a thumb. These include fill-bar sliders you tap or drag sideways,
-toggle tiles, segmented or chip pickers, and action and key tiles with plain-language
-labels. Tap **Advanced** (or **All N controls**, or swipe sideways) for every
+page: the handful of controls that matter most for that visualization. These
+include fill-bar sliders you tap or drag sideways, toggle tiles, segmented
+pickers, and action and key tiles with plain-language labels. On touch screens
+every control is big enough for a thumb; with a mouse the stage panel uses the
+workbench's compact sizes. Tap **Advanced** (or **All N controls**, or swipe sideways) for every
 control the visualization exposes. Advanced groups controls into collapsible
 cards and has a filter box for tools with dozens of controls. On the stage, a
 third **Studio** page holds Present, Fullscreen, Reload, the library, the
@@ -30,7 +33,10 @@ introspection reports, usually `#id`. A visualization without an entry falls
 back to a heuristic Simple page (pickers, then sliders, toggles and obvious
 action buttons).
 
-The control UI follows the design language of the Poincaré workbench sidebar
+The stage panel is laid out like the Poincaré workbench card: a floating panel
+at the top right, only as tall as the page it shows, with segmented tabs and
+small round icon buttons in one top bar, a title at the top of each page, and
+controls grouped in cards. The control UI follows the design language of the Poincaré workbench sidebar
 (`docs/GeometryofLinearGroups/Geometric/Tools/Kleinian/poincare`). It uses
 indigo/cyan accents, gradient-hairline glass, segmented tabs with a soft glow,
 and micro-label cards. The tokens and components are in `app/style.css`.
@@ -149,6 +155,7 @@ as camera position, simulation history, or canvas gestures.
   the introspected schema plus per-visualization curation; values are patched
   in place, so a widget under a finger is never replaced mid-drag.
 - `pager.js`: tabs over swipeable scroll-snap pages; inactive pages are inert.
+- `icons.js`: the inline SVG icons for buttons (buttons use text or these, never emoji).
 - `payload.js` / `store.js`: payload normalization and persistent playlists.
 - `entry.js` / `presentation.js`: direct-link shell entry and embedded layout.
 

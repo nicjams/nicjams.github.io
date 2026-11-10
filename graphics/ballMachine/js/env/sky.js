@@ -78,7 +78,7 @@ export function buildSky() {
         col += vec3(0.45, 0.55, 0.9) * pow(max(md, 0.0), 40.0) * 0.07 * uNight;
         // sun disk
         col += uSunCol * smoothstep(0.99993, 0.99996, sd) * 40.0 * uSunVis;
-        // below the horizon fade to the haze colour
+        // below the horizon fade to the haze color
         col = mix(col, uGround, smoothstep(0.0, -0.05, y));
         gl_FragColor = vec4(col, 1.0);
         #include <tonemapping_fragment>
@@ -228,7 +228,7 @@ export function buildOutside(tex, U, { seed = 17 } = {}) {
   gravel.name = 'gh.gravel'; gravel.matrixAutoUpdate = false;
   group.add(gravel);
 
-  // ---- hedges, topiary and parkland trees (vertex coloured, one draw call)
+  // ---- hedges, topiary and parkland trees (vertex colored, one draw call)
   const vB = new GeoBuilder({ color: 3 });
   const col = new THREE.Color();
   const jitterGeo = (geo, amp, freq, s) => {

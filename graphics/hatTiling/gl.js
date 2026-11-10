@@ -3,9 +3,9 @@
 //
 //  One shared outline (the current Tile(a, b), triangulated), drawn
 //  once per instance.  Each instance carries its placement plus an
-//  animation block — scale, spin, coin-flip, lift — and a colour.
+//  animation block — scale, spin, coin-flip, lift — and a color.
 //  Tile boundaries are gaps: fills are inset along vertex miters so
-//  the backing (stroke colour) or background shows between hats.
+//  the backing (stroke color) or background shows between hats.
 // ────────────────────────────────────────────────────────────────
 
 const INST_FLOATS = 16;   // lin(4) · trans(4: tx ty dx dy) · anim(4: scale rot flip lift) · rgba(4)
@@ -18,7 +18,7 @@ layout(location=2) in vec4 iTrans;
 layout(location=3) in vec4 iAnim;
 layout(location=4) in vec4 iColor;
 uniform vec2 uView;       // world → clip scale
-uniform vec4 uCam;        // centre xy, cos, sin
+uniform vec4 uCam;        // center xy, cos, sin
 uniform vec2 uCentroid;   // canonical centroid of the current outline
 uniform float uInset;     // canonical units
 uniform int uPass;        // 0 backing · 1 fill · 2 shadow · 3 ghost line
@@ -154,7 +154,7 @@ class HatGL {
         gl.bufferSubData(gl.ARRAY_BUFFER, 0, set.data, 0, set.count * INST_FLOATS);
     }
 
-    // view: { cx, cy, scale (css px per world unit), rot, W, H, oy (px the centre sits above mid-screen) }
+    // view: { cx, cy, scale (css px per world unit), rot, W, H, oy (px the center sits above mid-screen) }
     begin(view) {
         const gl = this.gl;
         gl.viewport(0, 0, this.canvas.width, this.canvas.height);
