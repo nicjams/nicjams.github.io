@@ -4,27 +4,26 @@
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
 <title>nicjams</title>
-<meta name="description" content="Small instruments for ears and eyes: paint music with musicalCanvas, build a band of virtual musicians in superGroups, follow A Theory of Harmony, and explore the Graphics Studio's interactive mathematics.">
-<meta name="theme-color" content="#f2efe8" media="(prefers-color-scheme: light)">
-<meta name="theme-color" content="#121418" media="(prefers-color-scheme: dark)">
+<meta name="description" content="musicalCanvas, superGroups, A Theory of Harmony, Loopback and the Graphics Studio.">
+<meta name="theme-color" content="#ffffff" media="(prefers-color-scheme: light)">
+<meta name="theme-color" content="#2b3138" media="(prefers-color-scheme: dark)">
 <meta property="og:title" content="nicjams">
-<meta property="og:description" content="Small instruments for ears and eyes: paint a tune, prove a scale, set mathematics in motion.">
-<link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 32 32'%3E%3Crect width='32' height='32' rx='7' fill='%23f2efe8'/%3E%3Cpath d='M4 21c4-6 8-6 12 0s8 6 12 0' fill='none' stroke='%231170a8' stroke-width='3' stroke-linecap='round'/%3E%3Cpath d='M8 12l4-4 4 4' fill='none' stroke='%23c2185b' stroke-width='2.6' stroke-linecap='round' stroke-linejoin='round'/%3E%3C/svg%3E">
+<meta property="og:description" content="musicalCanvas, superGroups, A Theory of Harmony, Loopback and the Graphics Studio.">
+<link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 32 32'%3E%3Crect width='32' height='32' rx='7' fill='%23f4f6f8'/%3E%3Cpath d='M4 21c4-6 8-6 12 0s8 6 12 0' fill='none' stroke='%232f6fde' stroke-width='3' stroke-linecap='round'/%3E%3Cpath d='M8 12l4-4 4 4' fill='none' stroke='%23c2185b' stroke-width='2.6' stroke-linecap='round' stroke-linejoin='round'/%3E%3C/svg%3E">
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-<link href="https://fonts.googleapis.com/css2?family=Fraunces:ital,opsz,wght@0,9..144,500..700;1,9..144,500..700&family=Inter:wght@400;500;600&display=swap" rel="stylesheet">
+<link href="https://fonts.googleapis.com/css2?family=Source+Serif+4:ital,opsz,wght@0,8..60,400..800;1,8..60,400..800&display=swap" rel="stylesheet">
+<script>
+  try { const t = localStorage.getItem('theme'); if (t) document.documentElement.dataset.theme = t; } catch (e) {}
+</script>
 <style>
   :root {
-    color-scheme: light dark;
-    --bg: #f2efe8;
-    --surface: #fbfaf6;
-    --paper: #f7f4ec;
-    --line: rgba(28, 32, 40, 0.12);
-    --line-strong: rgba(28, 32, 40, 0.24);
-    --ink: #1e242e;
-    --ink-dim: #5b6370;
-    --accent: #0b6a80;
-    --shadow: 0 1px 2px rgba(28, 32, 40, 0.06), 0 8px 24px -12px rgba(28, 32, 40, 0.18);
+    color-scheme: light;
+    --bg: #ffffff;
+    --surface: #f4f6f8;
+    --ink: #1f2228;
+    --ink-dim: #71747c;
+    --accent: #2f6fde;
 
     /* brush colours, from musicalCanvas/js/audio.js */
     --bass: #1170a8;
@@ -34,21 +33,32 @@
     --bells: #0f8a5f;
     --drums: #4b5563;
 
-    --serif: 'Fraunces', 'Iowan Old Style', 'Palatino Linotype', Georgia, serif;
-    --sans: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', system-ui, sans-serif;
+    --serif: 'Source Serif 4', Georgia, serif;
     --gutter: clamp(16px, 4vw, 40px);
   }
+  :root[data-theme="dark"] {
+    color-scheme: dark;
+    --bg: #2b3138;
+    --surface: #353c45;
+    --ink: #e8ebef;
+    --ink-dim: #a5abb4;
+    --accent: #5a96ff;
+
+    --bass: #5bb3e8;
+    --keys: #f2b13c;
+    --strings: #b28cf5;
+    --lead: #f0679d;
+    --bells: #46cf98;
+    --drums: #9aa3af;
+  }
   @media (prefers-color-scheme: dark) {
-    :root {
-      --bg: #121418;
-      --surface: #1a1d23;
-      --paper: #16191e;
-      --line: rgba(236, 235, 230, 0.10);
-      --line-strong: rgba(236, 235, 230, 0.22);
-      --ink: #ecebe6;
-      --ink-dim: #a3a9b3;
-      --accent: #5cc6de;
-      --shadow: 0 1px 2px rgba(0, 0, 0, 0.3), 0 10px 28px -14px rgba(0, 0, 0, 0.6);
+    :root:not([data-theme="light"]) {
+      color-scheme: dark;
+      --bg: #2b3138;
+      --surface: #353c45;
+      --ink: #e8ebef;
+      --ink-dim: #a5abb4;
+      --accent: #5a96ff;
 
       --bass: #5bb3e8;
       --keys: #f2b13c;
@@ -64,10 +74,10 @@
   body {
     background: var(--bg);
     color: var(--ink);
-    font: 16px/1.6 var(--sans);
+    font: 18px/1.55 var(--serif);
     -webkit-font-smoothing: antialiased;
   }
-  a { color: var(--accent); }
+  a { color: inherit; text-decoration: none; }
   img { display: block; max-width: 100%; }
   :focus-visible { outline: 2px solid var(--accent); outline-offset: 3px; }
 
@@ -77,169 +87,110 @@
 
   .top {
     display: flex;
-    justify-content: flex-end;
-    gap: 22px;
-    padding-top: 22px;
-    font-size: 14px;
+    align-items: center;
+    justify-content: space-between;
+    gap: 16px;
+    padding: clamp(20px, 4vw, 40px) 0 clamp(18px, 3vw, 28px);
   }
-  .top a { color: var(--ink-dim); text-decoration: none; }
-  .top a:hover { color: var(--ink); }
+  h1 { font: 800 clamp(40px, 7vw, 72px)/1 var(--serif); letter-spacing: -0.02em; }
+  h1 em { color: var(--accent); font-weight: 700; }
+  .top-links { display: flex; align-items: center; gap: 6px; }
+  .top-links a { padding: 8px 10px; color: var(--ink-dim); font-size: 16px; }
+  .top-links a:hover { color: var(--ink); }
 
-  .hero { padding: clamp(28px, 6vw, 64px) 0 clamp(48px, 7vw, 80px); }
-  h1 {
-    font: 600 clamp(60px, 17vw, 156px)/0.9 var(--serif);
-    font-optical-sizing: auto;
-    letter-spacing: -0.035em;
-  }
-  h1 em { color: var(--accent); font-weight: 500; }
-  .lede {
-    max-width: 34em;
-    margin-top: clamp(16px, 2.4vw, 26px);
+  .icon-btn {
+    display: inline-grid;
+    place-items: center;
+    width: 40px;
+    height: 40px;
+    border: 0;
+    border-radius: 999px;
+    background: transparent;
     color: var(--ink-dim);
-    font-size: clamp(18px, 2.1vw, 21px);
-    line-height: 1.5;
-    text-wrap: pretty;
+    cursor: pointer;
   }
+  .icon-btn:hover { background: var(--surface); color: var(--ink); }
+  .icon-btn svg { width: 18px; height: 18px; }
 
   /* the jam: a pocket musicalCanvas */
-  .jam { margin-top: clamp(28px, 4.5vw, 48px); }
+  .jam { position: relative; }
   .jam canvas {
     display: block;
     width: 100%;
-    height: clamp(190px, 26vw, 290px);
-    background: var(--paper);
-    border: 1px solid var(--line);
-    border-radius: 16px;
-    box-shadow: var(--shadow);
+    height: clamp(200px, 28vw, 320px);
+    background: var(--surface);
+    border-radius: 15px;
   }
-  .jam-bar {
-    display: flex;
-    flex-wrap: wrap;
-    align-items: center;
-    justify-content: space-between;
-    gap: 10px 20px;
-    margin-top: 14px;
-  }
-  .jam figcaption { color: var(--ink-dim); font-size: 14px; }
-  .jam-controls { display: flex; gap: 8px; }
+  .jam-controls { position: absolute; right: 12px; bottom: 12px; display: flex; gap: 6px; }
   .pill {
     display: inline-flex;
     align-items: center;
     gap: 7px;
-    min-height: 40px;
-    padding: 0 16px;
-    border: 1px solid var(--line-strong);
+    min-height: 36px;
+    padding: 0 14px;
+    border: 0;
     border-radius: 999px;
-    background: var(--surface);
+    background: var(--bg);
     color: var(--ink);
-    font: 500 14px/1 var(--sans);
+    font: 500 15px/1 var(--serif);
     cursor: pointer;
-    transition: background-color 0.15s, color 0.15s, border-color 0.15s;
+    transition: background-color 0.15s, color 0.15s;
   }
-  .pill:hover { border-color: var(--ink-dim); }
-  .pill[aria-pressed="true"] { background: var(--ink); color: var(--bg); border-color: var(--ink); }
+  .pill:hover { color: var(--accent); }
+  .pill[aria-pressed="true"] { background: var(--accent); color: #fff; }
   .pill svg { width: 15px; height: 15px; flex: none; }
 
   /* ---- sections ------------------------------------------------------------ */
 
-  .section { padding-bottom: clamp(56px, 8vw, 96px); }
+  .section { padding-top: clamp(48px, 7vw, 88px); }
   .section-head {
     display: flex;
-    flex-wrap: wrap;
     align-items: baseline;
     justify-content: space-between;
-    gap: 6px 20px;
-    padding-top: 18px;
-    margin-bottom: 26px;
-    border-top: 1px solid var(--line-strong);
+    gap: 16px;
+    margin-bottom: 22px;
   }
-  h2 { font: 600 clamp(24px, 3vw, 30px)/1.2 var(--serif); letter-spacing: -0.01em; }
-  .section-head a { font-size: 15px; font-weight: 500; text-decoration: none; }
-  .section-head a:hover { text-decoration: underline; text-underline-offset: 3px; }
+  h2 { font: 800 clamp(26px, 3.2vw, 32px)/1.2 var(--serif); letter-spacing: -0.01em; }
+  h2 a:hover { color: var(--accent); }
+  .section-head > a { color: var(--accent); font-size: 16px; white-space: nowrap; }
+  .section-head > a:hover { text-decoration: underline; text-underline-offset: 3px; }
 
-  /* ---- project cards ------------------------------------------------------- */
+  /* ---- projects ------------------------------------------------------------ */
 
-  .cards { display: grid; grid-template-columns: repeat(2, 1fr); gap: 22px; }
-  .card {
-    display: flex;
-    flex-direction: column;
-    overflow: hidden;
-    background: var(--surface);
-    border: 1px solid var(--line);
-    border-radius: 16px;
-    box-shadow: var(--shadow);
-    color: inherit;
-    text-decoration: none;
-    transition: transform 0.2s, border-color 0.2s;
-  }
-  .card:hover { transform: translateY(-3px); border-color: var(--line-strong); }
-  .card:focus-visible { outline-offset: 4px; border-radius: 16px; }
-  .shot {
+  .projects { display: grid; grid-template-columns: repeat(2, 1fr); gap: clamp(28px, 4vw, 44px) clamp(20px, 3vw, 32px); list-style: none; }
+  .projects a { display: block; }
+  .projects .shot {
     aspect-ratio: 16 / 10;
     overflow: hidden;
-    border-bottom: 1px solid var(--line);
-    background: var(--paper);
+    border-radius: 15px;
+    background: var(--surface);
   }
-  .shot img { width: 100%; height: 100%; object-fit: cover; transition: transform 0.5s; }
-  .card:hover .shot img { transform: scale(1.03); }
-  .shot.mosaic { display: grid; grid-template: 1fr 1fr / repeat(3, 1fr); gap: 2px; background: #05070f; }
-  .card-body { display: flex; flex-direction: column; flex: 1; padding: 20px 22px 22px; }
-  .kind { display: flex; align-items: center; gap: 8px; color: var(--ink-dim); font-size: 13px; }
-  .dot { width: 8px; height: 8px; border-radius: 50%; background: var(--c); flex: none; }
-  h3 { margin: 6px 0 8px; font: 600 24px/1.2 var(--serif); letter-spacing: -0.01em; }
-  .nowrap { white-space: nowrap; }
-  .card-body p.desc { color: var(--ink-dim); font-size: 15px; line-height: 1.55; }
-  .meta {
-    display: flex;
-    justify-content: space-between;
-    align-items: center;
-    gap: 12px;
-    margin-top: auto;
-    padding-top: 18px;
-    color: var(--ink-dim);
-    font-size: 13px;
-  }
-  .go { color: var(--accent); font-weight: 600; font-size: 14px; white-space: nowrap; }
-  .go::after { content: '→'; display: inline-block; margin-left: 0.3em; transition: transform 0.2s; }
-  .card:hover .go::after { transform: translateX(3px); }
+  .projects img { width: 100%; height: 100%; object-fit: cover; object-position: left top; transition: transform 0.4s; }
+  .projects a:hover img { transform: scale(1.025); }
+  h3 { margin-top: 14px; font: 700 24px/1.2 var(--serif); letter-spacing: -0.01em; }
+  .projects a:hover h3 { color: var(--accent); }
+  .sub { margin-top: 2px; color: var(--ink-dim); font-size: 17px; }
+  @media (max-width: 679px) { .projects { grid-template-columns: 1fr; } }
 
-  @media (max-width: 959px) {
-    .cards { grid-template-columns: 1fr; }
-    .card { flex-direction: row; }
-    .shot { flex: 0 0 46%; aspect-ratio: auto; min-height: 220px; border-bottom: 0; border-right: 1px solid var(--line); }
-  }
-  @media (max-width: 599px) {
-    .card { flex-direction: column; }
-    .shot { flex: none; aspect-ratio: 16 / 10; min-height: 0; border-right: 0; border-bottom: 1px solid var(--line); }
-  }
+  /* ---- graphics ------------------------------------------------------------ */
 
-  /* ---- graphics strip ------------------------------------------------------ */
-
-  .strip { display: grid; grid-template-columns: repeat(6, 1fr); gap: 18px 14px; list-style: none; }
-  .strip a { display: block; color: inherit; text-decoration: none; }
+  .strip { display: grid; grid-template-columns: repeat(4, 1fr); gap: 22px 16px; list-style: none; }
   .strip img {
     width: 100%;
     height: auto;
     aspect-ratio: 16 / 10;
     object-fit: cover;
-    border-radius: 10px;
-    border: 1px solid var(--line);
-    background: var(--paper);
+    border-radius: 11px;
+    background: var(--surface);
     transition: transform 0.2s;
   }
   .strip a:hover img { transform: translateY(-2px); }
-  .strip span { display: flex; align-items: flex-start; gap: 7px; margin-top: 8px; font-size: 14px; line-height: 1.3; }
-  .strip .dot { margin-top: 5px; }
-  .strip a:hover span { text-decoration: underline; text-underline-offset: 3px; }
-  @media (max-width: 959px) { .strip { grid-template-columns: repeat(3, 1fr); } }
+  .strip span { display: block; margin-top: 8px; font-size: 16px; line-height: 1.3; }
+  .strip a:hover span { color: var(--accent); }
+  @media (max-width: 859px) { .strip { grid-template-columns: repeat(3, 1fr); } }
   @media (max-width: 519px) { .strip { grid-template-columns: repeat(2, 1fr); } }
 
-  footer {
-    padding: 22px 0 40px;
-    border-top: 1px solid var(--line);
-    color: var(--ink-dim);
-    font-size: 14px;
-  }
+  main { padding-bottom: clamp(56px, 8vw, 96px); }
 
   @media (prefers-reduced-motion: reduce) {
     *, *::before, *::after { transition: none !important; }
@@ -248,131 +199,96 @@
 </head>
 <body>
 
-<nav class="top wrap" aria-label="Site">
-  <a href="#projects">Projects</a>
-  <a href="#graphics">Graphics</a>
-  <a href="https://github.com/nicjams">GitHub</a>
-</nav>
+<header class="top wrap">
+  <h1>nic<em>jams</em></h1>
+  <nav class="top-links" aria-label="Site">
+    <a href="https://github.com/nicjams">GitHub</a>
+    <button id="themeBtn" class="icon-btn" type="button" aria-label="Switch light or dark">
+      <svg viewBox="0 0 20 20" aria-hidden="true"><circle cx="10" cy="10" r="7" fill="none" stroke="currentColor" stroke-width="1.6"/><path d="M10 3a7 7 0 0 1 0 14z" fill="currentColor"/></svg>
+    </button>
+  </nav>
+</header>
 
-<main>
-  <header class="hero wrap">
-    <h1>nic<em>jams</em></h1>
-    <p class="lede">Small instruments for ears and eyes. Paint a tune, form a band of
-      virtual musicians, prove where the major scale comes from, or set some
-      mathematics in motion.</p>
-
-    <figure class="jam">
-      <canvas id="jam" role="img"
-        aria-label="A painted tune: coloured lines for bass, strings, keys, bells and drums, with a playhead sweeping across them."></canvas>
-      <div class="jam-bar">
-        <figcaption>A pocket musicalCanvas: each line is a part, and the playhead plays what it crosses.</figcaption>
-        <div class="jam-controls">
-          <button id="soundBtn" class="pill" type="button" aria-pressed="false">
-            <svg viewBox="0 0 16 16" aria-hidden="true"><path d="M2 6h3l4-3.5v11L5 10H2z" fill="currentColor"/><path d="M11.5 5.5a3.5 3.5 0 0 1 0 5M13.5 3.5a6.3 6.3 0 0 1 0 9" fill="none" stroke="currentColor" stroke-width="1.4" stroke-linecap="round"/></svg>
-            <span>Listen</span>
-          </button>
-          <button id="newBtn" class="pill" type="button">New tune</button>
-        </div>
-      </div>
-    </figure>
-  </header>
-
-  <section id="projects" class="section wrap" aria-labelledby="projects-title">
-    <div class="section-head"><h2 id="projects-title">Projects</h2></div>
-    <div class="cards">
-
-      <a class="card" href="musicalCanvas/">
-        <div class="shot">
-          <img src="assets/musical-canvas.webp" width="1200" height="720" loading="lazy"
-            alt="A painting in musicalCanvas: a sailboat, an island with a palm tree, the sun and waves, each drawn with a different instrument's brush.">
-        </div>
-        <div class="card-body">
-          <p class="kind"><span class="dot" style="--c: var(--keys)"></span>Music · Instrument</p>
-          <h3>musicalCanvas</h3>
-          <p class="desc">Paint music. Each brush is an instrument, and a playhead sweeps
-            the canvas turning your strokes into notes. Smear a stroke to play a chord,
-            press Scene for a picture that plays, then export MIDI.</p>
-          <p class="meta">7 brushes · MIDI export <span class="go">Paint</span></p>
-        </div>
-      </a>
-
-      <a class="card" href="superGroups/">
-        <div class="shot">
-          <img src="assets/supergroups.webp" width="1200" height="750" loading="lazy" style="object-position: left center"
-            alt="The superGroups listening room: the headline “Different minds. One groove.” beside four tiles labelled B, K, L and D for bass, keys, lead and drums.">
-        </div>
-        <div class="card-body">
-          <p class="kind"><span class="dot" style="--c: var(--lead)"></span>Music · Machine learning</p>
-          <h3>superGroups</h3>
-          <p class="desc">Thirteen virtual musicians, trained from scratch in PyTorch. Hear
-            how they learned to listen to each other, then build an unlikely band and
-            mix its takes.</p>
-          <p class="meta">13 musicians · 108 lineups <span class="go">Listen</span></p>
-        </div>
-      </a>
-
-      <a class="card" href="theoryOfHarmony/">
-        <div class="shot">
-          <img src="assets/theory-of-harmony.webp" width="1200" height="750" loading="lazy" style="object-position: left center"
-            alt="The opening chapter of A Theory of Harmony: the seven notes of C major lit up on a circle of twelve pitch classes.">
-        </div>
-        <div class="card-body">
-          <p class="kind"><span class="dot" style="--c: var(--strings)"></span>Music theory · Interactive essay</p>
-          <h3>A Theory of Harmony</h3>
-          <p class="desc">Hear beating, pluck a string and compare tunings, then follow a
-            proof that one harmonicity model selects major triads, <span class="nowrap">IV–I–V</span> and the
-            major scale.</p>
-          <p class="meta">9 chapters · with proofs <span class="go">Read</span></p>
-        </div>
-      </a>
-
-      <a class="card" href="graphics/">
-        <div class="shot mosaic">
-          <img src="graphics/thumbs/newtonFractals.webp" width="320" height="200" loading="lazy" alt="">
-          <img src="graphics/thumbs/hatTiling.webp" width="320" height="200" loading="lazy" alt="">
-          <img src="graphics/thumbs/fire.webp" width="320" height="200" loading="lazy" alt="">
-          <img src="graphics/thumbs/donutSpiral.webp" width="320" height="200" loading="lazy" alt="">
-          <img src="graphics/thumbs/cyclicCellularAutomaton.webp" width="320" height="200" loading="lazy" alt="">
-          <img src="graphics/thumbs/picardOrbit.webp" width="320" height="200" loading="lazy" alt="">
-        </div>
-        <div class="card-body">
-          <p class="kind"><span class="dot" style="--c: var(--bells)"></span>Mathematics · Visuals</p>
-          <h3>Graphics Studio</h3>
-          <p class="desc">Fractals, tilings, fluids and botanical studies in one gallery.
-            Build playlists, present them full screen, and drive them from your phone
-            as a remote.</p>
-          <p class="meta"><span><span data-viz-count>35</span> visualizations</span> <span class="go">Explore</span></p>
-        </div>
-      </a>
-
+<main class="wrap">
+  <figure class="jam">
+    <canvas id="jam" role="img"
+      aria-label="A painted tune: coloured lines for bass, strings, keys, bells and drums, with a playhead sweeping across them."></canvas>
+    <div class="jam-controls">
+      <button id="soundBtn" class="pill" type="button" aria-pressed="false">
+        <svg viewBox="0 0 16 16" aria-hidden="true"><path d="M2 6h3l4-3.5v11L5 10H2z" fill="currentColor"/><path d="M11.5 5.5a3.5 3.5 0 0 1 0 5M13.5 3.5a6.3 6.3 0 0 1 0 9" fill="none" stroke="currentColor" stroke-width="1.4" stroke-linecap="round"/></svg>
+        <span>Listen</span>
+      </button>
+      <button id="newBtn" class="pill" type="button">New tune</button>
     </div>
+  </figure>
+
+  <section class="section" aria-labelledby="music-title">
+    <div class="section-head"><h2 id="music-title">Music</h2></div>
+    <ul class="projects">
+      <li><a href="musicalCanvas/">
+        <div class="shot"><img src="assets/musical-canvas.webp" width="1200" height="720" loading="lazy"
+          alt="A painting in musicalCanvas: a sailboat, an island with a palm tree, the sun and waves, each drawn with a different instrument's brush."></div>
+        <h3>musicalCanvas</h3>
+        <p class="sub">Paint music</p>
+      </a></li>
+      <li><a href="loopback/">
+        <div class="shot"><img src="assets/loopback.webp" width="1200" height="750" loading="lazy"
+          alt="Loopback: a chord loop drawn as a ring with G, F, C and G round its rim, a red Solo button, and the loop's chord chart beside it."></div>
+        <h3>Loopback</h3>
+        <p class="sub">Loop some chords, solo over them</p>
+      </a></li>
+      <li><a href="superGroups/">
+        <div class="shot"><img src="assets/supergroups.webp" width="1200" height="750" loading="lazy"
+          alt="The superGroups listening room, with four tiles labelled B, K, L and D for bass, keys, lead and drums."></div>
+        <h3>superGroups</h3>
+        <p class="sub">Thirteen virtual musicians</p>
+      </a></li>
+      <li><a href="theoryOfHarmony/">
+        <div class="shot"><img src="assets/theory-of-harmony.webp" width="1200" height="750" loading="lazy"
+          alt="The seven notes of C major lit up on a circle of twelve pitch classes."></div>
+        <h3>A Theory of Harmony</h3>
+        <p class="sub">Where the major scale comes from</p>
+      </a></li>
+    </ul>
   </section>
 
-  <section id="graphics" class="section wrap" aria-labelledby="graphics-title">
+  <section class="section" aria-labelledby="graphics-title">
     <div class="section-head">
-      <h2 id="graphics-title">From the Graphics Studio</h2>
-      <a href="graphics/">Browse all <span data-viz-count>35</span> →</a>
+      <h2 id="graphics-title"><a href="graphics/">Graphics Studio</a></h2>
+      <a href="graphics/">All <span data-viz-count>35</span> →</a>
     </div>
     <ul class="strip">
-      <li><a href="graphics/mandelbrot/"><img src="graphics/thumbs/mandelbrot.webp" width="320" height="200" loading="lazy" alt=""><span><i class="dot" style="--c: #ff6b6b"></i>Mandelbrot Explorer</span></a></li>
-      <li><a href="graphics/passiflora/"><img src="graphics/thumbs/passiflora.webp" width="320" height="200" loading="lazy" alt=""><span><i class="dot" style="--c: #a9e34b"></i>Passiflora</span></a></li>
-      <li><a href="graphics/penrose/"><img src="graphics/thumbs/penrose.webp" width="320" height="200" loading="lazy" alt=""><span><i class="dot" style="--c: #5cc8ff"></i>Penrose Tiling</span></a></li>
-      <li><a href="graphics/smoke/"><img src="graphics/thumbs/smoke.webp" width="320" height="200" loading="lazy" alt=""><span><i class="dot" style="--c: #ffa94d"></i>Domain Warping</span></a></li>
-      <li><a href="graphics/indrasPearls/"><img src="graphics/thumbs/indrasPearls.webp" width="320" height="200" loading="lazy" alt=""><span><i class="dot" style="--c: #ff6b6b"></i>Indra’s Pearls</span></a></li>
-      <li><a href="graphics/ballMachine/"><img src="graphics/thumbs/ballMachine.webp" width="320" height="200" loading="lazy" alt=""><span><i class="dot" style="--c: #63e6be"></i>Glass House Ball Machine</span></a></li>
+      <li><a href="graphics/mandelbrot/"><img src="graphics/thumbs/mandelbrot.webp" width="320" height="200" loading="lazy" alt=""><span>Mandelbrot Explorer</span></a></li>
+      <li><a href="graphics/passiflora/"><img src="graphics/thumbs/passiflora.webp" width="320" height="200" loading="lazy" alt=""><span>Passiflora</span></a></li>
+      <li><a href="graphics/penrose/"><img src="graphics/thumbs/penrose.webp" width="320" height="200" loading="lazy" alt=""><span>Penrose Tiling</span></a></li>
+      <li><a href="graphics/indrasPearls/"><img src="graphics/thumbs/indrasPearls.webp" width="320" height="200" loading="lazy" alt=""><span>Indra’s Pearls</span></a></li>
+      <li><a href="graphics/newtonFractals/"><img src="graphics/thumbs/newtonFractals.webp" width="320" height="200" loading="lazy" alt=""><span>Newton Fractals</span></a></li>
+      <li><a href="graphics/hatTiling/"><img src="graphics/thumbs/hatTiling.webp" width="320" height="200" loading="lazy" alt=""><span>Hat Monotile</span></a></li>
+      <li><a href="graphics/smoke/"><img src="graphics/thumbs/smoke.webp" width="320" height="200" loading="lazy" alt=""><span>Domain Warping</span></a></li>
+      <li><a href="graphics/ballMachine/"><img src="graphics/thumbs/ballMachine.webp" width="320" height="200" loading="lazy" alt=""><span>Glass House Ball Machine</span></a></li>
+      <li><a href="graphics/fire/"><img src="graphics/thumbs/fire.webp" width="320" height="200" loading="lazy" alt=""><span>Combustion Engine</span></a></li>
+      <li><a href="graphics/picardOrbit/"><img src="graphics/thumbs/picardOrbit.webp" width="320" height="200" loading="lazy" alt=""><span>Picard Orbit</span></a></li>
+      <li><a href="graphics/turingPatterns/"><img src="graphics/thumbs/turingPatterns.webp" width="320" height="200" loading="lazy" alt=""><span>Gray–Scott</span></a></li>
+      <li><a href="graphics/donutSpiral/"><img src="graphics/thumbs/donutSpiral.webp" width="320" height="200" loading="lazy" alt=""><span>Donut Spiral</span></a></li>
     </ul>
   </section>
 </main>
-
-<footer class="wrap">
-  nicjams · made for fun, built in the open on
-  <a href="https://github.com/nicjams/nicjams.github.io">GitHub</a>.
-</footer>
 
 <script type="module">
   // Keep the visualization count in step with the Graphics Studio catalog.
   import { VISUALIZATIONS } from './graphics/app/manifest.js';
   for (const el of document.querySelectorAll('[data-viz-count]')) el.textContent = VISUALIZATIONS.length;
+</script>
+
+<script>
+  // Light/dark toggle: follows the system until clicked, then remembers.
+  document.getElementById('themeBtn').addEventListener('click', () => {
+    const root = document.documentElement;
+    const dark = root.dataset.theme ? root.dataset.theme === 'dark' : matchMedia('(prefers-color-scheme: dark)').matches;
+    root.dataset.theme = dark ? 'light' : 'dark';
+    try { localStorage.setItem('theme', root.dataset.theme); } catch (e) {}
+    dispatchEvent(new Event('themechange'));
+  });
 </script>
 
 <script>
@@ -385,6 +301,7 @@
   const newBtn = document.getElementById('newBtn');
   const reduceMotion = matchMedia('(prefers-reduced-motion: reduce)');
   const darkMode = matchMedia('(prefers-color-scheme: dark)');
+  const isDark = () => { const t = document.documentElement.dataset.theme; return t ? t === 'dark' : darkMode.matches; };
 
   const STEPS = 32;                  // four bars of eighth notes
   const ROWS = 15;                   // three octaves of major pentatonic
@@ -474,9 +391,9 @@
 
   function readColors() {
     const css = getComputedStyle(document.documentElement);
-    for (const k of ['paper', 'ink', 'bass', 'strings', 'keys', 'bells', 'drums']) colors[k] = css.getPropertyValue('--' + k).trim();
+    for (const k of ['ink', 'bass', 'strings', 'keys', 'bells', 'drums']) colors[k] = css.getPropertyValue('--' + k).trim();
     colors.kick = colors.hat = colors.drums;
-    grain = makeGrain(darkMode.matches);
+    grain = makeGrain(isDark());
   }
 
   function makeGrain(dark) {
@@ -707,6 +624,7 @@
   document.addEventListener('visibilitychange', sync);
   reduceMotion.addEventListener('change', sync);
   darkMode.addEventListener('change', () => { readColors(); draw(); });
+  addEventListener('themechange', () => { readColors(); draw(); });
   new ResizeObserver(resize).observe(canvas);
   new IntersectionObserver(([e]) => { onScreen = e.isIntersecting; sync(); }).observe(canvas);
 
