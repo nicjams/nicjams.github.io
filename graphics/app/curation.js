@@ -21,6 +21,19 @@
 // visualization without an entry falls back to a heuristic Simple page.
 
 export const CURATION = {
+  droneShow: {
+    simple: [
+      { sel: "#droneCount", label: "Fleet size" },
+      { sel: "#speed", label: "Transition time" },
+      { sel: "#palette", label: "Light palette" },
+      { sel: "#autoplay", label: "Auto play" },
+      { sel: "#trails", label: "Light trails" },
+      { sel: "#prevBtn", label: "Previous formation" },
+      { sel: "#nextBtn", label: "Next formation" },
+    ],
+    keys: [{ key: " ", label: "Play / pause", simple: true }, { key: "n", label: "Next formation", simple: true }, { key: "p", label: "Previous formation" }],
+    hide: ["#search", "#fullscreenBtn"],
+  },
   "3dFractal": {
     simple: [
       { sel: "#fractalSelect" },
@@ -232,6 +245,38 @@ export const CURATION = {
       "#strokeSlider": "Stroke width",
     },
     hide: ["#panelToggle", "#panelClose", "#capPrev", "#capNext", "#playBtn", "#screenshotBtn"],
+  },
+  hexKnot: {
+    simple: [
+      { sel: 'input[type=radio][name="motion"]', label: "Motion" },
+      { sel: 'input[type=radio][name="tile"]', label: "Tile" },
+      { sel: 'input[type=radio][name="scheme"]', label: "Color by" },
+      { sel: 'input[type=radio][name="palette"]', label: "Palette" },
+      { sel: "#speed", label: "Speed" },
+      { sel: "#scale", label: "Tile size" },
+      { sel: "#shuffleBtn", label: "Shuffle" },
+      { sel: "#alignBtn", label: "Align all" },
+    ],
+    keys: [
+      { key: " ", label: "Pause / resume", simple: true },
+      { key: "m", label: "Next motion" },
+      { key: "t", label: "Next tile" },
+      { key: "k", label: "Next coloring" },
+      { key: "p", label: "Next palette" },
+      { key: "g", label: "Tile edges" },
+      { key: "r", label: "Shuffle" },
+      { key: "a", label: "Align all" },
+    ],
+    labels: {
+      'input[type=radio][name="style"]': "Finish",
+      "#band": "Band width",
+      "#turnStyle": "Turn amount",
+      "#lift": "Lift turning tiles",
+      "#grout": "Tile edges",
+      "#hover": "Trace loop on hover",
+      "#pauseBtn": "Pause / resume",
+    },
+    hide: ["#hover"],
   },
   penrose: {
     simple: [

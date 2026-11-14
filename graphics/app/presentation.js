@@ -8,7 +8,7 @@ export function prepareVisualization(frame, id) {
     html, body { margin:0 !important; width:100% !important; height:100% !important; overflow:hidden !important; }
   `;
   if (['picardOrbit', 'infiniteZ3lattice', 'z3lattice', 'indrasPearls'].includes(id)) style.textContent += '#info { display:none !important; }';
-  if (['penrose', 'turingPatterns', 'tidalMarsh', 'cyclicCellularAutomaton'].includes(id)) style.textContent += `
+  if (['penrose', 'hexKnot', 'turingPatterns', 'tidalMarsh', 'cyclicCellularAutomaton'].includes(id)) style.textContent += `
     .app, .app > main, #stage { position:fixed !important; inset:0 !important; width:100% !important; height:100% !important; max-width:none !important; padding:0 !important; margin:0 !important; display:block !important; border:0 !important; border-radius:0 !important; }
     #stage canvas { width:100% !important; height:100% !important; }
   `;
@@ -22,6 +22,7 @@ export function prepareVisualization(frame, id) {
   if (id === '4dKleinian') style.textContent += '.topbar, .drawer, #stats, .hint-bar { display:none !important; }';
   if (id === 'gameOfLife') style.textContent += '#restoreBtn { display:none !important; }';
   if (id === 'ballMachine') style.textContent += '#placard, #panelToggle, #machinePanel, #dock, #start { display:none !important; } #ticker { bottom:16px !important; }';
+  if (id === 'droneShow') style.textContent += '#showPanel, .sky-top, .sky-caption, .sky-bottom { display:none !important; } .studio { display:block !important; min-height:0 !important; } .sky { position:fixed !important; inset:0 !important; height:100% !important; }';
   if (id === 'cubicBarrier') style.textContent += '#braidPanel, #hint, .tabs, #showUi { display:none !important; }';
   doc.head.append(style);
   frame.contentWindow.dispatchEvent(new frame.contentWindow.Event('resize'));

@@ -1,0 +1,166 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <script src="../app/entry.js"></script>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>Hex Knot — one tile, many links</title>
+    <meta name="description" content="Identical hexagonal tiles carrying a woven band turn at random; every closed knot component gets its own color.">
+    <meta property="og:type" content="website">
+    <meta property="og:site_name" content="nicjams">
+    <meta property="og:title" content="Hex Knot">
+    <meta property="og:description" content="Identical hexagonal tiles carrying a woven band turn at random; every closed knot component gets its own color.">
+    <meta property="og:url" content="https://nicjams.github.io/graphics/hexKnot/">
+    <meta property="og:image" content="https://nicjams.github.io/graphics/hexKnot/preview.jpg">
+    <meta property="og:image:width" content="1200">
+    <meta property="og:image:height" content="630">
+    <meta property="og:image:alt" content="Hexagonal tiles whose woven bands join into colored interlaced loops.">
+    <meta name="twitter:card" content="summary_large_image">
+    <link rel="canonical" href="https://nicjams.github.io/graphics/hexKnot/">
+    <meta name="graphics-description"
+        content="Hexagonal tiles, all the same, each carrying three woven bands. Tiles turn at random, and every knot component the bands join into is colored on its own, so colors split and merge as the components do.">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link
+        href="https://fonts.googleapis.com/css2?family=Fraunces:ital,opsz,wght@0,9..144,400;0,9..144,500;1,9..144,400;1,9..144,500&family=JetBrains+Mono:wght@400;500&family=Manrope:wght@400;500;600&display=swap"
+        rel="stylesheet">
+    <link rel="stylesheet" href="css/style.css">
+</head>
+
+<body>
+    <div class="app">
+
+        <header>
+            <div class="title">Hex Knot · <em>one tile, many links</em></div>
+            <div class="sub">after the paving stones of Salobreña</div>
+            <div class="meta"><span id="tileCount">— tiles</span><span id="compCount"></span></div>
+        </header>
+
+        <main>
+            <div class="stage" id="stage">
+                <canvas id="tiling"></canvas>
+                <div class="legend" id="legend"></div>
+                <div class="readout" id="readout"></div>
+            </div>
+
+            <aside>
+
+                <!-- Motion -->
+                <section class="section" data-control-group="Motion">
+                    <div class="section-title">
+                        <h2>Motion</h2>
+                        <span class="hint"><kbd>space</kbd> pause · <kbd>M</kbd> next</span>
+                    </div>
+                    <div class="chips" id="motionChips" role="radiogroup" aria-label="Motion">
+                        <label class="chip"><input type="radio" name="motion" value="still"><i>Still</i></label>
+                        <label class="chip"><input type="radio" name="motion" value="random" checked><i>Random</i></label>
+                        <label class="chip"><input type="radio" name="motion" value="wave"><i>Wave</i></label>
+                        <label class="chip"><input type="radio" name="motion" value="ripples"><i>Ripples</i></label>
+                    </div>
+                    <p class="caption" id="motionCaption"></p>
+                    <div class="slider-row slim">
+                        <label for="speed" class="name-sm">Speed</label>
+                        <input type="range" id="speed" min="0.1" max="3" step="0.05" value="1">
+                        <span class="val" id="speedVal">1.00</span>
+                    </div>
+                    <div class="row-2">
+                        <div class="field">
+                            <label for="turnStyle">Turn</label>
+                            <select id="turnStyle">
+                                <option value="either" selected>±60°</option>
+                                <option value="cw">+60°</option>
+                                <option value="third">120°</option>
+                                <option value="half">180°</option>
+                            </select>
+                        </div>
+                        <button id="pauseBtn" type="button">Pause</button>
+                    </div>
+                    <div class="checks">
+                        <label class="check"><input type="checkbox" id="lift" checked><i>Lift turning tiles</i></label>
+                    </div>
+                </section>
+
+                <!-- Tile -->
+                <section class="section" data-control-group="Tile">
+                    <div class="section-title">
+                        <h2>Tile</h2>
+                        <span class="hint"><kbd>T</kbd> next · click a tile to turn it</span>
+                    </div>
+                    <div class="chips" id="tileChips" role="radiogroup" aria-label="Tile">
+                        <label class="chip"><input type="radio" name="tile" value="salobrena" checked><i>Salobreña</i></label>
+                        <label class="chip"><input type="radio" name="tile" value="lattice"><i>Lattice</i></label>
+                        <label class="chip"><input type="radio" name="tile" value="weave"><i>Weave</i></label>
+                        <label class="chip"><input type="radio" name="tile" value="truchet"><i>Truchet</i></label>
+                    </div>
+                    <p class="caption" id="tileCaption"></p>
+                    <div class="slider-row slim">
+                        <label for="scale" class="name-sm">Size</label>
+                        <input type="range" id="scale" min="18" max="110" step="1" value="46">
+                        <span class="val" id="scaleVal">46</span>
+                    </div>
+                    <div class="slider-row slim">
+                        <label for="band" class="name-sm">Band</label>
+                        <input type="range" id="band" min="0.12" max="0.5" step="0.01" value="0.34">
+                        <span class="val" id="bandVal">0.34</span>
+                    </div>
+                    <div class="btn-row">
+                        <button id="shuffleBtn" type="button">Shuffle <kbd>R</kbd></button>
+                        <button id="alignBtn" type="button">Align all <kbd>A</kbd></button>
+                    </div>
+                </section>
+
+                <!-- Color -->
+                <section class="section" data-control-group="Color">
+                    <div class="section-title">
+                        <h2>Color by</h2>
+                        <span class="hint"><kbd>K</kbd> next</span>
+                    </div>
+                    <div class="chips" id="schemeChips" role="radiogroup" aria-label="Color by">
+                        <label class="chip"><input type="radio" name="scheme" value="component" checked><i>Component</i></label>
+                        <label class="chip"><input type="radio" name="scheme" value="length"><i>Length</i></label>
+                        <label class="chip"><input type="radio" name="scheme" value="stone"><i>Stone</i></label>
+                    </div>
+                    <p class="caption" id="schemeCaption"></p>
+
+                    <div class="sub-title">Palette</div>
+                    <div class="swatches" id="paletteChips" role="radiogroup" aria-label="Palette"></div>
+
+                    <div class="sub-title">Finish</div>
+                    <div class="chips seg" id="styleChips" role="radiogroup" aria-label="Finish">
+                        <label class="chip"><input type="radio" name="style" value="flat"><i>Flat</i></label>
+                        <label class="chip"><input type="radio" name="style" value="bevel" checked><i>Bevel</i></label>
+                        <label class="chip"><input type="radio" name="style" value="terrazzo"><i>Terrazzo</i></label>
+                        <label class="chip"><input type="radio" name="style" value="line"><i>Line</i></label>
+                    </div>
+
+                    <div class="checks">
+                        <label class="check"><input type="checkbox" id="grout" checked><i>Tile edges</i></label>
+                        <label class="check"><input type="checkbox" id="hover" checked><i>Trace on hover</i></label>
+                    </div>
+                </section>
+
+                <!-- Note -->
+                <section class="section">
+                    <div class="proj-wrap">
+                        Each band meets a tile edge at its midpoint, square to the edge, so any two tiles fit no
+                        matter how they are turned. Three kinds of path do the joining: an arc of radius ½ around a
+                        corner, an arc of radius <em>³⁄₂</em> skipping one edge, and a straight line to the
+                        opposite edge. The grid is wrapped into a torus, so every component is a closed loop: a
+                        <em>link</em>, recolored whenever a turn splits or merges its components.
+                    </div>
+                    <div class="keys">
+                        <kbd>space</kbd> pause <kbd>M</kbd> motion <kbd>T</kbd> tile <kbd>K</kbd> coloring
+                        <kbd>P</kbd> palette <kbd>G</kbd> tile edges <kbd>R</kbd> shuffle <kbd>A</kbd> align
+                    </div>
+                </section>
+
+            </aside>
+        </main>
+
+    </div>
+
+    <script type="module" src="js/main.js"></script>
+</body>
+
+</html>

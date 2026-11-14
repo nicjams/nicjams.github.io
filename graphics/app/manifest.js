@@ -37,6 +37,8 @@ export const VISUALIZATIONS = [
     blurb: 'A looping tour of the aperiodic hat: growth, legal neighbors, mirror images, supertiles, Fibonacci squares and the Tile(a,b) family.', keys: [' ', 'n', 'p', 't', 'o', 'h'] },
   { id: 'penrose', title: 'Penrose Tiling', cat: 'tilings', glyph: '✶',
     blurb: 'Penrose tilings by cut and project from ℝ⁵: phason flips, waves and ripples, an endless deflation zoom, and colorings that show the hidden structure.', keys: [' ', 'm', 'k', 'p', 'r'] },
+  { id: 'hexKnot', title: 'Hex Knot', cat: 'tilings', glyph: '⌬',
+    blurb: 'Identical hexagonal tiles carrying woven bands turn at random; every closed loop of the link gets its own color as loops split and merge.', keys: [' ', 'm', 't', 'k', 'p', 'r', 'a'] },
   { id: 'picardOrbit', title: 'Picard Orbit', cat: 'tilings', glyph: '◉',
     blurb: 'A PSL₂(ℤ[i]) orbit drawn in the Poincaré ball.', keys: [] },
   { id: 'infiniteZ3lattice', title: 'Z³ Lattice (Raymarched)', cat: 'tilings', glyph: '⧉',
@@ -75,6 +77,8 @@ export const VISUALIZATIONS = [
     blurb: 'Scale of the universe, from quarks to the cosmos.', keys: [] },
 
   // — Generative —
+  { id: 'droneShow', title: 'Drone Show', cat: 'generative', glyph: '✧',
+    blurb: 'Choreograph a sky full of light with dozens of drone formations, palettes and an automatic show.', keys: [' ', 'n', 'p'] },
   { id: 'island', title: 'Island · Tree Study', cat: 'generative', glyph: '♧',
     blurb: 'Grow a raymarched tree from simple shapes and layered sine waves.', keys: [] },
   { id: 'donutSpiral', title: 'Donut Spiral', cat: 'generative', glyph: '🍩',

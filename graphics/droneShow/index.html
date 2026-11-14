@@ -1,0 +1,40 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="theme-color" content="#090e1a">
+  <meta name="description" content="Choreograph a sky full of light with an interactive drone show visualizer.">
+  <title>Drone Show · Graphics Studio</title>
+  <link rel="stylesheet" href="style.css">
+  <script src="../app/entry.js"></script>
+</head>
+<body>
+  <main class="studio">
+    <section class="sky" aria-label="Drone show preview">
+      <canvas id="showCanvas" aria-label="Animated drone formation"></canvas>
+      <div class="sky-top"><a class="back" href="../">← <span>GRAPHICS STUDIO</span></a><div class="live"><i></i> LIVE SIMULATION</div></div>
+      <div class="sky-caption"><div class="eyebrow"><span class="tiny-star">✦</span> NOW IN THE SKY <span class="line"></span> <span id="formationNumber">01 / 00</span></div><h1 id="currentName">The opening</h1><p id="currentDescription">A constellation takes flight.</p></div>
+      <div class="sky-bottom"><div class="telemetry"><span><i></i> <b id="droneReadout">320</b> DRONES</span><span>FORMATION <b id="statusReadout">IN FLIGHT</b></span></div><button id="fullscreenBtn" class="icon-button" title="Full screen" aria-label="Toggle full screen">⛶</button></div>
+    </section>
+    <aside class="panel" id="showPanel">
+      <header class="panel-header"><div><div class="brand"><span class="brand-icon">✳</span> DRONE SHOW <span class="brand-light">/ STUDIO</span></div><p>Make a little magic in the sky.</p></div><span class="edition">NO. 01</span></header>
+      <div class="panel-scroll">
+        <div class="section-head"><div><span class="overline">THE LIBRARY</span><h2>Choose a formation<span class="period">.</span></h2></div><span class="preset-count" id="presetCount"></span></div>
+        <div class="search-wrap"><span>⌕</span><input id="search" type="search" placeholder="Search formations" aria-label="Search formations"><kbd>/</kbd></div>
+        <div class="filters" id="filters" aria-label="Formation categories"></div>
+        <div class="preset-grid" id="presetGrid"></div><p class="empty" id="empty" hidden>No formations found. Try another search.</p>
+        <div class="divider"></div>
+        <div class="section-head settings-heading"><div><span class="overline">MAKE IT YOURS</span><h2>Show settings<span class="period">.</span></h2></div><span class="settings-icon">✳</span></div>
+        <div class="setting"><div class="setting-title"><label for="droneCount">Fleet size</label><output id="countValue">320 drones</output></div><input id="droneCount" type="range" min="80" max="800" step="20" value="320"><div class="range-labels"><span>80</span><span>800</span></div></div>
+        <div class="setting"><div class="setting-title"><label for="speed">Transition speed</label><output id="speedValue">4.0 s</output></div><input id="speed" type="range" min="1" max="8" step="0.5" value="4"><div class="range-labels"><span>FASTER</span><span>SLOWER</span></div></div>
+        <div class="setting"><div class="setting-title"><label for="palette">Light palette</label></div><select id="palette"><option value="aurora">Aurora</option><option value="warm">Golden hour</option><option value="ice">Ice blue</option><option value="candy">Candy</option><option value="rainbow">Spectrum</option><option value="white">Starlight</option></select></div>
+        <div class="setting toggle-row"><div><label for="autoplay">Auto play</label><small>Cycle through the library</small></div><label class="switch"><input id="autoplay" type="checkbox"><span></span></label></div>
+        <div class="setting toggle-row"><div><label for="trails">Light trails</label><small>Leave a trace as drones move</small></div><label class="switch"><input id="trails" type="checkbox" checked><span></span></label></div>
+      </div>
+      <footer class="panel-footer"><button id="prevBtn" class="secondary" aria-label="Previous formation">←</button><button id="playBtn" class="play-button">▶ <span>PLAY THE SHOW</span></button><button id="nextBtn" class="secondary" aria-label="Next formation">→</button></footer>
+    </aside>
+  </main>
+  <script type="module" src="app.js"></script>
+</body>
+</html>
