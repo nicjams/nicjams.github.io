@@ -330,4 +330,85 @@ export const SHOWS = [
       sec('Out', 30, 4, merge(L.funk({ a: K.lime, b: K.magenta, rate: 1, dim: up(0.8, 0) }), L.dark({ cycCol: K.green, floor: 0, cycDim: up(0.3, 0) }))),
     ],
   },
+  {
+    id: 'sacredGeometry', name: 'Sacred Geometry', bpm: 104,
+    blurb: 'Eight and a half minutes of kinetic architecture: columns, gothic spires, diamond lattices and portal frames.',
+    sections: [
+      sec('Foundation', 55, 4, merge(
+        L.dark({ col: K.royal, cycCol: K.blue, floor: 0.25 }),
+        L.curtain({ col: K.ice, alt: K.royal, dim: up(0.2, 0.7), ripple: 8, rate: 24, zoom: 2.2, kin: { shape: 'flat', h: 9.4, flip: up(0, 1, 0.1, 0.9), flipMode: 'all' } }),
+      )),
+      sec('Nave', 80, 6, merge(
+        L.converge({ col: K.gold, alt: K.ice, dim: 0.85, point: 'air', spread: 12, circle: 6, rate: 16, zoom: 2.4, kin: { shape: 'arch', h: 10.4, amp: 1.8, flip: 1, flipMode: 'inner' } }),
+        L.floorUp({ col: K.royal, dim: 0.55, fan: 18, rate: 24 }),
+      )),
+      sec('Lattice', 85, 6, L.split({
+        left: blend(K.cyan, K.teal), right: blend(K.violet, K.magenta), dim: 0.88, rate: 4, zoom: 3,
+        kin: { shape: 'flat', h: 9.8, flip: 0.5, flipMode: 'lattice', flipWave: up(0, 0.25), period: 32 },
+      })),
+      sec('Portals', 85, 5, merge(
+        L.tunnel({ col: journey([K.teal, K.green, K.cyan]), alt: K.ice, dim: 0.85, size: up(8, 16), rate: 8, target: 'cyc', kin: { shape: 'rake', h: 9.2, amp: -1.4, flip: 1, flipMode: 'outer' } }),
+        L.floorUp({ col: K.teal, dim: 0.5, rate: 16 }),
+      )),
+      sec('Hourglass', 80, 5, merge(
+        {
+          layers: [
+            { g: 'left', col: K.gold, dim: 0.9, aim: 'air', spread: [4, 0, 6], zoom: 2.5, frost: 0.05 },
+            { g: 'right', col: K.royal, dim: 0.9, aim: 'air', spread: [-4, 0, 6], zoom: 2.5, frost: 0.05 },
+          ],
+          fx: [{ g: 'pods', a: 'dim', w: 'sin', rate: 4, size: 0.5, spread: 360, by: 'pod' }],
+          kin: { shape: 'vee', h: 10, amp: -1.2, flip: 0.75, flipMode: 'fan', flipWave: 0.2, period: 24 },
+          cyc: cyc(K.gold, K.royal, 0.3),
+        },
+        L.floorUp({ col: K.amber, dim: 0.6, rate: 8 }),
+      )),
+      sec('Apex', 60, 0.4, merge(
+        L.peak({ col: K.white, alt: K.gold, rate: 1 }),
+        { kin: { shape: 'arch', h: 9.6, amp: 1.6, roll: -0.25, flip: 0.6, flipMode: 'fan', flipWave: 0.35, period: 16 } },
+      )),
+      sec('Resolution', 65, 8, merge(
+        L.wash({ col: K.warm, dim: up(0.65, 0.15), g: 'pods', zoom: 24 }),
+        L.dark({ col: K.royal, cycCol: K.blue, floor: up(0.3, 0.04), cycDim: up(0.25, 0.05) }),
+        { kin: { shape: 'flat', h: 10.8, flip: up(0.4, 0, 0, 0.6), flipMode: 'all' } },
+      )),
+    ],
+  },
+  {
+    id: 'midnightExpress', name: 'Midnight Express', bpm: 128,
+    blurb: 'Nine minutes of late-night trance-fusion: pulsing basslines, rolling stick waves, a fake-out drop and full-tilt strobes.',
+    sections: [
+      sec('Pulse', 50, 3, merge(
+        L.dark({ col: K.uv, cycCol: K.uv, floor: 0.2 }),
+        L.curtain({ col: K.teal, alt: K.uv, dim: up(0.25, 0.7), ripple: 14, rate: 8, zoom: 2.2, by: 'center', kin: { shape: 'flat', h: 10.5 } }),
+      )),
+      sec('Arpeggio', 85, 4, merge(
+        L.fan({ col: K.cyan, alt: K.magenta, dim: 0.85, tilt: 46, fan: 42, zoom: 3.2, chase: { w: 'saw', rate: 2, spread: 360, by: 'x', wings: true, size: 0.85 }, kin: { shape: 'wave', h: 9.6, amp: 1.1, period: 16, roll: 0.2, flipWave: 0.3, flipMode: 'alt' }, cycCol: K.uv }),
+        L.floorUp({ col: K.magenta, dim: 0.65, rate: 4 }),
+      )),
+      sec('Vortex', 90, 5, merge(
+        L.tunnel({ col: K.green, alt: K.cyan, dim: 0.9, size: up(10, 22), rate: 4, zoom: 2.2, kin: { shape: 'twist', h: 9.5, amp: 1.2, period: 16, roll: 0.32, flip: 0.5, flipMode: 'outer' } }),
+        { fx: [{ g: 'pods', a: 'hue', w: 'saw', rate: 16, size: 120, spread: 360, by: 'pod' }] },
+      )),
+      sec('Crossfire', 80, 4, merge(
+        L.split({ left: K.pink, right: K.cyan, dim: 0.92, tilt: 52, fan: 48, rate: 2, zoom: 2.8, kin: { shape: 'vee', h: 9.2, amp: 1.4, roll: 0.3, flip: 0.45, flipMode: 'lattice' } }),
+        L.floorUp({ col: K.cyan, alt: K.pink, dim: 0.8, rate: 2 }),
+      )),
+      sec('Hush before the storm', 40, 2, merge(
+        L.rain({ col: K.ice, dim: 0.55, rate: 0.5, zoom: 1.4, kin: { shape: 'breathe', h: 11.2, amp: 0.6, period: 32 } }),
+        specials(K.cyan, 0.45),
+      )),
+      sec('Riser', 60, 2, merge(
+        L.converge({ col: blend(K.uv, K.white), alt: K.cyan, dim: up(0.5, 1), point: 'air', circle: up(4, 24), rate: steps([4, 2, 1, 0.5]), zoom: 2.4, kin: { shape: 'rake', h: up(10.8, 8.4), amp: up(-0.5, -2), flip: up(0, 0.7), flipMode: 'fan' } }),
+        { fx: [{ g: 'all', a: 'strobe', w: 'square', rate: 0.5, size: (c) => (c.p > 0.75 ? 0.95 : 0) }] },
+      )),
+      sec('Overdrive', 75, 0.15, merge(
+        L.peak({ col: K.cyan, alt: K.magenta, rate: 0.5, hueSpread: 180 }),
+        { kin: { shape: 'chaos', h: 9.2, amp: 1.8, period: 8, roll: 0.35, flipWave: 0.45, flipMode: 'alt' } },
+      )),
+      sec('Dawn cool-down', 55, 8, merge(
+        L.wash({ col: K.teal, dim: up(0.55, 0.08), g: 'pods', zoom: 28 }),
+        L.dark({ col: K.blue, cycCol: K.teal, floor: up(0.35, 0), cycDim: up(0.25, 0) }),
+      )),
+    ],
+  },
 ];

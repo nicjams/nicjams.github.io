@@ -729,8 +729,8 @@ export const CURATION = {
     simple: [
       { sel: "#sceneSelect", label: "Scene" },
       { sel: "#showSelect", label: "Show" },
-      { sel: "#rigSelect", label: "Rig" },
-      { sel: "#extrasKit", label: "Extras kit" },
+      { sel: "#venueSelect", label: "Venue" },
+      { sel: "#extrasKit", label: "Stage kit" },
       { sel: "#cameraSelect", label: "Camera" },
       { sel: "#hazeLevel", label: "Haze" },
       { sel: "#playBtn" },

@@ -2,7 +2,7 @@
 
 import { Engine, TARGETS, KIN_SHAPES, FLIP_MODES, hexHS } from './engine.js';
 import { SHOWS, K } from './shows.js';
-import { SCENES, DEVICE_BASE } from './scenes.js';
+import { SCENES, DEVICE_BASE, SCENE_CATS } from './scenes.js';
 import { groupLabels, POD_COUNT, PER_POD, FLOOR_COUNT } from './layout.js';
 import { setupMidi } from './midi.js';
 import { Lasers, PATTERNS, LASER_COLORS } from './lasers.js';
@@ -72,14 +72,35 @@ function refreshOutput(input) {
 }
 $$('input[type=range]').forEach((r) => { refreshOutput(r); on(r, 'input', () => refreshOutput(r)); });
 
-// ——— tabs ———
-function selectTab(name) {
-  $$('.tabs button').forEach((b) => b.setAttribute('aria-selected', String(b.dataset.tab === name)));
+// ——— tabs & panel visibility ———
+const TAB_MAP = { prog: 'desk', fx: 'desk', cues: 'desk', kin: 'rig', laser: 'rig', setup: 'venue' };
+const tabButtons = $$('.tabs [role="tab"]');
+const validTabs = new Set(tabButtons.map((b) => b.dataset.tab));
+function selectTab(raw) {
+  const mapped = TAB_MAP[raw] || raw;
+  const name = validTabs.has(mapped) ? mapped : 'show';
+  tabButtons.forEach((b) => {
+    const sel = b.dataset.tab === name;
+    b.setAttribute('aria-selected', String(sel));
+    b.tabIndex = sel ? 0 : -1;
+  });
   $$('section.tab').forEach((s) => { s.hidden = s.dataset.tab !== name; });
   store.set('tab', name);
 }
-$$('.tabs button').forEach((b) => on(b, 'click', () => selectTab(b.dataset.tab)));
+tabButtons.forEach((b) => on(b, 'click', () => selectTab(b.dataset.tab)));
+on('.tabs', 'keydown', (e) => {
+  const k = e.key;
+  if (!['ArrowRight', 'ArrowLeft', 'Home', 'End'].includes(k)) return;
+  e.preventDefault(); e.stopPropagation();
+  const cur = tabButtons.findIndex((b) => b.getAttribute('aria-selected') === 'true');
+  const next = k === 'Home' ? 0 : k === 'End' ? tabButtons.length - 1
+    : (cur + (k === 'ArrowRight' ? 1 : -1) + tabButtons.length) % tabButtons.length;
+  tabButtons[next].focus();
+  selectTab(tabButtons[next].dataset.tab);
+});
 selectTab(store.get('tab', 'show'));
+on('#hidePanelBtn', 'click', () => document.body.classList.add('hide-panel'));
+on('#showPanelBtn', 'click', () => document.body.classList.remove('hide-panel'));
 
 // ——— show playback ———
 const showSelect = $('#showSelect');
@@ -92,11 +113,13 @@ function loadShow(id, fade = 3) {
   engine.loadShow(id, fade);
   showSelect.value = id;
   const s = engine.show;
-  $('#showBlurb').textContent = s ? `${s.blurb} (${s.sections.length} sections, ${fmtTime(s.total)}; full set ${fmtTime(setTotal)})` : 'No show running: only the programmer, live effects and cues drive the rig.';
+  $('#showBlurb').textContent = s ? `${s.blurb} (${s.sections.length} sections · full set ${fmtTime(setTotal)})` : 'No show running: only the programmer, live effects and cues drive the rig.';
   $('#bpm').value = engine.bpm;
   renderSections();
   $('#hudShow').textContent = s ? s.name : 'Programmer';
-  $('#hudTotal').textContent = s ? fmtTime(s.total) : '—';
+  $('#hudSlash').hidden = !s;
+  $('#hudTotal').hidden = !s;
+  $('#hudTotal').textContent = s ? fmtTime(s.total) : '';
 }
 function renderSections() {
   const ol = $('#sectionList');
@@ -242,7 +265,7 @@ for (const [attr, sel] of Object.entries(ATTR_INPUTS)) {
   const el = $(sel);
   on(el, 'input', () => {
     if (syncingProg) return;
-    if (!engine.selection.size) { flashHint('Select fixtures first (Program tab).'); return; }
+    if (!engine.selection.size) { flashHint('Select fixtures first in the map above.'); return; }
     if (attr === 'hue' || attr === 'sat') { engine.progSet('hue', +$('#pHue').value); engine.progSet('sat', +$('#pSat').value); }
     else engine.progSet(attr, +el.value);
     if (attr === 'pan' || attr === 'tilt') { engine.progSet('pan', +$('#pPan').value); engine.progSet('tilt', +$('#pTilt').value); $('#pAim').value = ''; }
@@ -311,27 +334,30 @@ function markActive() {
 }
 let hintTimer;
 function flashHint(msg) {
-  const h = $('#controls .tab:not([hidden]) .hint') || $('#fxHint');
-  if (!h) return;
-  const old = h.dataset.orig ?? h.textContent;
-  h.dataset.orig = old;
-  h.textContent = msg; h.style.color = 'var(--amber)';
+  const t = $('#panelToast');
+  if (!t) return;
+  t.textContent = msg;
+  t.hidden = false;
   clearTimeout(hintTimer);
-  hintTimer = setTimeout(() => { h.textContent = old; h.style.color = ''; }, 2200);
+  hintTimer = setTimeout(() => { t.hidden = true; }, 2200);
 }
 
 // ——— live effects ———
 const FX_PRESETS = {
   dimChase: { name: 'Intensity chase ←→', a: 'dim', w: 'saw', rate: 2, size: 1, spread: 360, by: 'x' },
   podStep: { name: 'Pod step (front→back)', a: 'dim', w: 'square', rate: 2, size: 1, spread: 360, by: 'pod', duty: 0.25 },
+  centerBurst: { name: 'Center → out burst', a: 'dim', w: 'pulse', rate: 2, size: 1, spread: 180, by: 'center' },
+  diagWave: { name: 'Diagonal wave', a: 'dim', w: 'sin', rate: 4, size: 0.85, spread: 360, by: 'diag' },
   sparkle: { name: 'Random sparkle', a: 'dim', w: 'rand', rate: 0.25, size: 1, spread: 0, by: 'rand' },
   pulse: { name: 'On-beat pulse', a: 'dim', w: 'pulse', rate: 1, size: 0.9, spread: 0 },
   tiltWave: { name: 'Tilt wave', a: 'tilt', w: 'sin', rate: 8, size: 20, spread: 360, by: 'x' },
+  wingTilt: { name: 'Mirrored tilt bounce', a: 'tilt', w: 'tri', rate: 4, size: 22, spread: 180, by: 'x', wings: true },
   panFan: { name: 'Pan fan (wings)', a: 'pan', w: 'sin', rate: 16, size: 40, spread: 180, by: 'x', wings: true },
   circle: { name: 'Circles', a: 'circle', rate: 8, size: 12, spread: 360, by: 'i' },
   ballyhoo: { name: 'Ballyhoo', a: 'ballyhoo', rate: 8, size: 30, spread: 0, by: 'rand' },
   rainbow: { name: 'Rainbow roll', a: 'hue', w: 'saw', rate: 16, size: 180, spread: 360, by: 'x' },
   zoomBreathe: { name: 'Zoom breathe', a: 'zoom', w: 'sin', rate: 16, size: 10, spread: 180, by: 'center' },
+  frostBreathe: { name: 'Soft ↔ sharp breathe', a: 'frost', w: 'sin', rate: 16, size: 0.6, spread: 180, by: 'pod' },
   strobeBuild: { name: 'Strobe chase', a: 'strobe', w: 'square', rate: 1, size: 0.8, spread: 360, by: 'rand', duty: 0.25 },
 };
 $('#fxPreset').innerHTML = '<option value="">Custom</option>' + Object.entries(FX_PRESETS).map(([k, p]) => `<option value="${k}">${p.name}</option>`).join('');
@@ -361,7 +387,8 @@ function renderFx() {
     ul.append(li);
   });
   const e = engine.liveFx[fxSel];
-  $('#fxEditor').classList.toggle('disabled', !e);
+  $('#fxEditor').hidden = !e;
+  $('#fxClear').hidden = engine.liveFx.length === 0;
   if (e) {
     $('#fxGroup').value = Array.isArray(e.g) ? 'sel' : e.g;
     $('#fxAttr').value = e.a; $('#fxWave').value = e.w || 'sin'; $('#fxBy').value = e.by || 'i';
@@ -566,7 +593,7 @@ function micFrame(dt) {
 // ——— MIDI ———
 let midiMap = store.get('midi', {});
 let learning = false, armed = null;
-const learnables = () => $$('#controls input[type=range], #controls input[type=checkbox], #controls button').filter((el) => el.id && !el.closest('.tabs'));
+const learnables = () => $$('#controls input[type=range], #controls input[type=checkbox], #controls button').filter((el) => el.id && !el.closest('.tabs, header, .scene-cats'));
 function renderMidiMap() {
   const ul = $('#midiMap');
   ul.innerHTML = '';
@@ -714,7 +741,9 @@ const KITS = {
   none: { laserOn: false, tubesOn: false, ballCount: '0', blindersOn: false, strobesOn: false, liquidOn: false, co2On: false },
   phish: { laserOn: false, tubesOn: true, tubeLayout: 'truss', tubeLook: 'follow', tubeColor: 'rig', ballCount: '1', ballColor: 'white', blindersOn: true, blinderMode: 'drops', strobesOn: true, strobeMode: 'show', liquidOn: false, co2On: false },
   biscuits: { laserOn: true, laserPattern: 'auto', laserColor: 'rgb', tubesOn: true, tubeLayout: 'curtain', tubeLook: 'wave', ballCount: '0', blindersOn: false, strobesOn: true, strobeMode: 'beat', liquidOn: false, co2On: true, co2Mode: 'drops' },
+  club: { laserOn: true, laserPattern: 'sweep', laserColor: 'rgb', tubesOn: true, tubeLayout: 'columns', tubeLook: 'chase', tubeColor: 'rig', ballCount: '0', blindersOn: false, strobesOn: true, strobeMode: 'beat', liquidOn: false, co2On: true, co2Mode: 'drops' },
   dead: { laserOn: false, tubesOn: false, ballCount: '1', ballColor: 'rig', blindersOn: true, blinderMode: 'phrase', strobesOn: false, liquidOn: true, liquidPalette: 'classic', co2On: false },
+  starlight: { laserOn: false, tubesOn: true, tubeLayout: 'canopy', tubeLook: 'sparkle', tubeColor: 'white', ballCount: '2', ballColor: 'white', blindersOn: true, blinderMode: 'phrase', strobesOn: false, liquidOn: false, co2On: false },
   all: { laserOn: true, laserPattern: 'auto', tubesOn: true, tubeLayout: 'truss', tubeLook: 'follow', ballCount: '3', blindersOn: true, blinderMode: 'drops', strobesOn: true, strobeMode: 'show', liquidOn: true, co2On: true, co2Mode: 'drops' },
 };
 on('#extrasKit', 'change', (e) => {
@@ -731,8 +760,8 @@ on('#extrasKit', 'change', (e) => {
 
 { const k = new URL(location.href).searchParams.get('kit'); if (KITS[k]) { $('#extrasKit').value = k; $('#extrasKit').dispatchEvent(new Event('change')); } }
 
-// remember the Extras tab between visits
-const extrasInputs = () => $$('section[data-tab=laser] input, section[data-tab=laser] select').filter((el) => el.id && el.id !== 'extrasKit');
+// remember the Extras devices between visits
+const extrasInputs = () => $$('[data-save="extras"] input, [data-save="extras"] select').filter((el) => el.id);
 function saveExtras() { store.set('extras', Object.fromEntries(extrasInputs().map((el) => [el.id, el.type === 'checkbox' ? el.checked : el.value]))); }
 {
   const saved = store.get('extras', null);
@@ -777,9 +806,9 @@ for (const [id, key] of [['fairyOn', 'on'], ['fairyLayout', 'layout'], ['fairyCo
   const read = () => { ambience.fairy.o[key] = el.type === 'checkbox' ? el.checked : el.type === 'range' ? +el.value : el.value; };
   on(el, el.type === 'range' || el.type === 'color' ? 'input' : 'change', read); read();
 }
-// remember the Venue tab too; the room comes back as it was (house lights without a fade)
+// remember the Venue controls too; the room comes back as it was (house lights without a fade)
 {
-  const inputs = () => $$('section[data-tab=venue] input, section[data-tab=venue] select').filter((el) => el.id);
+  const inputs = () => $$('[data-save="venue"] input, [data-save="venue"] select').filter((el) => el.id);
   const save = () => store.set('venueTab', Object.fromEntries(inputs().map((el) => [el.id, el.type === 'checkbox' ? el.checked : el.value])));
   const saved = new URL(location.href).searchParams.get('venue') ? null : store.get('venueTab', null);
   if (saved) for (const el of inputs()) {
@@ -879,17 +908,30 @@ function sceneTick() {
     if (sc) launchScene(sc.id);
   }
 }
-// thumbnails
+// thumbnails & category filter
 const grid = $('#sceneGrid');
+const catsBar = $('#sceneCats');
+let activeSceneCat = 'all';
 SCENES.forEach((sc, i) => {
   const b = document.createElement('button');
-  b.type = 'button'; b.className = 'scene'; b.dataset.id = sc.id; b.setAttribute('role', 'listitem');
+  b.type = 'button'; b.className = 'scene'; b.dataset.id = sc.id; b.dataset.cat = sc.cat || 'beams'; b.setAttribute('role', 'listitem');
   b.title = `${sc.name}${i < 10 ? ` (key ${(i + 1) % 10})` : ''}`;
-  b.innerHTML = `<img alt="" src="scenes/${sc.id}.webp"><small>${i < 10 ? (i + 1) % 10 : ''}</small><span>${sc.name}</span><i></i>`;
+  b.innerHTML = `<img alt="" loading="lazy" src="scenes/${sc.id}.webp"><small>${i < 10 ? (i + 1) % 10 : ''}</small><span>${sc.name}</span><i></i>`;
   b.querySelector('img').onerror = (e) => { e.target.remove(); b.style.background = 'linear-gradient(135deg, #1a1d24, #0a0c10)'; };
   on(b, 'click', () => launchScene(sc.id));
   grid.append(b);
 });
+for (const [cat, label] of Object.entries(SCENE_CATS)) {
+  const b = document.createElement('button');
+  b.type = 'button'; b.textContent = label; b.dataset.cat = cat;
+  b.classList.toggle('active', cat === activeSceneCat);
+  on(b, 'click', () => {
+    activeSceneCat = cat;
+    $$('button', catsBar).forEach((x) => x.classList.toggle('active', x.dataset.cat === cat));
+    for (const s of grid.children) s.hidden = cat !== 'all' && s.dataset.cat !== cat;
+  });
+  catsBar.append(b);
+}
 $('#sceneSelect').innerHTML = '<option value="">— choose —</option>' + SCENES.map((sc) => `<option value="${sc.id}">${sc.name}</option>`).join('');
 on('#sceneSelect', 'change', (e) => { if (e.target.value && e.target.value !== liveScene) launchScene(e.target.value); });
 on('#sceneAuto', 'change', () => { autoNext = null; });
@@ -947,12 +989,16 @@ function updateUI() {
   $('#hudBpm').textContent = engine.bpm.toFixed(engine.bpm % 1 ? 1 : 0);
   if (s?.scene) {
     $('#hudTime').textContent = fmtTime(engine.showTime);
-    $('#hudTotal').textContent = 'scene';
+    $('#hudSlash').hidden = true;
+    $('#hudTotal').hidden = true;
     $('#hudSection').textContent = '';
     $('#hudProgress').style.width = '0';
     $('#showPosOut').textContent = 'Scene';
   } else if (s) {
     $('#hudTime').textContent = fmtTime(engine.showTime);
+    $('#hudSlash').hidden = false;
+    $('#hudTotal').hidden = false;
+    $('#hudTotal').textContent = fmtTime(s.total);
     $('#hudSection').textContent = engine.section ? `· ${engine.section.n}` : '';
     $('#hudProgress').style.width = `${(engine.showTime / s.total) * 100}%`;
     if (!scrubbing) showPos.value = engine.showTime / s.total;
@@ -965,20 +1011,22 @@ function updateUI() {
     if (canvas.dataset.section !== engine.section?.n) canvas.dataset.section = engine.section?.n || '';
   } else {
     $('#hudTime').textContent = cueIdx >= 0 && cues[cueIdx] ? `Cue ${cueIdx + 1}` : '—';
-    $('#hudTotal').textContent = cues.length ? `${cues.length}` : '—';
+    $('#hudSlash').hidden = !cues.length;
+    $('#hudTotal').hidden = !cues.length;
+    $('#hudTotal').textContent = cues.length ? `${cues.length}` : '';
     $('#hudSection').textContent = cueIdx >= 0 && cues[cueIdx] ? `· ${cues[cueIdx].name}` : '';
   }
   if (midi.layer.on) $('#hudSection').textContent += ' · MIDI play';
   scenesUI();
-  if (!$('section[data-tab=prog]').hidden) {
+  if (!$('section[data-tab=desk]').hidden) {
     for (let i = 0; i < dots.length; i++) {
       const o = engine.out[i], k = 0.25 + 0.75 * Math.min(1, o.dim);
-      dots[i].style.background = o.dim > 0.01 ? `rgb(${o.r * 255 * k | 0},${o.g * 255 * k | 0},${o.b * 255 * k | 0})` : '#1a1d24';
+      dots[i].style.background = o.dim > 0.01 ? `rgb(${o.r * 255 * k | 0},${o.g * 255 * k | 0},${o.b * 255 * k | 0})` : '#1a1e27';
     }
   }
   if (!$('section[data-tab=midi]').hidden) midi.readout();
-  if (!$('section[data-tab=laser]').hidden) $('#laserNow').textContent = lasers.on ? `${lasers.count} beams · ${PATTERNS[lasers.pattern]}` : 'Off.';
-  if (!$('section[data-tab=kin]').hidden) {
+  if (!$('section[data-tab=rig]').hidden) {
+    $('#laserNow').textContent = lasers.on ? `${lasers.count} beams · ${PATTERNS[lasers.pattern].replace(/\s*\(.*\)/, '')}` : '';
     engine.pods.forEach((p, i) => {
       podBars[i].style.bottom = `${((p.h - 4) / 10) * 90}%`;
       podBars[i].style.transform = `rotate(${-p.r * 57.3}deg)`;

@@ -33,11 +33,12 @@ Dimensions, head counts and exact motion are my own simplifications.
 
 ## Scenes
 
-The **Scenes** grid at the top of the Show tab has 21 complete looks, each with a
-thumbnail. A scene is the whole rig: a held look, a stick formation, and every
-Extras device. Click a thumbnail, press <kbd>1</kbd>–<kbd>0</kbd> for the first ten,
-pick from **Launch scene** (the Studio remote sees this), play MIDI notes on channel
-16 from C2 up (one pad per scene), or link with `?scene=<id>`.
+The **Scenes** grid at the top of the Show tab has 33 complete looks, each with a
+thumbnail and category filter (*Beams*, *Kinetic*, *FX & Lasers*, *Mood*). A scene is
+the whole rig: a held look, a stick formation, and every stage device. Click a
+thumbnail, press <kbd>1</kbd>–<kbd>0</kbd> for the first ten, pick from **Launch
+scene** (the Studio remote sees this), play MIDI notes on channel 16 from C2 up (one
+pad per scene), or link with `?scene=<id>`.
 
 Every launch moves; nothing cuts. Color and intensity crossfade over **Move time**,
 the heads pan and tilt there at motor speed, and the sticks fly and flip at hoist
@@ -59,8 +60,8 @@ While anything is still traveling, the live thumbnail pulses and the status says
 random. The programmer, live FX and masters still apply on top of a scene; pick a
 show to go back to timed playback.
 
-Scenes are defined in `scenes.js`. Thumbnails are `scenes/<id>.webp` (480×300,
-about 180 KB for all 21). Regenerate them with the repo served on port 8124:
+Scenes are defined in `scenes.js`. Thumbnails are `scenes/<id>.webp` (480×300).
+Regenerate them with the repo served on port 8124:
 
 ```sh
 node graphics/scripts/lightDesigner-scene-thumbs.mjs            # all scenes
@@ -69,9 +70,9 @@ node graphics/scripts/lightDesigner-scene-thumbs.mjs portal     # just some
 
 ## Venue, house lights and fairy lights
 
-The **Venue** tab puts the rig in a room. The default is **Empty**: the stage and
+The **Room** tab puts the rig in a venue and controls the camera. The default is **Empty**: the stage and
 floor in a hazy black void, as before. `?venue=club|theater|stadium` picks one from a
-link, and the page remembers the tab.
+link, and the page remembers the room.
 
 - **Club**: a brick box with a low steel ceiling, concrete pillars, a bar with
   backlit bottles, a flickering neon sign and exit signs.
@@ -111,7 +112,7 @@ the rig fills the sky from that close. The other presets are still under View.
 
 ## Lasers (optional)
 
-The **Extras** tab adds an optional laser package. It's in the spirit of
+The **Rig** tab adds an optional laser package alongside the kinetic sticks. It's in the spirit of
 the Disco Biscuits, whose lighting designer Johnny R. Goode runs full-color,
 audience-scanning Lightwave International lasers alongside the moving heads
 ([Lightwave](https://lasershows.com/portfolio/disco-biscuits/)). There are six
@@ -133,11 +134,12 @@ floor, and otherwise run out into the haze.
 
 ## Other devices (optional)
 
-The **Extras** tab also holds the kit a jam-band LD reaches for. These devices
-follow the grand master, blackout and flash, and travel in and out rather than
-popping (see *Scenes*). A **Quick kit** menu sets
-them up in one step: arena, trance-fusion, psychedelic ’60s, everything, or nothing.
-`?kit=phish|biscuits|dead|all` does the same from a link, and the page remembers the tab.
+The **Rig** tab also holds the kit a jam-band LD reaches for, collapsing inactive
+devices until turned on. These devices follow the grand master, blackout and flash,
+and travel in and out rather than popping (see *Scenes*). A **Stage kit** menu sets
+them up in one step: arena, trance-fusion, late-night club, psychedelic ’60s,
+starlight ballroom, everything, or clean rig.
+`?kit=phish|biscuits|club|dead|starlight|all` does the same from a link.
 
 - **LED pixel tubes** (24 pixels each): a wall upstage, bars on the truss sticks
   (they ride the kinetics, like the LED bars on Phish's 2022 truss sticks),
@@ -168,7 +170,7 @@ them up in one step: arena, trance-fusion, psychedelic ’60s, everything, or no
   the one before it), then programmer overrides, live FX, the snapshot fade used by
   jumps and GO, highlight, masters, and finally physics (motor response, hoist and
   flip speed).
-- `shows.js`: six long shows (~58 min as a set), built from a small look vocabulary.
+- `shows.js`: eight long shows (~75 min as a set), built from a small look vocabulary.
 - `rig.js`: three.js renderer. It builds the stage, the floor, the truss sticks and
   their chains. Beams are instanced additive cones. Surfaces sample a
   per-fixture data texture, so beams leave pools on the deck and floor and catch the metal.
@@ -201,20 +203,13 @@ scaled function values with `mul(v, k)`, not `v * k`.
 
 ## Console
 
-- **Show**: playback, section list, scrubbing, set/loop/hold, crossfade scale,
-  masters (grand, pods, floor, haze), flash/strobe, blackout, tap tempo.
-- **Program**: group chips or the fixture map (shift = range, ⌘/ctrl = toggle),
-  intensity, color, pan/tilt, position palettes (tracked aim points), zoom,
-  frost, shutter. Double-click an attribute's label to release it.
-- **FX**: stack live effects on any group: waveform, rate, size, phase spread
-  and order, duty, wings, reverse.
-- **Kinetic**: take over the pods (shape, trim, amplitude, roll, period),
-  hoist speed and moving-head response.
-- **Cues**: record programmer + FX + pods as cues, GO/Back, run the list as your
-  own timed scene, export/import JSON (stored in this browser).
-- **MIDI**: play mode, where every key fires lights (details below), plus MIDI
-  learn for any fader, button or toggle.
-- **Setup**: microphone beat-following and intensity pulse, stage & floor on/off, haze texture and render quality.
+The panel is organized into five single-row tabs (**Show**, **Rig**, **Room**, **Desk**, **MIDI**) with progressive disclosure so inactive devices and secondary settings stay tucked out of the way:
+
+- **Show**: scenes (with category filters and auto-cycle), timed show playback, scrubbing and section list, and masters (grand, pods, floor, haze, flash, strobe, blackout, tap tempo).
+- **Rig**: quick stage kits, kinetic pod override and live pod meter, plus stage devices (lasers, LED tubes, mirror balls, liquid light show, blinders & strobes, CO₂ jets).
+- **Room**: venue architecture (empty, club, theater with curtain, stadium), house lights, fairy lights, camera presets, bloom and render quality.
+- **Desk**: fixture selection chips and map, programmer attributes and position palettes, stackable live effects, and recordable cue list with JSON export/import.
+- **MIDI**: play mode (notes fire lights), on-screen and computer keyboards, test groove, MIDI learn, and microphone sound-to-light.
 
 ## MIDI play mode
 
