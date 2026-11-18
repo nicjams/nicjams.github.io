@@ -150,29 +150,31 @@ const GLOW_VERT = /* glsl */ `
   }
 `;
 const GLOW_FRAG = /* glsl */ `
+  uniform float uBloom;
   varying vec3 vC;
   void main() {
     float d = length(gl_PointCoord - 0.5) * 2.0;
     if (d > 1.0) discard;
-    float a = exp(-d * d * 7.0) * 0.8 + (1.0 - smoothstep(0.0, 0.28, d)) * 1.6;
+    float a = exp(-d * d * 7.0) * 0.8 + (1.0 - smoothstep(0.0, 0.28, d)) * 1.6 + exp(-d * d * 2.2) * 0.42 * uBloom;
     gl_FragColor = vec4(vC * a, 1.0);
   }
 `;
 
 // Lasers: each beam is a camera-facing ribbon a few pixels wide, clipped to the near
 // plane. The brightness profile is measured in the fragment shader as the exact
-// pixel distance to the beam's screen-space line (endpoints passed as flat
-// varyings): interpolating an across-beam coordinate over the quad would be
-// perspective-skewed on long, shallow beams and shows up as stair-steps.
+// pixel distance to the beam's screen-space line (endpoints passed as flat varyings,
+// fragment NDC recovered from vClip.xy / vClip.w so stereo XR viewports need no offset):
+// interpolating an across-beam coordinate over the quad would be perspective-skewed on
+// long, shallow beams and shows up as stair-steps.
 const LASER_VERT = /* glsl */ `
   attribute vec3 aStart; attribute vec3 aEnd; attribute vec3 aColor;
-  uniform vec2 uRes; uniform float uWidth;
-  varying vec3 vC; varying vec3 vW; varying float vAlong;
-  flat varying vec4 vSeg; // beam endpoints in framebuffer pixels
+  uniform vec2 uRes; uniform float uWidth; uniform float uBloom;
+  varying vec3 vC; varying vec3 vW; varying float vAlong; varying vec4 vClip;
+  flat varying vec4 vSeg; // beam endpoints in eye-centered pixels
   void main() {
     vec3 va = (viewMatrix * vec4(aStart, 1.0)).xyz, vb = (viewMatrix * vec4(aEnd, 1.0)).xyz;
     float near = -0.15;
-    if (va.z > near && vb.z > near) { gl_Position = vec4(2.0, 2.0, 2.0, 1.0); return; }
+    if (va.z > near && vb.z > near) { gl_Position = vec4(2.0, 2.0, 2.0, 1.0); vClip = gl_Position; vSeg = vec4(0.0); return; }
     if (va.z > near) va = mix(va, vb, (va.z - near) / (va.z - vb.z));
     if (vb.z > near) vb = mix(vb, va, (vb.z - near) / (vb.z - va.z));
     vec4 ca = projectionMatrix * vec4(va, 1.0), cb = projectionMatrix * vec4(vb, 1.0);
@@ -180,17 +182,19 @@ const LASER_VERT = /* glsl */ `
     vec2 d = sb - sa; float l = length(d); d = l > 1e-4 ? d / l : vec2(1.0, 0.0);
     vec2 nrm = vec2(-d.y, d.x);
     vec4 c = mix(ca, cb, position.x);
+    float hw = uWidth + uBloom * 3.0;
     // widen, and extend a little past each end so round-off never trims the tips
-    c.xy += (nrm * position.y + d * (position.x * 2.0 - 1.0)) * uWidth / uRes * c.w;
+    c.xy += (nrm * position.y + d * (position.x * 2.0 - 1.0)) * hw / uRes * c.w;
     gl_Position = c;
-    vSeg = vec4(sa + uRes, sb + uRes);
+    vClip = c;
+    vSeg = vec4(sa, sb);
     vC = aColor; vAlong = position.x;
     vW = mix(aStart, aEnd, position.x);
   }
 `;
 const LASER_FRAG = /* glsl */ `
-  uniform float uTime; uniform float uHaze;
-  varying vec3 vC; varying vec3 vW; varying float vAlong;
+  uniform float uTime; uniform float uHaze; uniform vec2 uRes; uniform float uBloom;
+  varying vec3 vC; varying vec3 vW; varying float vAlong; varying vec4 vClip;
   flat varying vec4 vSeg;
   float h3(vec3 p) { p = fract(p * 0.3183099 + 0.1); p *= 17.0; return fract(p.x * p.y * p.z * (p.x + p.y + p.z)); }
   float vn(vec3 x) { // smooth value noise: no blocky steps along shallow beams
@@ -200,11 +204,11 @@ const LASER_FRAG = /* glsl */ `
   }
   void main() {
     // exact distance (px) from this pixel to the beam's line segment
-    vec2 a = vSeg.xy, b = vSeg.zw, ab = b - a, p = gl_FragCoord.xy - a;
+    vec2 a = vSeg.xy, b = vSeg.zw, ab = b - a, p = (vClip.xy / vClip.w) * uRes - a;
     float h = clamp(dot(p, ab) / max(dot(ab, ab), 1e-6), 0.0, 1.0);
     float d = length(p - ab * h);
     // a ~2 px anti-aliased core plus a soft halo
-    float core = exp(-(d * d) / 0.8) * 0.62 + exp(-(d * d) / 5.0) * 0.14;
+    float core = exp(-(d * d) / 0.8) * 0.62 + exp(-(d * d) / 5.0) * 0.14 + exp(-(d * d) / 14.0) * 0.09 * uBloom;
     float grain = 0.85 + 0.3 * vn(vW * 0.8 + vec3(0.0, -uTime * 0.5, uTime * 0.25));
     float start = smoothstep(0.0, 0.004, clamp(vAlong, 0.0, 1.0));
     gl_FragColor = vec4(vC * core * grain * start * (0.6 + 0.6 * uHaze), 1.0);
@@ -239,11 +243,13 @@ export class Rig {
     this.host = host;
     this.quality = 1;
     const r = (this.renderer = new THREE.WebGLRenderer({ antialias: false, powerPreference: 'high-performance' }));
+    r.xr.enabled = true;
     r.setPixelRatio(Math.min(window.devicePixelRatio || 1, 1.75));
     r.toneMapping = THREE.ACESFilmicToneMapping;
     r.toneMappingExposure = 1.05;
     host.append(r.domElement);
     this.canvas = r.domElement;
+    this._xrCamPos = new THREE.Vector3();
 
     this.scene = new THREE.Scene();
     this.scene.background = new THREE.Color(0x000000);
@@ -409,7 +415,7 @@ export class Rig {
     gg.setAttribute('aSize', new THREE.BufferAttribute(this.gSize, 1));
     this.glowMat = new THREE.ShaderMaterial({
       vertexShader: GLOW_VERT, fragmentShader: GLOW_FRAG,
-      uniforms: { uScale: { value: 300 } },
+      uniforms: { uScale: { value: 300 }, uBloom: { value: 0 } },
       transparent: true, depthWrite: false, blending: THREE.AdditiveBlending,
     });
     this.glow = new THREE.Points(gg, this.glowMat);
@@ -433,7 +439,7 @@ export class Rig {
     quad.instanceCount = 0;
     const mat = new THREE.ShaderMaterial({
       vertexShader: LASER_VERT, fragmentShader: LASER_FRAG,
-      uniforms: { uRes: { value: new THREE.Vector2(1, 1) }, uWidth: { value: width }, uTime: { value: 0 }, uHaze: { value: 0.7 } },
+      uniforms: { uRes: { value: new THREE.Vector2(1, 1) }, uWidth: { value: width }, uBloom: { value: 0 }, uTime: { value: 0 }, uHaze: { value: 0.7 } },
       transparent: true, depthWrite: false, blending: THREE.AdditiveBlending,
     });
     const mesh = new THREE.Mesh(quad, mat);
@@ -554,23 +560,34 @@ export class Rig {
 
   update(dt, opts) {
     const E = this.engine, N = this.N;
+    const inXR = this.renderer.xr.isPresenting || !!opts.xrActive;
     // camera
-    if (this.tween) {
-      const tw = this.tween;
-      tw.t += dt;
-      const k = Math.min(1, tw.t / tw.dur), e = k * k * (3 - 2 * k);
-      this.camera.position.lerpVectors(tw.fromPos, tw.toPos, e);
-      this.controls.target.lerpVectors(tw.fromT, tw.toT, e);
-      this.camera.fov = tw.fromFov + (tw.toFov - tw.fromFov) * e;
-      this.camera.updateProjectionMatrix();
-      if (k >= 1) this.tween = null;
-    } else if (opts.drift && performance.now() - this.lastInteract > 6000) {
-      const off = this.camera.position.clone().sub(this.controls.target);
-      const a = 0.028 * Math.sin(E.time * 0.045) * dt;
-      off.applyAxisAngle(new THREE.Vector3(0, 1, 0), a);
-      this.camera.position.copy(this.controls.target).add(off);
+    if (!inXR) {
+      if (this.tween) {
+        const tw = this.tween;
+        tw.t += dt;
+        const k = Math.min(1, tw.t / tw.dur), e = k * k * (3 - 2 * k);
+        this.camera.position.lerpVectors(tw.fromPos, tw.toPos, e);
+        this.controls.target.lerpVectors(tw.fromT, tw.toT, e);
+        this.camera.fov = tw.fromFov + (tw.toFov - tw.fromFov) * e;
+        this.camera.updateProjectionMatrix();
+        if (k >= 1) this.tween = null;
+      } else if (opts.drift && performance.now() - this.lastInteract > 6000) {
+        const off = this.camera.position.clone().sub(this.controls.target);
+        const a = 0.028 * Math.sin(E.time * 0.045) * dt;
+        off.applyAxisAngle(new THREE.Vector3(0, 1, 0), a);
+        this.camera.position.copy(this.controls.target).add(off);
+      }
+      this.controls.update();
+    } else {
+      const xrCam = this.renderer.xr.getCamera();
+      const vp = xrCam?.cameras?.[0]?.viewport;
+      if (vp && vp.z > 0 && vp.w > 0) {
+        const rx = vp.z * 0.5, ry = vp.w * 0.5;
+        for (const m of this.ribbons || []) m.uniforms.uRes.value.set(rx, ry);
+        this.glowMat.uniforms.uScale.value = vp.w * 0.45 * (1 + (opts.bloom ?? 0.85) * 0.16);
+      }
     }
-    this.controls.update();
 
     // truss sticks + chains
     const rig = this.rig, pose = {}, mat = new THREE.Matrix4();
@@ -595,7 +612,7 @@ export class Rig {
     // fixtures
     const m = new THREE.Matrix4(), q = new THREE.Quaternion(), Y = new THREE.Vector3(0, 1, 0), d = new THREE.Vector3();
     const pos = new THREE.Vector3(), one = new THREE.Vector3(1, 1, 1), qb = new THREE.Quaternion();
-    const cam = this.camera.position;
+    const cam = this.renderer.xr.isPresenting ? this.renderer.xr.getCamera().getWorldPosition(this._xrCamPos) : this.camera.position;
     const beamGain = (opts.beamGain ?? 1) * (1 - (this.beamWash || 0)); // house lights wash the beams out
     const ld = this.lightData, ab = this.aBeam.array, ac = this.aColor.array;
     for (let i = 0; i < N; i++) {
@@ -646,7 +663,12 @@ export class Rig {
     this.beamMat.uniforms.uTime.value = E.time;
     this.beamMat.uniforms.uHaze.value = E.m.haze;
     this.beamMat.uniforms.uTexture.value = opts.hazeTexture ?? 0.75;
-    this.bloom.strength = (opts.bloom ?? 0.85) * 0.6;
+    const bloomAmt = opts.bloom ?? 0.85;
+    this.bloom.strength = bloomAmt * 0.6;
+    const xrBloom = inXR ? bloomAmt : 0;
+    this.glowMat.uniforms.uBloom.value = xrBloom;
+    this.beamMat.uniforms.uGain.value = inXR ? 0.15 * (1 + bloomAmt * 0.22) : 0.15;
+    for (const rm of this.ribbons || []) if (rm.uniforms.uBloom) rm.uniforms.uBloom.value = xrBloom;
     // auto-exposure, like a camera riding the iris: busy, bright looks are pulled down
     let load = 0;
     for (let i = 0; i < N; i++) { const R = E.render[i]; load += R.I * (0.4 + 0.6 * Math.min(1, R.tan * 4)); }
@@ -656,6 +678,8 @@ export class Rig {
 
     this.preRender?.(dt, opts);
     this.updateLasers(opts.lasers);
-    this.composer.render(dt);
+    opts.vr?.update(dt);
+    if (inXR) this.renderer.render(this.scene, opts.xrCamera || this.camera);
+    else this.composer.render(dt);
   }
 }

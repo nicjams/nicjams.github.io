@@ -362,6 +362,80 @@ try {
   await waitFor('ck5.ambience.fairy.pres === 0', 'the fairy lights to switch off', 6000);
   pass('venues: empty by default with the audience camera, club ceiling and theater curtain stop beams, stadium floodlights, Showtime fade, fairy lights on the truss');
 
+  // clean branding (no overt CK5 references in title or UI)
+  assert.equal(await js('document.title'), 'Light Designer', 'title is Light Designer');
+  assert(!(await js('/ck5|kuroda|phish|biscuits/i.test(document.getElementById("controls").innerText)')), 'no overt CK5/band references in UI text');
+  pass('clean Light Designer branding without overt CK5 references');
+
+  // WebXR VR: stereo ArrayCamera rendering (lasers & tubes in BOTH eyes) + 3D spatial console across all 5 tabs
+  const stereo = await js(`(async () => {
+    const THREE = await import('three');
+    const { rig, lasers, devices } = lightDesigner;
+    lightDesigner.launchScene('laserSky', { instant: true });
+    await new Promise((r) => setTimeout(r, 80));
+    const W = 512, H = 256, hw = W / 2;
+    const rt = new THREE.WebGLRenderTarget(W, H);
+    const makeEye = (vx, dx) => {
+      const c = new THREE.PerspectiveCamera(70, hw / H, 0.1, 1000);
+      c.position.set(dx, 1.7, 7.8);
+      c.lookAt(0, 5.8, -4);
+      c.updateMatrixWorld(true);
+      c.viewport = new THREE.Vector4(vx, 0, hw, H);
+      return c;
+    };
+    const arrCam = new THREE.ArrayCamera([makeEye(0, -0.032), makeEye(hw, 0.032)]);
+    arrCam.position.set(0, 1.7, 7.8);
+    for (const m of rig.ribbons || []) m.uniforms.uRes.value.set(hw * 0.5, H * 0.5);
+    rig.renderer.setRenderTarget(rt);
+    rig.update(0.016, { xrActive: true, xrCamera: arrCam, bloom: 0.85, lasers });
+    const px = new Uint8Array(W * H * 4);
+    rig.renderer.readRenderTargetPixels(rt, 0, 0, W, H, px);
+    rig.renderer.setRenderTarget(null);
+    rig.resize();
+    let leftLit = 0, rightLit = 0;
+    for (let y = 0; y < H; y++) {
+      for (let x = 0; x < hw; x++) if (px[(y * W + x) * 4 + 1] > 25) leftLit++;
+      for (let x = hw; x < W; x++) if (px[(y * W + x) * 4 + 1] > 25) rightLit++;
+    }
+    rt.dispose();
+    return { leftLit, rightLit, laserCount: lasers.count, tubesVisible: devices.tubeMesh.visible };
+  })()`);
+  assert(stereo.laserCount > 0 && stereo.tubesVisible && stereo.leftLit > 200 && stereo.rightLit > 200 && Math.abs(stereo.leftLit - stereo.rightLit) / stereo.leftLit < 0.25,
+    `stereo XR renders lasers & pixel tubes in both eyes (${JSON.stringify(stereo)})`);
+
+  // Spatial 3D console in VR: session lifecycle, vantage teleport, tabs, scene launch, select modal, piano
+  await js('lightDesigner.vr.onSessionStart(); lightDesigner.vr.update(0.05)');
+  assert.equal(await js('lightDesigner.vr.active && lightDesigner.vr.panelGroup.visible'), true, 'VR spatial console opens');
+  await js("lightDesigner.vr.teleport('stage', true); lightDesigner.vr.update(0.02)");
+  assert.equal(await js('+lightDesigner.vr.xrRig.position.y.toFixed(2)'), 1.2, 'On Stage vantage stands on the 1.2 m deck');
+  // Render every tab on the 3D VR canvas without error
+  for (const tab of ['show', 'rig', 'venue', 'desk', 'midi']) {
+    await js(`document.querySelector('.tabs [data-tab="${tab}"]').click(); lightDesigner.vr.redraw()`);
+    assert((await js('lightDesigner.vr.hits.length')) > 5, `VR tab ${tab} populates interactive hit regions`);
+  }
+  // Play a note on the 3D VR piano (MIDI tab is active)
+  await js(`(() => {
+    const vr = lightDesigner.vr;
+    // Find a piano hit region (near bottom of MIDI tab)
+    const keyHit = vr.hits.find((h) => h.w > 30 && h.w < 70 && h.h > 140);
+    vr.pointerDownAt(vr.pointers[0], keyHit.x + 10, keyHit.y + 120, 1);
+  })()`);
+  await sleep(60);
+  assert((await js('lightDesigner.midi.layer.held().length')) === 1, 'VR 3D piano plays MIDI notes');
+  await js('lightDesigner.vr.releasePointer(lightDesigner.vr.pointers[0]); lightDesigner.midi.stop(); document.getElementById("midiMode").checked = false; document.getElementById("midiMode").dispatchEvent(new Event("change"))');
+  // Switch back to Show tab on the VR console and tap a scene card
+  await js(`(() => {
+    const vr = lightDesigner.vr;
+    vr.tapCanvas(100, 137); // Show tab button
+    vr.tapCanvas(500, 290); // Scene card in row 1 col 2 (Teal Curtain)
+  })()`);
+  await waitFor("lightDesigner.engine.show.name === 'Teal Curtain'", 'VR console scene card launches Teal Curtain');
+  await js('lightDesigner.vr.setConsoleOpen(false)');
+  assert.equal(await js('!lightDesigner.vr.panelGroup.visible && lightDesigner.vr.reopenMesh.visible'), true, 'VR console hides and leaves reopen pill');
+  await js('lightDesigner.vr.onSessionEnd()');
+  assert.equal(await js('!lightDesigner.vr.active && lightDesigner.rig.controls.enabled'), true, 'exiting VR restores desktop controls');
+  pass(`WebXR VR: stereo left/right eye rendering (${stereo.leftLit}/${stereo.rightLit} lit px) and 5-tab 3D spatial console`);
+
   assert.deepEqual(errors, [], `page errors:\n${errors.join('\n')}`);
   console.log(`PASS: light designer (${passed.length} checks). Screenshot: ${join(tmpdir(), 'ck5-midi-groove.png')}`);
 } catch (err) {

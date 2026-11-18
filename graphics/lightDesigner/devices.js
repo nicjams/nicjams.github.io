@@ -55,15 +55,15 @@ export const LIQUID_PALETTES = { classic: 'Classic (magenta, amber, cyan)', rig:
 const TUBE_VERT = /* glsl */ `
   attribute vec3 aA; attribute vec3 aB; attribute float aR; attribute float aIdx;
   uniform vec2 uRes; uniform float uMinPx;
-  varying float vId;
-  flat varying vec4 vSeg;  // ends of the tube in framebuffer pixels
+  varying float vId; varying vec4 vClip;
+  flat varying vec4 vSeg;  // ends of the tube in eye-centered pixels
   flat varying vec2 vW;    // clip-space w at the ends, for perspective-correct position
   flat varying vec2 vT;    // position along the tube at the (near-clipped) ends
   flat varying vec2 vRad;  // tube radius in pixels at the ends
   void main() {
     vec3 va = (viewMatrix * vec4(aA, 1.0)).xyz, vb = (viewMatrix * vec4(aB, 1.0)).xyz;
     float ta = 0.0, tb = 1.0, near = -0.15;
-    if ((va.z > near && vb.z > near) || aR <= 0.0) { gl_Position = vec4(2.0, 2.0, 2.0, 1.0); return; }
+    if ((va.z > near && vb.z > near) || aR <= 0.0) { gl_Position = vec4(2.0, 2.0, 2.0, 1.0); vClip = gl_Position; vSeg = vec4(0.0); vW = vec2(1.0); vT = vec2(0.0); vRad = vec2(0.0); vId = aIdx; return; }
     if (va.z > near) { float k = (va.z - near) / (va.z - vb.z); va = mix(va, vb, k); ta = k; }
     if (vb.z > near) { float k = (vb.z - near) / (vb.z - va.z); vb = mix(vb, va, k); tb = 1.0 - k; }
     vec4 ca = projectionMatrix * vec4(va, 1.0), cb = projectionMatrix * vec4(vb, 1.0);
@@ -75,15 +75,16 @@ const TUBE_VERT = /* glsl */ `
     vec4 c = mix(ca, cb, position.x);
     c.xy += (nrm * position.y + d * (position.x * 2.0 - 1.0)) * W / uRes * c.w;
     gl_Position = c;
-    vSeg = vec4(sa + uRes, sb + uRes); vW = vec2(ca.w, cb.w); vT = vec2(ta, tb); vRad = vec2(ra, rb); vId = aIdx;
+    vClip = c;
+    vSeg = vec4(sa, sb); vW = vec2(ca.w, cb.w); vT = vec2(ta, tb); vRad = vec2(ra, rb); vId = aIdx;
   }
 `;
 const TUBE_FRAG = /* glsl */ `
-  uniform sampler2D uTex; uniform float uPix; uniform float uMinPx;
-  varying float vId;
+  uniform sampler2D uTex; uniform float uPix; uniform float uMinPx; uniform vec2 uRes;
+  varying float vId; varying vec4 vClip;
   flat varying vec4 vSeg; flat varying vec2 vW; flat varying vec2 vT; flat varying vec2 vRad;
   void main() {
-    vec2 a = vSeg.xy, ab = vSeg.zw - vSeg.xy, p = gl_FragCoord.xy - a;
+    vec2 a = vSeg.xy, ab = vSeg.zw - vSeg.xy, p = (vClip.xy / vClip.w) * uRes - a;
     float h = clamp(dot(p, ab) / max(dot(ab, ab), 1e-6), 0.0, 1.0);
     float d = length(p - ab * h);
     float s = (h / vW.y) / ((1.0 - h) / vW.x + h / vW.y);

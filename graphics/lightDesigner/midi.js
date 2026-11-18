@@ -520,5 +520,5 @@ export function setupMidi({ engine, onControl, onEnable, onScene }) {
     $('#midiReach').value = `${layer.reached.size} / ${engine.N} fixtures reached · ${layer.hits} notes`;
     $('#midiPedal').classList.toggle('on', layer.pedal);
   }
-  return { layer, connect, tick, readout, feed, get access() { return access; }, stop: stopPlayer };
+  return { layer, connect, tick, readout, feed, noteOn: pianoOn, noteOff: pianoOff, get octave() { return qwertyOctave; }, get access() { return access; }, stop: stopPlayer };
 }

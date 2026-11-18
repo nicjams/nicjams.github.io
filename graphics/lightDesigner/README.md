@@ -1,35 +1,26 @@
-# CK5 Virtual Rig
+# Light Designer
 
-A virtual light rig in the spirit of Chris Kuroda's kinetic lighting for Phish,
-over a bare stage and floor in a hazy black void (no band or audience): 30 moving
-truss sticks carrying 60 moving heads, 12 floor units, haze, and optional extras.
-It's an impression, not a model of any real lighting plot.
+A virtual kinetic arena lighting rig over a bare stage and floor in a hazy void (or
+inside a club, theater, or stadium): 30 moving truss sticks carrying 60 moving
+heads, 12 floor units, volumetric haze, optional stage extras, MIDI play mode, and
+immersive WebXR VR.
 
 ## The rig: moving sticks
 
-The rig follows Phish's 2019–23 design: 30 separate sticks of 5′, 8′ and 10′ truss,
-none pinned together, each on its own hoists, hung in six rows of five across a
-62′ grid, making zigzags, smiles, frowns and rooftops. Each row carries ten moving
-heads (two per stick). The Kinetic tab and every show and scene drive three things
-per row:
+The rig uses 30 separate sticks of 5′, 8′ and 10′ truss, none pinned together, each
+on its own hoists, hung in six rows of five across a 62′ grid to make zigzags,
+smiles, frowns, columns, portals and rooftops. Each row carries ten moving heads
+(two per stick). The Rig tab and every show and scene drive three things per row:
 
 - **Height**: trims the row (rows 1–6 from front to back).
 - **Roll**: bends the row into a smile or frown; alternate rows zigzag.
-- **Flip**: turns sticks toward vertical (the real sticks could fly vertical). The
-  *flip pattern* decides which ones: all (columns), alternate (zigzags, and
-  diamonds at half-way), a lattice with rows opposed, the outer legs only (each row
-  becomes a portal frame), the inner three, or a fan. A *flip wave* rolls flips
-  through the rows over time.
+- **Flip**: turns sticks toward vertical. The *flip pattern* decides which ones: all
+  (columns), alternate (zigzags, and diamonds at half-way), a lattice with rows
+  opposed, the outer legs only (each row becomes a portal frame), the inner three,
+  or a fan. A *flip wave* rolls flips through the rows over time.
 
-Flips are what make the one rig do what earlier eras needed different trusses
-for: the pre-2018 circles become arches and domes (a strong frown), squares become
-portal frames, and the 2016 video wall becomes rows of LED bars on the truss.
-Flips travel at about 60°/s, like a hoist lifting one end.
-
-Sources: [L4LM interview (2022)](https://liveforlivemusic.com/features/chris-kuroda-andrew-giffin-mobilizing-phish-lighting-operation-interview-2022/),
-[PLSN, December 2023](https://plsn.com/archives/december-2023/phish-fresh-performances-changing-looks/),
-[Gateway on the 2022 tour](https://www.gsps.com/2022/10/05/phish-summer-tour-lighting-2022).
-Dimensions, head counts and exact motion are my own simplifications.
+Flips let a single modular truss rig form arches, domes, portal frames, lattices and
+standing columns, traveling smoothly at about 60°/s like a hoist lifting one end.
 
 ## Scenes
 
@@ -112,13 +103,11 @@ the rig fills the sky from that close. The other presets are still under View.
 
 ## Lasers (optional)
 
-The **Rig** tab adds an optional laser package alongside the kinetic sticks. It's in the spirit of
-the Disco Biscuits, whose lighting designer Johnny R. Goode runs full-color,
-audience-scanning Lightwave International lasers alongside the moving heads
-([Lightwave](https://lasershows.com/portfolio/disco-biscuits/)). There are six
-projectors: the two upstage corners, upstage center, the two wings and front of house.
-Beams are razor-thin (drawn a fixed number of pixels wide), stop on the deck or the
-floor, and otherwise run out into the haze.
+The **Rig** tab adds an optional full-color, audience-scanning laser package
+alongside the moving heads. There are six projectors: the two upstage corners,
+upstage center, the two wings and front of house. Beams are razor-thin (drawn a
+fixed number of pixels wide in both desktop and stereo VR), stop on the deck, floor
+or venue walls, and otherwise run out into the haze.
 
 - **Looks**: fans, sweeping fans, liquid sky (a rippling sheet just over the
   crowd), tunnel (a spinning cone), starburst, beam chase (jumps on the beat),
@@ -134,16 +123,14 @@ floor, and otherwise run out into the haze.
 
 ## Other devices (optional)
 
-The **Rig** tab also holds the kit a jam-band LD reaches for, collapsing inactive
-devices until turned on. These devices follow the grand master, blackout and flash,
-and travel in and out rather than popping (see *Scenes*). A **Stage kit** menu sets
-them up in one step: arena, trance-fusion, late-night club, psychedelic ’60s,
-starlight ballroom, everything, or clean rig.
-`?kit=phish|biscuits|club|dead|starlight|all` does the same from a link.
+The **Rig** tab also holds optional stage extras, collapsing inactive devices until
+turned on. These devices follow the grand master, blackout and flash, and travel in
+and out rather than popping (see *Scenes*). A **Stage kit** menu sets them up in one
+step: arena, trance-fusion, late-night club, psychedelic ’60s, starlight ballroom,
+everything, or clean rig (`?kit=arena|trance|club|psych|starlight|all`).
 
 - **LED pixel tubes** (24 pixels each): a wall upstage, bars on the truss sticks
-  (they ride the kinetics, like the LED bars on Phish's 2022 truss sticks),
-  columns around the stage, or a canopy over the crowd. Looks: follow the nearest
+  (riding the kinetics), columns around the stage, or a canopy over the crowd. Looks: follow the nearest
   head, rain drips, rainbow wave, bar chase, sparkle, a level meter (show energy
   or MIDI), or flash on the beat. Like the lasers, they're drawn in screen space
   with anti-aliased edges and seams, so they stay crisp at any distance.
@@ -182,7 +169,27 @@ starlight ballroom, everything, or clean rig.
 - `ambient.js`: house lights and fairy lights.
 - `midi.js`: MIDI play mode. `NoteLayer` turns MIDI bytes into per-fixture light (no DOM). `setupMidi` wires
   Web MIDI, the on-screen and computer keyboards, the test groove, the sweep and the monitor.
+- `vr.js`: WebXR (`immersive-vr`) session, vantage teleportation, thumbstick locomotion, controller laser pointers and the floating 3D spatial console.
 - `main.js`: panel, keyboard, cue list, MIDI learn and microphone sound-to-light.
+
+## WebXR VR
+
+Press **VR** in the header on a WebXR headset (Meta Quest, Apple Vision Pro, PCVR) to
+step inside the venue at 1:1 scale with all graphics intact (volumetric beams,
+stereo screen-space lasers and LED pixel tubes, mirror-ball facet glints, liquid
+projection, CO₂ and room lights):
+
+- **Spatial console**: a floating, grabbable 3D lighting desk (`vr.js`) gives full
+  access to all five tabs (**Show**, **Rig**, **Room**, **Desk**, **MIDI**), scene
+  thumbnails, master faders, the 72-head programmer plot, live effects, cues, and a
+  two-handed playable 2-octave MIDI keyboard.
+- **Vantage spots & locomotion**: jump between *Crowd*, *On Stage* (under the 30
+  moving sticks), *FOH*, *Wing* and *Balcony*, or walk with the left thumbstick
+  (stepping automatically onto the 1.2 m stage deck) and snap-turn / fly with the
+  right thumbstick.
+- **Live controller shortcuts**: **B / Y** hides or summons the console, **A**
+  launches the next scene, **X** taps tempo, grip on the console repositions it, and
+  squeezing grip in open air holds **Flash** (right) or **Strobe** (left).
 
 ## Writing a show
 

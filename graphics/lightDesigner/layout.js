@@ -3,7 +3,7 @@
 // Units are meters. x runs across the stage (house left → right), y is up, and
 // +z points from the stage toward the audience. The stage deck is 1.2 m high.
 //
-// The rig is "moving sticks", after Phish's 2019–23 design: 30 separate sticks of
+// The rig is "moving sticks": 30 separate sticks of
 // 5′, 8′ and 10′ truss, each on its own hoists, hung in six rows (p1 front … p6
 // back) of five across a 62′ grid. Each row carries ten moving heads (two per
 // stick), and twelve floor units stand along the upstage edge.

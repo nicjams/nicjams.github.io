@@ -77,6 +77,14 @@ body.hide-panel #showPanelBtn:focus-visible { opacity: 1; pointer-events: auto; 
   padding: 11px 14px 9px; border-bottom: 1px solid var(--line);
 }
 .brand { display: flex; align-items: baseline; gap: 8px; min-width: 0; }
+.header-actions { display: flex; align-items: center; gap: 5px; flex: none; }
+.vr-btn {
+  width: auto; height: 26px; padding: 0 9px; border-radius: 7px;
+  font: 600 10.5px 'JetBrains Mono', monospace; letter-spacing: .04em;
+  background: rgba(255, 255, 255, 0.04); border: 1px solid var(--line2); color: var(--dim);
+}
+.vr-btn.vr-ready { border-color: var(--amber-line); color: var(--amber); background: var(--amber-d); }
+.vr-btn:hover { color: var(--ink); border-color: var(--amber); }
 h1 { margin: 0; font-size: 16px; font-weight: 600; letter-spacing: -0.02em; }
 h1 span { color: var(--dim); font-weight: 400; }
 .badge { font: 10px 'JetBrains Mono', monospace; color: var(--faint); letter-spacing: .02em; white-space: nowrap; }

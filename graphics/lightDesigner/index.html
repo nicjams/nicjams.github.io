@@ -3,14 +3,14 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1">
-  <meta name="description" content="A virtual light rig over a stage: 30 kinetic truss sticks, 72 moving heads and a lighting console.">
-  <meta name="graphics-description" content="A virtual arena rig in the spirit of CK5: six kinetic truss pods, 60 hanging moving heads and 12 floor units, over a stage in a hazy black void: 30 moving truss sticks that trim, bend and flip into formations, 72 moving heads, and optional lasers, LED tubes, mirror balls, blinders, strobes, a liquid light show and CO₂. Run a long show, take over with the programmer, effects engine, kinetics and cue list, or play the rig from a MIDI keyboard: every key fires lights. Drag to orbit · scroll to zoom.">
+  <meta name="description" content="A virtual kinetic light rig over a stage in 3D and WebXR VR: 30 moving truss sticks, 72 moving heads and a lighting console.">
+  <meta name="graphics-description" content="A virtual arena lighting rig: six kinetic truss rows, 60 hanging moving heads and 12 floor units over a stage in a hazy black void, with 30 moving truss sticks that trim, bend and flip into formations, plus optional lasers, LED tubes, mirror balls, blinders, strobes, a liquid light show and CO₂. Run hour-long shows, take over with the programmer, effects engine, kinetics and cue list, play the rig from a MIDI keyboard, or step inside in WebXR VR. Drag to orbit · scroll to zoom.">
   <script src="../app/entry.js"></script>
-  <title>CK5 Virtual Rig</title>
+  <title>Light Designer</title>
   <meta property="og:type" content="website">
   <meta property="og:site_name" content="nicjams">
-  <meta property="og:title" content="CK5 Virtual Rig">
-  <meta property="og:description" content="A virtual lighting rig with 72 moving heads and haze. Run hour-long shows or play the lights from a MIDI keyboard.">
+  <meta property="og:title" content="Light Designer">
+  <meta property="og:description" content="A virtual kinetic lighting rig with 72 moving heads, haze, MIDI play mode and WebXR VR.">
   <meta property="og:url" content="https://nicjams.github.io/graphics/lightDesigner/">
   <meta property="og:image" content="https://nicjams.github.io/graphics/lightDesigner/preview.jpg">
   <meta property="og:image:width" content="1200">
@@ -42,10 +42,13 @@
   <aside id="controls">
     <header>
       <div class="brand">
-        <h1>CK5 <span>Rig</span></h1>
+        <h1>Light <span>Designer</span></h1>
         <span class="badge">30 sticks · 72 heads</span>
       </div>
-      <button id="hidePanelBtn" type="button" class="icon-btn" data-studio-ignore title="Hide panel (H)" aria-label="Hide panel">✕</button>
+      <div class="header-actions" data-studio-ignore>
+        <button id="enterVrBtn" type="button" class="vr-btn" title="Enter immersive VR">VR</button>
+        <button id="hidePanelBtn" type="button" class="icon-btn" title="Hide panel (H)" aria-label="Hide panel">✕</button>
+      </div>
     </header>
 
     <div id="panelToast" class="toast" role="status" hidden></div>
@@ -163,12 +166,15 @@
         <select id="extrasKit" aria-label="Quick kit">
           <option value="">Load a quick kit…</option>
           <option value="none">Clean rig (nothing extra)</option>
-          <option value="phish">Arena (truss bars, mirror ball, drop blinders)</option>
-          <option value="biscuits">Trance-fusion (lasers, strobes, CO₂, tube wall)</option>
+          <option value="arena">Arena (truss bars, mirror ball, drop blinders)</option>
+          <option value="trance">Trance-fusion (lasers, strobes, CO₂, tube wall)</option>
           <option value="club">Late-night club (sweeping lasers, LED columns, CO₂)</option>
-          <option value="dead">Psychedelic ’60s (liquid light, mirror ball, warm blinders)</option>
+          <option value="psych">Psychedelic ’60s (liquid light, mirror ball, warm blinders)</option>
           <option value="starlight">Starlight ballroom (twin balls, sparkle canopy)</option>
           <option value="all">Everything at once</option>
+          <option value="phish" hidden>Arena</option>
+          <option value="biscuits" hidden>Trance-fusion</option>
+          <option value="dead" hidden>Psychedelic ’60s</option>
         </select>
       </fieldset>
 
@@ -667,7 +673,7 @@
             <span><kbd>H</kbd> Hide panel</span>
             <span><kbd>A</kbd>–<kbd>K</kbd> MIDI keys</span>
           </div>
-          <p class="fine">Inspired by Chris Kuroda’s CK5 kinetic lighting for Phish. Drag to orbit · scroll to zoom.</p>
+          <p class="fine">Drag to orbit · scroll to zoom · press VR to step onto the floor or stage in WebXR.</p>
         </div>
       </details>
     </footer>

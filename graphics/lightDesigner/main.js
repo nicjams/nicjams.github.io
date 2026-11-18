@@ -14,15 +14,25 @@ const $ = (s, r = document) => r.querySelector(s);
 const $$ = (s, r = document) => [...r.querySelectorAll(s)];
 const status = $('#status');
 const store = {
-  get(k, d) { try { const v = localStorage.getItem(`ck5.${k}`); return v ? JSON.parse(v) : d; } catch { return d; } },
-  set(k, v) { try { localStorage.setItem(`ck5.${k}`, JSON.stringify(v)); } catch { /* private mode */ } },
+  get(k, d) {
+    try {
+      const v = localStorage.getItem(`ld.${k}`) ?? localStorage.getItem(`ck5.${k}`);
+      return v ? JSON.parse(v) : d;
+    } catch { return d; }
+  },
+  set(k, v) {
+    try {
+      localStorage.setItem(`ld.${k}`, JSON.stringify(v));
+      localStorage.removeItem(`ck5.${k}`);
+    } catch { /* private mode */ }
+  },
 };
 const fmtTime = (s) => { s = Math.max(0, Math.floor(s)); return `${Math.floor(s / 60)}:${String(s % 60).padStart(2, '0')}`; };
 const on = (el, ev, fn) => (typeof el === 'string' ? $(el) : el).addEventListener(ev, fn);
 
-let Rig, CAMERAS;
+let Rig, CAMERAS, VRConsole;
 try {
-  ({ Rig, CAMERAS } = await import('./rig.js'));
+  ([{ Rig, CAMERAS }, { VRConsole }] = await Promise.all([import('./rig.js'), import('./vr.js')]));
 } catch (err) {
   status.textContent = 'Could not load three.js — check your connection.';
   throw err;
@@ -512,9 +522,9 @@ on('#cueRun', 'change', (e) => {
   }
 });
 on('#cueExport', 'click', () => {
-  const blob = new Blob([JSON.stringify({ kind: 'ck5-cues', version: 1, cues }, null, 1)], { type: 'application/json' });
+  const blob = new Blob([JSON.stringify({ kind: 'light-designer-cues', version: 1, cues }, null, 1)], { type: 'application/json' });
   const a = document.createElement('a');
-  a.href = URL.createObjectURL(blob); a.download = 'ck5-cues.json'; a.click();
+  a.href = URL.createObjectURL(blob); a.download = 'light-cues.json'; a.click();
   setTimeout(() => URL.revokeObjectURL(a.href), 1000);
 });
 on('#cueImportBtn', 'click', () => $('#cueImport').click());
@@ -525,7 +535,7 @@ on('#cueImport', 'change', async (e) => {
     const data = JSON.parse(await file.text());
     if (!Array.isArray(data.cues)) throw new Error('no cues');
     cues = data.cues; cueIdx = -1; saveCues(); renderCues();
-  } catch { flashHint('That file is not a CK5 cue list.'); }
+  } catch { flashHint('That file is not a valid cue list.'); }
   e.target.value = '';
 });
 renderCues();
@@ -737,12 +747,15 @@ on('#ballDrop', 'click', () => { if (devices.o.balls) devices.redropBalls(); els
 on('#ballRaise', 'click', () => setCtrl('ballCount', '0'));
 
 // quick kits: set the Extras controls as a person would, so the remote and storage follow
+const ARENA_KIT = { laserOn: false, tubesOn: true, tubeLayout: 'truss', tubeLook: 'follow', tubeColor: 'rig', ballCount: '1', ballColor: 'white', blindersOn: true, blinderMode: 'drops', strobesOn: true, strobeMode: 'show', liquidOn: false, co2On: false };
+const TRANCE_KIT = { laserOn: true, laserPattern: 'auto', laserColor: 'rgb', tubesOn: true, tubeLayout: 'curtain', tubeLook: 'wave', ballCount: '0', blindersOn: false, strobesOn: true, strobeMode: 'beat', liquidOn: false, co2On: true, co2Mode: 'drops' };
+const PSYCH_KIT = { laserOn: false, tubesOn: false, ballCount: '1', ballColor: 'rig', blindersOn: true, blinderMode: 'phrase', strobesOn: false, liquidOn: true, liquidPalette: 'classic', co2On: false };
 const KITS = {
   none: { laserOn: false, tubesOn: false, ballCount: '0', blindersOn: false, strobesOn: false, liquidOn: false, co2On: false },
-  phish: { laserOn: false, tubesOn: true, tubeLayout: 'truss', tubeLook: 'follow', tubeColor: 'rig', ballCount: '1', ballColor: 'white', blindersOn: true, blinderMode: 'drops', strobesOn: true, strobeMode: 'show', liquidOn: false, co2On: false },
-  biscuits: { laserOn: true, laserPattern: 'auto', laserColor: 'rgb', tubesOn: true, tubeLayout: 'curtain', tubeLook: 'wave', ballCount: '0', blindersOn: false, strobesOn: true, strobeMode: 'beat', liquidOn: false, co2On: true, co2Mode: 'drops' },
+  arena: ARENA_KIT, phish: ARENA_KIT,
+  trance: TRANCE_KIT, biscuits: TRANCE_KIT,
   club: { laserOn: true, laserPattern: 'sweep', laserColor: 'rgb', tubesOn: true, tubeLayout: 'columns', tubeLook: 'chase', tubeColor: 'rig', ballCount: '0', blindersOn: false, strobesOn: true, strobeMode: 'beat', liquidOn: false, co2On: true, co2Mode: 'drops' },
-  dead: { laserOn: false, tubesOn: false, ballCount: '1', ballColor: 'rig', blindersOn: true, blinderMode: 'phrase', strobesOn: false, liquidOn: true, liquidPalette: 'classic', co2On: false },
+  psych: PSYCH_KIT, dead: PSYCH_KIT,
   starlight: { laserOn: false, tubesOn: true, tubeLayout: 'canopy', tubeLook: 'sparkle', tubeColor: 'white', ballCount: '2', ballColor: 'white', blindersOn: true, blinderMode: 'phrase', strobesOn: false, liquidOn: false, co2On: false },
   all: { laserOn: true, laserPattern: 'auto', tubesOn: true, tubeLayout: 'truss', tubeLook: 'follow', ballCount: '3', blindersOn: true, blinderMode: 'drops', strobesOn: true, strobeMode: 'show', liquidOn: true, co2On: true, co2Mode: 'drops' },
 };
@@ -953,13 +966,21 @@ function scenesUI() {
 }
 { const q = new URL(location.href).searchParams.get('scene'); if (sceneById(q)) setTimeout(() => launchScene(q, { instant: true }), 0); }
 
-// ——— frame loop ———
+// ——— WebXR VR & spatial console ———
+const vr = new VRConsole({
+  engine, rig, midi, lasers, devices, venue, ambience, holds, tap, SCENES,
+  selectGroup, selectionChanged, markActive, launchScene, setVenue, selectTab, flashHint,
+});
+on(camSel, 'change', () => { if (vr.active && camSel.value in { audience: 1, foh: 1, side: 1, balcony: 1 }) vr.teleport(camSel.value, true); });
+
+// ——— frame loop (WebGLRenderer.setAnimationLoop drives both desktop rAF and WebXR stereo frames) ———
 loadShow(SHOWS[0].id, 0);
 let last = performance.now(), uiT = 0, frames = 0;
 status.hidden = true;
 function frame(now) {
-  const dt = Math.min(0.1, (now - last) / 1000);
+  const rawDt = (now - last) / 1000;
   last = now;
+  const dt = rawDt > 0 && rawDt < 0.25 ? Math.min(0.1, rawDt) : 1 / 60;
   micFrame(dt);
   midi.tick(dt);
   sceneTick();
@@ -971,16 +992,15 @@ function frame(now) {
   engine.update(dt);
   lasers.update(dt);
   if (engine.mode === 'hold' && engine.show && engine.showTime >= engine.show.total - 0.002) engine.showTime = engine.show.total - 0.001;
-  if (view.autoCam && engine.time - lastCut > 28) {
+  if (view.autoCam && !vr.active && engine.time - lastCut > 28) {
     const ids = Object.keys(CAMERAS).filter((k) => k !== 'above' && k !== rig.camId);
     const id = ids[Math.floor(Math.random() * ids.length)];
     rig.setCamera(id, 5); camSel.value = id; lastCut = engine.time;
   }
-  rig.update(dt, { ...view, lasers });
+  rig.update(dt, { ...view, lasers, vr });
   canvas.dataset.frames = ++frames;
   uiT += dt;
   if (uiT > 0.1) { uiT = 0; updateUI(); }
-  requestAnimationFrame(frame);
 }
 function updateUI() {
   const s = engine.show;
@@ -1033,7 +1053,7 @@ function updateUI() {
     });
   }
 }
-requestAnimationFrame(frame);
+rig.renderer.setAnimationLoop(frame);
 
-// expose for debugging and tests
-window.ck5 = { engine, rig, loadShow, goCue, midi, lasers, devices, venue, ambience, setVenue, launchScene, sceneMoving };
+// expose for debugging and tests (keep window.ck5 alias for automated test scripts)
+window.lightDesigner = window.ck5 = { engine, rig, vr, loadShow, goCue, midi, lasers, devices, venue, ambience, setVenue, launchScene, sceneMoving };

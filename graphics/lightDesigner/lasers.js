@@ -1,5 +1,5 @@
-// lasers.js — optional laser package, in the spirit of the Disco Biscuits' audience-scanning
-// full-color lasers run alongside the moving heads.
+// lasers.js — optional audience-scanning full-color laser package run alongside
+// the moving heads.
 //
 // Six projectors: two upstage corners, one upstage center, two downstage wings and
 // one at front of house. Each frame the chosen pattern writes a list of beams
